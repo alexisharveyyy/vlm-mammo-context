@@ -15,8 +15,14 @@ repository should be used to interpret a real patient's imaging.
 - **Data:** CBIS-DDSM from The Cancer Imaging Archive (TCIA), with BI-RADS
   assessments and biopsy-confirmed benign or malignant labels. No images are
   stored in this repository; see `data/README.md`.
-- **Models:** open vision-language models (candidates: Qwen2-VL, LLaVA-Med,
-  MedGemma, InternVL).
+- **Models:** three open vision-language models run locally:
+  Qwen3-VL-8B-Instruct, MedGemma 1.5 4B (`google/medgemma-1.5-4b-it`) and
+  InternVL3.5-8B. Exact checkpoints and revisions are in
+  `configs/models.yaml`. LLaVA-Med was a candidate but was dropped because it
+  does not run outside its original CUDA-oriented codebase.
+- **Model terms:** MedGemma is used under the Health AI Developer Foundations
+  terms; this repository contains only model outputs, no weights and no hosted
+  model. Qwen3-VL and InternVL3.5 are Apache-2.0.
 - **Conditions:** the same image under a neutral prompt and under prompts that
   add patient age, family history, a colleague's benign or malignant opinion,
   or irrelevant text, plus text-only and blank-image controls.
