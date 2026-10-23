@@ -32,7 +32,9 @@ repository should be used to interpret a real patient's imaging.
 
 ## Status
 
-Phase 1 of 8: data download and frozen splits. No model results yet.
+Phase 3 of 8: prompt conditions and preregistration (draft under review).
+No test-set results yet. See `docs/PREREGISTRATION.md` and
+`docs/RUN_DESIGN.md`.
 
 ## Languages
 
