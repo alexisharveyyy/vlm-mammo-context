@@ -76,3 +76,19 @@ def test_roi_crops_recorded():
 def test_test_set_frozen():
     digest = hashlib.sha256((MANIFESTS / "test.csv").read_bytes()).hexdigest()
     assert digest == TEST_CSV_SHA256, "test.csv is frozen at splits-v1 and must not change"
+
+
+def test_roi_checksums_cover_every_case():
+    cases = pd.concat([read("dev.csv"), read("test.csv")])
+    objects = read("roi_dicom_checksums.csv")
+    pngs = read("roi_checksums.csv")
+    assert set(objects.case_id) == set(cases.case_id)
+    assert (objects.groupby("case_id").size() == 2).all()
+    assert objects.md5_base64.str.len().eq(24).all()
+    assert pngs.case_id.is_unique and set(pngs.case_id) == set(cases.case_id)
+    assert pngs.sha256.str.fullmatch(r"[0-9a-f]{64}").all()
+    assert pngs.pixel_sha256.str.fullmatch(r"[0-9a-f]{64}").all()
+    assert set(pngs.csv_order_swapped) <= {"yes", "no", "undetermined"}
+    assert (pngs.crop_object != pngs.mask_object).all()
+    birads = dict(zip(cases.case_id, cases.birads_assessment, strict=True))
+    assert all(birads[c] == a for c, a in zip(objects.case_id, objects.assessment, strict=True))
