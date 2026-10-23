@@ -1,0 +1,40 @@
+{
+  "model": "qwen3_vl_8b",
+  "commit": "e7627636d71220823f72abb376c65e29651d218f",
+  "config_sha256": "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b",
+  "smoke_config_sha256": "2b14254730fa7fd254410d25aab5bcdbfdc71ae7ca2201312942bd86eb272c5a",
+  "all": {
+    "calls": 20,
+    "parse_failures": 14,
+    "parse_failure_rate": 0.7,
+    "median_seconds": 5.8835,
+    "max_seconds": 7.132,
+    "median_output_tokens": 19.0,
+    "token_probability_available": 20
+  },
+  "full": {
+    "calls": 10,
+    "parse_failures": 10,
+    "parse_failure_rate": 1.0,
+    "median_seconds": 6.279999999999999,
+    "max_seconds": 6.904,
+    "median_output_tokens": 19.0,
+    "token_probability_available": 10
+  },
+  "roi": {
+    "calls": 10,
+    "parse_failures": 4,
+    "parse_failure_rate": 0.4,
+    "median_seconds": 2.2220000000000004,
+    "max_seconds": 7.132,
+    "median_output_tokens": 18.0,
+    "token_probability_available": 10
+  },
+  "load_seconds": 14.2,
+  "versions": {
+    "torch": "2.14.1",
+    "transformers": "5.20.2",
+    "python": "3.12.13",
+    "macos": "26.6.2"
+  }
+}

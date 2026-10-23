@@ -1,0 +1,14 @@
+{"model": "qwen3_vl_8b", "case_id": "P_00032_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00032_RIGHT_MLO", "image_kind": "roi", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00043_LEFT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00043_LEFT_MLO", "image_kind": "roi", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00171_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00319_LEFT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00402_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_00638_LEFT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01173_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01173_RIGHT_MLO", "image_kind": "roi", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01422_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01472_RIGHT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01472_RIGHT_MLO", "image_kind": "roi", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
+{"model": "qwen3_vl_8b", "case_id": "P_01629_LEFT_MLO", "image_kind": "full", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: indeterminate\nConfidence: 50"}
