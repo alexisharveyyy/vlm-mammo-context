@@ -6,7 +6,17 @@ readme = "README.md"
 license = "MIT"
 authors = [{ name = "Alexis Harvey" }]
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+    # Exact pins: PNG bytes depend on Pillow and its zlib, pixels on pydicom
+    # and numpy, manifest bytes on pandas, and the splits on the IDC index
+    # shipped in idc-index-data.
+    "idc-index==0.13.4",
+    "idc-index-data==25.0.5",
+    "numpy==2.5.4",
+    "pandas==3.1.0",
+    "pillow==13.0.0",
+    "pydicom==3.0.2",
+]
 
 [dependency-groups]
 dev = [
