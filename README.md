@@ -1,4 +1,4 @@
-# vlm-mammo-context
+# Same Image, Different Answer: Prompt Context Sensitivity of Vision-Language Models in Mammography
 
 **Question.** When the image stays the same, do vision-language models change
 their mammogram reading because of what the prompt says (patient context, a
