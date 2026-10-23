@@ -35,6 +35,7 @@ def main() -> int:
     ap.add_argument("--model", required=True)
     ap.add_argument("--smoke-config", type=Path, default=ROOT / "configs" / "smoke.yaml")
     ap.add_argument("--out", type=Path, default=ROOT / "runs" / "smoke")
+    ap.add_argument("--answer-format", choices=sorted(parse.FORMATS), default="plain")
     args = ap.parse_args()
 
     smoke = yaml.safe_load(args.smoke_config.read_text())
@@ -61,13 +62,13 @@ def main() -> int:
     records = []
     for case_id in smoke["cases"]:
         for kind in smoke["image_kinds"]:
-            prompt = f"{smoke['prompts'][kind]}\n\n{parse.FORMAT_INSTRUCTION}"
+            prompt = f"{smoke['prompts'][kind]}\n\n{parse.FORMATS[args.answer_format]}"
             out = adapter.predict(images.load_case_image(case_id, kind), prompt)
             record = {
                 "model": args.model,
                 "case_id": case_id,
                 "image_kind": kind,
-                "prompt_id": f"smoke_neutral_{kind}",
+                "prompt_id": f"smoke_neutral_{kind}_{args.answer_format}",
                 **out,
                 **provenance,
             }
@@ -89,7 +90,7 @@ def main() -> int:
     import torch
     import transformers
 
-    summary = {"model": args.model, **provenance}
+    summary = {"model": args.model, "answer_format": args.answer_format, **provenance}
     for kind in [None, *smoke["image_kinds"]]:
         rows = [r for r in records if kind is None or r["image_kind"] == kind]
         fails = sum(not r["parse"]["ok"] for r in rows)

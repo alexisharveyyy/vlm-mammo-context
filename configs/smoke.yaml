@@ -29,4 +29,5 @@ prompts:
   roi: >-
     This is a region of interest cropped from a mammogram around one finding.
     Assess the finding for breast cancer.
-# Appended to every prompt after a blank line: models.parse.FORMAT_INSTRUCTION
+# Appended to every prompt after a blank line: models.parse.FORMATS[--answer-format]
+# ("plain" by default; "forced" adds an explicit forced choice).

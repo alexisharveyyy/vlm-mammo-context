@@ -86,3 +86,8 @@ def test_log_failure_keeps_raw_text(tmp_path):
 def test_unknown_rules():
     with pytest.raises(ValueError):
         parse.parse(CLEAN, "loose")
+
+
+def test_forced_format_extends_plain_format():
+    assert parse.FORMATS["forced"].startswith(parse.FORMATS["plain"])
+    assert "must choose benign or malignant" in parse.FORMATS["forced"]

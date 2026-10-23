@@ -32,6 +32,15 @@ FORMAT_INSTRUCTION = (
     "Confidence: <a number from 0 to 100>"
 )
 
+# Same format, plus an explicit forced choice. Tested in the Phase 2 smoke
+# test because one model abstained ("indeterminate") under the plain format.
+FORMAT_INSTRUCTION_FORCED = (
+    FORMAT_INSTRUCTION + "\n"
+    "You must choose benign or malignant, even if you are uncertain; "
+    "express your uncertainty in the confidence number."
+)
+FORMATS = {"plain": FORMAT_INSTRUCTION, "forced": FORMAT_INSTRUCTION_FORCED}
+
 STRICT = re.compile(
     r"\A\s*BI-RADS: ([0-6])\s*\n\s*Assessment: (benign|malignant)\s*\n"
     r"\s*Confidence: (\d{1,3})\s*\Z"
