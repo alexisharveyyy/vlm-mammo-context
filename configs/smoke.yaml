@@ -1,0 +1,32 @@
+# Phase 2 smoke test: every adapter on 10 dev cases, full image and ROI crop.
+#
+# Dev set only. The cases were drawn with random.Random(2): dev cases are
+# grouped by stratum (abnormality type x label), each stratum shuffled, then
+# picked round-robin (3 calc benign, 3 calc malignant, 2 mass benign, 2 mass
+# malignant).
+#
+# The prompts are provisional neutral prompts for checking the adapters and
+# the parser only. The study prompts and their paraphrases are fixed in
+# Phase 3 (prompts/ and the preregistration).
+
+split: dev
+cases:
+  - P_00032_RIGHT_MLO
+  - P_00043_LEFT_MLO
+  - P_00171_RIGHT_MLO
+  - P_00319_LEFT_MLO
+  - P_00402_RIGHT_MLO
+  - P_00638_LEFT_MLO
+  - P_01173_RIGHT_MLO
+  - P_01422_RIGHT_MLO
+  - P_01472_RIGHT_MLO
+  - P_01629_LEFT_MLO
+image_kinds: [full, roi]
+prompts:
+  full: >-
+    This is a mammogram: one mediolateral oblique (MLO) view of one breast.
+    Assess the image for breast cancer.
+  roi: >-
+    This is a region of interest cropped from a mammogram around one finding.
+    Assess the finding for breast cancer.
+# Appended to every prompt after a blank line: models.parse.FORMAT_INSTRUCTION
