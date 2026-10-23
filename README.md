@@ -28,6 +28,14 @@ repository should be used to interpret a real patient's imaging.
 
 Phase 1 of 8: data download and frozen splits. No model results yet.
 
+## Languages
+
+| Language | Role | Status |
+|---|---|---|
+| Python | data download and preprocessing, model runs, run logging, a cross-check of the headline numbers | in use |
+| R | statistics and figures under `analysis/` (bootstrap, Wilson intervals, AUROC, multiple-comparison correction), reading only the committed run outputs; versions pinned with renv | planned (Phase 6) |
+| TypeScript | static results viewer under `viewer/` (Vite), outputs only and no images | planned (Phase 8) |
+
 ## Development
 
 ```sh
