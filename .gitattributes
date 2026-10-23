@@ -1,0 +1,3 @@
+# Manifests are hashed byte for byte; never convert line endings.
+data/manifests/*.csv -text
+data/manifests/*.json -text
