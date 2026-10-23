@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "vlm-mammo-context: context sensitivity of vision-language models on mammograms"
+type: software
+authors:
+  - family-names: Harvey
+    given-names: Alexis
+    affiliation: Louisiana State University
+repository-code: "https://github.com/alexisharveyyy/vlm-mammo-context"
+license: MIT
+version: 0.0.0
+keywords:
+  - vision-language models
+  - mammography
+  - CBIS-DDSM
+  - prompt sensitivity
+  - sycophancy
