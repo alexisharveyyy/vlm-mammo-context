@@ -159,14 +159,48 @@ The assignment will be restated in the preregistration (Phase 3).
 
 ## ROI crops
 
-For each case, `crop_series_instance_uids` and `mask_series_instance_uids`
-list the CBIS-DDSM ROI crop and mask series of every abnormality on the image,
-and `roi_crop_available` is true when all of them are in the IDC index. All
-100 dev and all 500 test cases have ROI crops available. Crops are not
-downloaded yet; they may be used as a secondary image condition. In many
-series the crop and the mask are two instances of one series, and their order
-differs between the mass and calc files, so they have to be told apart by
-content (the mask is binary) when they are used.
+`crop_series_instance_uids` and `mask_series_instance_uids` in `dev.csv` and
+`test.csv` list the CBIS-DDSM ROI crop and mask series of every abnormality on
+the case image; `roi_crop_available` is true for all 100 dev and all 500 test
+cases. `download.py roi` fetches the crop and mask series of one selected
+abnormality per case (1,200 DICOM objects, about 10 GB), verified by size and
+the IDC bucket MD5, and `preprocess.py --roi` converts the crops. They may be
+used as a secondary image condition.
+
+**One abnormality per case.** 39 cases have more than one abnormality on the
+image (3 dev, 36 test). All abnormalities on a case image share the case's
+binary label (this is an eligibility rule of the splits), and in this data
+they also share its pathology, so the label comes from each of them. The rule
+uses the abnormality with the highest BI-RADS assessment, which is the case's
+`birads_assessment`, and breaks ties by the lowest CBIS-DDSM abnormality id.
+The assessments differ in 3 test cases; in 2 of them
+(`P_00284_LEFT_MLO`, `P_00969_LEFT_MLO`) the rule selects abnormality 2.
+
+**Crop or mask is decided by content.** The mask is the image whose pixels
+take at most two values (masks are 8-bit with values 0 and 255; crops are
+16-bit). Series and instance order are never used.
+
+**Swapped series.** In 579 cases (94 dev, 485 test) the crop and the mask are
+two instances of one series. Both instances have InstanceNumber 1 and IDC
+names files by UUID, so the CSV file names (`000000`, `000001`) cannot be
+mapped to an instance; whether the CSV order is swapped is undetermined
+there. The CSVs use a fixed convention by file type (the calc files name the
+crop `000001`, the mass files `000000`). IDC gives such a series a single
+description ("cropped images" or "ROI mask images") that does not tell the
+two apart. In the other 21 cases (6 dev, 15 test) the crop and mask are
+separate series: the CSV names the mask series as the crop in 1 case
+(`P_00474_LEFT_MLO`, test), and IDC's series descriptions match the content
+in all 21.
+
+The crops are converted with the same fixed settings as the full images
+(16-bit to 8-bit integer window, no resizing, same PNG options). Crops are 81
+to 2,853 pixels wide and 81 to 3,817 pixels tall.
+`manifests/roi_dicom_checksums.csv` records the selected abnormality and every
+DICOM object (size, MD5, SHA-256); `manifests/roi_checksums.csv` records which
+object is the crop and which the mask, `csv_order_swapped`
+(`yes`, `no` or `undetermined`), the IDC series descriptions, and the PNG file
+and pixel SHA-256. The crops are frozen with the `prereg-v1` tag, not with
+`splits-v1`.
 
 ## Preprocessing
 
@@ -200,6 +234,8 @@ uv run python data/download.py metadata   # CSVs, verified against splits.json
 uv run python data/make_splits.py         # rewrites the manifests; must not change them
 uv run python data/download.py images     # about 20 GB, verified against dicom_checksums.csv
 uv run python data/preprocess.py          # PNGs, verified against png_sha256.csv
+uv run python data/download.py roi        # ROI crops and masks, about 10 GB
+uv run python data/preprocess.py --roi    # crop PNGs, verified against roi_checksums.csv
 ```
 
 `make_splits.py` reads the IDC index bundled with `idc-index`, so the lockfile
@@ -214,6 +250,8 @@ pins the index version.
 | `manifests/splits.json` | seed, rules, IDC versions, source CSV SHA-256, counts per split |
 | `manifests/dicom_checksums.csv` | per case: IDC object name, size, MD5 from the IDC bucket, SHA-256 |
 | `manifests/png_sha256.csv` | per case: PNG width and height, file SHA-256, pixel SHA-256 |
+| `manifests/roi_dicom_checksums.csv` | per case: selected abnormality, its crop and mask DICOM objects with size, MD5, SHA-256 |
+| `manifests/roi_checksums.csv` | per case: crop and mask object, swap status, IDC descriptions, crop PNG size and SHA-256s |
 
 `test.csv` is frozen at the `splits-v1` tag and never changes after it.
 
