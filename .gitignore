@@ -1,0 +1,43 @@
+# Data: nothing under data/ is tracked except manifests, the data card
+# and the download and preprocessing scripts.
+data/*
+!data/manifests/
+!data/README.md
+!data/*.py
+
+# Medical images anywhere in the tree
+*.dcm
+*.dicom
+*.DCM
+*.nii
+*.nii.gz
+
+# Model weights and checkpoints
+checkpoints/
+*.safetensors
+*.bin
+*.gguf
+*.pt
+*.pth
+*.ckpt
+hf_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+build/
+dist/
+
+# Secrets
+.env
+.env.*
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
