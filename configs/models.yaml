@@ -1,0 +1,93 @@
+# Model checkpoints, backends, resize policies and decoding settings.
+#
+# Every model receives the 8-bit full-resolution master (full image or ROI
+# crop) resized by models/images.py with the `resize` policy below, then
+# converted to RGB by copying the gray channel. The model's own processor then
+# sees an image that already fits its native input, so it does no further
+# aspect change. Masks are never shown to any model.
+#
+# Decoding is greedy (do_sample false, so temperature does not apply), with a
+# fixed seed set before every call. No system prompt is used for any model.
+# Revisions are full commit hashes on the Hugging Face Hub.
+
+models:
+  qwen3_vl_8b:
+    backend: transformers
+    repo_id: Qwen/Qwen3-VL-8B-Instruct
+    revision: 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b
+    license: Apache-2.0 (Hub metadata tag; the repository has no LICENSE file)
+    gated: false
+    dtype: bfloat16
+    device: mps
+    load_kwargs:
+      attn_implementation: sdpa
+    # 16 px patches merged 2x2: each 32 x 32 block is one visual token.
+    # At most 1,048,576 pixels = 1,024 visual tokens; aspect ratio kept; each
+    # side a multiple of 32; short side at least 256 so small ROI crops meet
+    # the processor minimum of 65,536 pixels.
+    resize:
+      type: max_pixels
+      max_pixels: 1048576
+      multiple_of: 32
+      min_side: 256
+    decoding:
+      do_sample: false
+      max_new_tokens: 128
+      seed: 0
+
+  medgemma_1_5_4b:
+    backend: transformers
+    repo_id: google/medgemma-1.5-4b-it
+    revision: 91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b
+    license: Health AI Developer Foundations terms of use (outputs may be published; not for clinical use)
+    gated: true
+    # Gemma 3 overflows in float16; bfloat16 is required.
+    dtype: bfloat16
+    device: mps
+    load_kwargs:
+      attn_implementation: sdpa
+    # SigLIP encoder at a fixed 896 x 896 (256 visual tokens). The processor
+    # would squash the image to a square, so it is letterboxed first: long
+    # side 896, aspect ratio kept, padded with black.
+    resize:
+      type: letterbox
+      size: 896
+    decoding:
+      do_sample: false
+      max_new_tokens: 128
+      seed: 0
+
+  internvl3_5_8b:
+    backend: transformers
+    repo_id: OpenGVLab/InternVL3_5-8B-HF
+    revision: 741a7d03020411e666c6109218ab71e08151ef86
+    license: Apache-2.0 (Qwen3 language backbone also Apache-2.0)
+    gated: false
+    dtype: bfloat16
+    device: mps
+    load_kwargs:
+      attn_implementation: sdpa
+    # 448 x 448 tiles, 256 visual tokens each. Tiling is turned on with at
+    # most 4 tiles plus a thumbnail; the long side is set to 896 so a typical
+    # MLO aspect (about 0.55) maps to a 1 x 2 grid without squashing
+    # (3 tiles, 768 visual tokens). A near-square ROI crop maps to a 2 x 2
+    # grid (5 tiles, 1,280 visual tokens).
+    resize:
+      type: long_side
+      size: 896
+    processor_kwargs:
+      crop_to_patches: true
+      max_patches: 4
+    decoding:
+      do_sample: false
+      max_new_tokens: 128
+      seed: 0
+
+dropped:
+  llava_med:
+    repo_id: microsoft/llava-med-v1.5-mistral-7b
+    reason: >-
+      Not loadable in transformers (model type llava_mistral). The official
+      code pins transformers 4.36.2, Python 3.10 and CUDA-oriented serving,
+      which does not run on Apple silicon. Only unofficial, unvalidated
+      conversions exist. Dropped by the owner on 2026-10-23.
