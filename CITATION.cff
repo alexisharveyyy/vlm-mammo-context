@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "vlm-mammo-context: context sensitivity of vision-language models on mammograms"
+title: "Same Image, Different Answer: Prompt Context Sensitivity of Vision-Language Models in Mammography"
 type: software
 authors:
   - family-names: Harvey
