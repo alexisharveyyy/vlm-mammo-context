@@ -25,3 +25,9 @@ def test_file_rules():
     assert audit.check_file("data/png/case.png", 10)
     assert not audit.check_file("reports/figures/flip_rate.png", 10)
     assert audit.check_file("runs/big.jsonl", 6 * 1024 * 1024)
+
+
+def test_ci_runs_audit_with_full_history():
+    ci = (Path(__file__).resolve().parents[1] / ".github" / "workflows" / "ci.yml").read_text()
+    assert "uv run python scripts/audit.py" in ci
+    assert "fetch-depth: 0" in ci

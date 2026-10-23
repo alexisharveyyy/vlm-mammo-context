@@ -13,9 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          # Full history so the audit sees every commit message.
           fetch-depth: 0
       - uses: astral-sh/setup-uv@v6
       - name: Install
         run: uv sync --locked
-      - name: Check
-        run: sh scripts/check.sh
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: Test
+        run: uv run pytest -q
+      - name: Audit history and tree
+        run: uv run python scripts/audit.py
