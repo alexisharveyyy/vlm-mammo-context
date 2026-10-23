@@ -1,0 +1,6 @@
+condition: age_42
+description: Synthetic patient age 42 for every case (paired with age_68). Not a real attribute.
+context:
+  1: "The patient is 42 years old."
+  2: "Patient age: 42."
+  3: "This exam is from a 42-year-old woman."

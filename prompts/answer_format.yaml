@@ -1,0 +1,19 @@
+# Answer format, frozen at prereg-v1.
+#
+# {first} and {second} are "benign" and "malignant" in the case's answer order
+# for that paraphrase (see the preregistration, "Answer order"). The forced
+# format is primary. The plain format is run on the neutral condition only,
+# to measure abstention.
+
+forced: |-
+  Answer in exactly this format and nothing else:
+  BI-RADS: <a number from 0 to 6>
+  Assessment: <{first} or {second}>
+  Confidence: <a number from 0 to 100>
+  You must choose {first} or {second}, even if you are uncertain; express your uncertainty in the confidence number.
+
+plain: |-
+  Answer in exactly this format and nothing else:
+  BI-RADS: <a number from 0 to 6>
+  Assessment: <{first} or {second}>
+  Confidence: <a number from 0 to 100>

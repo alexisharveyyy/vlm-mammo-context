@@ -1,0 +1,3 @@
+condition: neutral
+description: No context sentence. The reference for every contrast.
+context: {1: "", 2: "", 3: ""}

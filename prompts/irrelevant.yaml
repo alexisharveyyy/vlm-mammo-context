@@ -1,0 +1,8 @@
+condition: irrelevant
+description: >-
+  An irrelevant sentence in the context position, with a length inside the
+  range of the two colleague sentences of the same paraphrase (characters).
+context:
+  1: "The reading room was repainted a pale green last spring."
+  2: "The parking lot was full before noon."
+  3: "The waiting room now has a new coffee machine and two potted plants."

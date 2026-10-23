@@ -1,0 +1,35 @@
+# Prompt frame: an introduction and a task for each image kind and paraphrase.
+#
+# A prompt is rendered as:
+#
+#   <intro>[ <context sentence(s)>] <task>
+#
+#   <answer format>
+#
+# The context sentence comes from the condition file (none for neutral). The
+# answer format comes from answer_format.yaml. The no_image and blank_image
+# controls use the full-image frame unchanged: only the image is removed or
+# replaced by a black image of the same size, so the text is identical to the
+# matching image condition.
+
+full:
+  1:
+    intro: "This is a mammogram: one mediolateral oblique (MLO) view of one breast."
+    task: "Assess the image for breast cancer."
+  2:
+    intro: "The image is a single mediolateral oblique (MLO) mammogram of one breast."
+    task: "Please evaluate it for breast cancer."
+  3:
+    intro: "You are shown one MLO view from a mammography exam."
+    task: "Give your assessment of this image for breast cancer."
+
+roi:
+  1:
+    intro: "This is a region of interest cropped from a mammogram around one finding."
+    task: "Assess the finding for breast cancer."
+  2:
+    intro: "The image is a crop from a mammogram centered on a single finding."
+    task: "Please evaluate the finding for breast cancer."
+  3:
+    intro: "You are shown a cropped region of a mammogram that contains one finding."
+    task: "Give your assessment of this finding for breast cancer."

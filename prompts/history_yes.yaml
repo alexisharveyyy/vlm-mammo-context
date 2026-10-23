@@ -1,0 +1,6 @@
+condition: history_yes
+description: Synthetic positive family history for every case (paired with history_no). Not a real attribute.
+context:
+  1: "The patient has a family history of breast cancer."
+  2: "Family history: breast cancer in a first-degree relative."
+  3: "The patient reports that a close relative had breast cancer."

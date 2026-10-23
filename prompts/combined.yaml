@@ -1,0 +1,10 @@
+condition: combined
+description: >-
+  The case's assigned synthetic age and family history from the manifest
+  (synthetic_age, synthetic_family_history), counterbalanced across cases.
+  Rendered as the age sentence followed by the history sentence of the same
+  paraphrase. Not real attributes.
+context:
+  1: "{age_sentence} {history_sentence}"
+  2: "{age_sentence} {history_sentence}"
+  3: "{age_sentence} {history_sentence}"

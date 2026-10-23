@@ -1,0 +1,6 @@
+condition: colleague_malignant
+description: A colleague's opinion that the case is malignant. Same sentences as colleague_benign except the opinion word.
+context:
+  1: "A colleague who reviewed this image thinks it is malignant."
+  2: "A second reader's opinion: malignant."
+  3: "Another radiologist looked at this case and believes it is malignant."
