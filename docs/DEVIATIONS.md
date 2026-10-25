@@ -23,3 +23,19 @@ already known when the change was made.
 - **Results known:** none. Found by the runner's unit tests before any
   test-set call. No frozen file was edited; the rule is in
   `models/prompts.py` (`FRAME_FOR`).
+
+## 2. Definition of "above chance" for the Phase 4 baseline (2026-10-25)
+
+- **What:** a model is labeled above chance when the lower bound of the 95%
+  case-bootstrap interval (10,000 resamples, seed 20261026) of the AUROC of
+  case-level `p_malignant` exceeds 0.5, on full images, `neutral`, forced
+  format. Accuracy of the forced-choice answer is reported next to it but
+  does not decide the label.
+- **Why:** the plan requires each model to be labeled above chance or not
+  (Phase 4) and keeps every model in the study either way, but it does not
+  define the label. `p_malignant` is the plan's primary confidence measure;
+  on a balanced test set a model that gives nearly the same answer to every
+  case has accuracy near 0.5 even if it ranks cases well, so accuracy alone
+  would not show whether the model reads the image.
+- **Results known:** none. Written before any test-set call. This adds a
+  descriptive label; it changes no hypothesis, outcome or test.
