@@ -21,6 +21,8 @@ where the answer word starts. The returned dict:
 
 from __future__ import annotations
 
+import functools
+import hashlib
 import math
 import re
 import time
@@ -75,8 +77,12 @@ def class_probability(
     return None
 
 
-def check_not_mask(image: Image.Image) -> None:
-    if np.unique(np.asarray(image.convert("L"))).size <= 2:
+def check_not_mask(image: Image.Image, allow_blank: bool = False) -> None:
+    """Refuse binary images. allow_blank admits only an all-zero image."""
+    values = np.unique(np.asarray(image.convert("L")))
+    if allow_blank and values.tolist() == [0]:
+        return
+    if values.size <= 2:
         raise ValueError("binary image: masks are never shown to a model")
 
 
@@ -88,8 +94,16 @@ class Adapter(ABC):
     @abstractmethod
     def load(self) -> None: ...
 
+    def reload(self) -> None:
+        """Load again after a failure (the runner retries a failed call once)."""
+        self.load()
+
+    def set_feature_cache(self, enabled: bool) -> None:
+        """Image-feature caching; a no-op unless the backend supports it."""
+        return None
+
     @abstractmethod
-    def generate(self, image: Image.Image, prompt: str) -> Generation: ...
+    def generate(self, image: Image.Image | None, prompt: str) -> Generation: ...
 
     @abstractmethod
     def decode(self, token_ids: list[int]) -> str: ...
@@ -97,9 +111,24 @@ class Adapter(ABC):
     @abstractmethod
     def class_token_ids(self) -> dict[str, set[int]]: ...
 
-    def predict(self, image: Image.Image, prompt: str) -> dict:
-        check_not_mask(image)
-        sent = images.resize(image, self.cfg["resize"])
+    def prepare(self, image: Image.Image | None, allow_blank: bool = False) -> Image.Image | None:
+        """The image as sent to the model: mask check, then the resize policy.
+
+        None means a text-only call (the no_image control). allow_blank admits
+        an all-zero image (the blank_image control) and nothing else.
+        """
+        if image is None:
+            return None
+        check_not_mask(image, allow_blank)
+        return images.resize(image, self.cfg["resize"])
+
+    def predict(self, image: Image.Image | None, prompt: str, allow_blank: bool = False) -> dict:
+        sent = self.prepare(image, allow_blank)
+        return self.predict_prepared(sent, prompt, None if image is None else image.size)
+
+    def predict_prepared(
+        self, sent: Image.Image | None, prompt: str, input_size: tuple[int, int] | None
+    ) -> dict:
         gen = self.generate(sent, prompt)
         parsed = parse.parse(gen.text)
         probs = class_probability(
@@ -117,8 +146,8 @@ class Adapter(ABC):
                 "model": self.key,
                 "repo_id": self.cfg["repo_id"],
                 "revision": self.cfg["revision"],
-                "input_size": list(image.size),
-                "sent_size": list(sent.size),
+                "input_size": None if input_size is None else list(input_size),
+                "sent_size": None if sent is None else list(sent.size),
                 "output_tokens": len(gen.token_ids),
                 "seconds": round(gen.seconds, 3),
             },
@@ -144,16 +173,63 @@ class TransformersAdapter(Adapter):
         ).to(self.device)
         self.model.eval()
         self.tokenizer = self.processor.tokenizer
+        self._class_ids = None
+        self._feature_cache = None
+        self._cache_enabled = False
 
-    def messages(self, prompt: str) -> list[dict]:
-        return [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt}]}]
+    def reload(self) -> None:
+        enabled = self._cache_enabled
+        del self.model
+        if self.device == "mps":
+            self.torch.mps.empty_cache()
+        self.load()
+        self.set_feature_cache(enabled)
 
-    def generate(self, image: Image.Image, prompt: str) -> Generation:
+    def set_feature_cache(self, enabled: bool) -> None:
+        """Reuse vision-encoder outputs for repeated identical pixel inputs.
+
+        Wraps the model's get_image_features (functools.wraps keeps the
+        signature that transformers inspects). One entry is held, keyed on the
+        SHA-256 of the pixel tensor and the other arguments, and replaced when
+        the image changes. Outputs were bit-identical with and without it on
+        the dev set; the runner rechecks that before each test-set tier.
+        """
+        inner = self.model.model
+        original = getattr(inner.get_image_features, "__wrapped_original__", None)
+        if original is not None:
+            inner.get_image_features = original
+        self._feature_cache = None
+        self._cache_enabled = enabled
+        if not enabled:
+            return
+        original = inner.get_image_features
+
+        @functools.wraps(original)
+        def cached(pixel_values, *args, **kwargs):
+            parts = [pixel_values.float().cpu().numpy().tobytes()]
+            for value in [*args, *(kwargs[k] for k in sorted(kwargs))]:
+                parts.append(repr(value.tolist() if hasattr(value, "tolist") else value).encode())
+            key = hashlib.sha256(b"\x00".join(parts) + repr(sorted(kwargs)).encode()).hexdigest()
+            if self._feature_cache is None or self._feature_cache[0] != key:
+                self._feature_cache = (key, original(pixel_values, *args, **kwargs))
+            return self._feature_cache[1]
+
+        cached.__wrapped_original__ = original
+        inner.get_image_features = cached
+
+    def messages(self, prompt: str, with_image: bool = True) -> list[dict]:
+        content = [{"type": "image"}] if with_image else []
+        return [{"role": "user", "content": [*content, {"type": "text", "text": prompt}]}]
+
+    def generate(self, image: Image.Image | None, prompt: str) -> Generation:
         torch = self.torch
         text = self.processor.apply_chat_template(
-            self.messages(prompt), add_generation_prompt=True, tokenize=False
+            self.messages(prompt, with_image=image is not None),
+            add_generation_prompt=True,
+            tokenize=False,
         )
-        inputs = self.processor(text=[text], images=[image], return_tensors="pt").to(self.device)
+        kwargs = {"images": [image]} if image is not None else {}
+        inputs = self.processor(text=[text], return_tensors="pt", **kwargs).to(self.device)
         if "pixel_values" in inputs:
             inputs["pixel_values"] = inputs["pixel_values"].to(self.model.dtype)
         torch.manual_seed(self.cfg["decoding"]["seed"])
@@ -188,10 +264,12 @@ class TransformersAdapter(Adapter):
         return self.tokenizer.decode(token_ids, skip_special_tokens=True)
 
     def class_token_ids(self) -> dict[str, set[int]]:
-        return {
-            label: {self.tokenizer.encode(w, add_special_tokens=False)[0] for w in words}
-            for label, words in CLASS_WORDS.items()
-        }
+        if self._class_ids is None:
+            self._class_ids = {
+                label: {self.tokenizer.encode(w, add_special_tokens=False)[0] for w in words}
+                for label, words in CLASS_WORDS.items()
+            }
+        return self._class_ids
 
 
 ADAPTERS: dict[str, type[Adapter]] = {"transformers": TransformersAdapter}

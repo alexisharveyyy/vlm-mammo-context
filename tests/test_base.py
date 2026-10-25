@@ -77,3 +77,21 @@ def test_predict_refuses_masks():
     mask[10:20, 10:20] = 255
     with pytest.raises(ValueError, match="mask"):
         FakeAdapter("fake", CFG).predict(Image.fromarray(mask), "prompt")
+
+
+def test_blank_allowed_only_when_requested_and_all_zero():
+    blank = Image.fromarray(np.zeros((40, 30), dtype=np.uint8))
+    with pytest.raises(ValueError, match="mask"):
+        base.check_not_mask(blank)
+    base.check_not_mask(blank, allow_blank=True)
+    mask = np.zeros((40, 30), dtype=np.uint8)
+    mask[5:10, 5:10] = 255
+    with pytest.raises(ValueError, match="mask"):
+        base.check_not_mask(Image.fromarray(mask), allow_blank=True)
+
+
+def test_text_only_predict():
+    adapter = FakeAdapter("fake", CFG)
+    out = adapter.predict(None, "prompt")
+    assert adapter.seen is None
+    assert out["meta"]["input_size"] is None and out["meta"]["sent_size"] is None
