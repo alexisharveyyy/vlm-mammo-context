@@ -89,8 +89,14 @@ def test_answer_order_alternates_and_is_counterbalanced():
     assert "You must choose malignant or benign" in text
 
 
+def test_blank_roi_uses_roi_text():
+    assert prompts.render("colleague_benign", 2, "blank_roi", CASE) == prompts.render(
+        "colleague_benign", 2, "roi", CASE
+    )
+
+
 def test_controls_use_full_image_text():
-    for control in ("no_image", "blank_image"):
+    for control in ("no_image", "blank_image", "blank_full"):
         assert prompts.render("neutral", 1, control, CASE) == prompts.render(
             "neutral", 1, "full", CASE
         )

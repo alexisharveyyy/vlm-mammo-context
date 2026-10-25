@@ -4,7 +4,8 @@
 
 `case` is a row of dev.csv or test.csv merged with answer_order.csv; only the
 synthetic context columns and the answer-order offset are read. The true
-label is never used. no_image and blank_image use the full-image text.
+label is never used. Controls use the text of the image condition they stand
+in for (FRAME_FOR).
 """
 
 from __future__ import annotations
@@ -28,6 +29,10 @@ CONDITIONS = [
 ]
 PARAPHRASES = (1, 2, 3)
 ANSWER_FORMATS = ("forced", "plain")
+# Controls use the text of the image condition they stand in for: no_image and
+# blank_full the full-image frame, blank_roi the ROI frame. "blank_image" is
+# the full-size blank image as first named in prompts/frame.yaml.
+FRAME_FOR = {"no_image": "full", "blank_image": "full", "blank_full": "full", "blank_roi": "roi"}
 
 
 @cache
@@ -63,9 +68,7 @@ def render(
 ) -> str:
     if condition not in CONDITIONS:
         raise ValueError(f"unknown condition {condition!r}")
-    if image_kind in ("no_image", "blank_image"):
-        image_kind = "full"
-    frame = _load("frame")[image_kind][paraphrase]
+    frame = _load("frame")[FRAME_FOR.get(image_kind, image_kind)][paraphrase]
     context = context_sentence(condition, paraphrase, case)
     body = " ".join(part for part in (frame["intro"], context, frame["task"]) if part)
     first, second = answer_order(int(case["answer_order_offset"]), paraphrase)

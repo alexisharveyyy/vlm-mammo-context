@@ -7,4 +7,19 @@ Every change to that plan is recorded here before the affected analysis is repor
 the date, what changed, why, and whether any affected test-set result was
 already known when the change was made.
 
-None so far.
+## 1. Prompt text for the blank ROI control (2026-10-25)
+
+- **What:** the `blank_roi` control (an all-black image the size of the ROI
+  crop) is given the ROI-crop prompt text, and `blank_full` the full-image
+  text.
+- **Why:** section 4.2 of the plan gives each blank control the same prompt
+  text as its image condition, and section 5.2 compares `roi` with
+  `blank_roi`. A comment in the frozen `prompts/frame.yaml` says the
+  blank-image control uses the full-image frame; it was written before the
+  blank control was split into full-size and ROI-size versions, and the
+  frozen `models/prompts.py` only handled the full-size name. Using the
+  full-image text for `blank_roi` would change the image and the text at
+  once and confound the comparison.
+- **Results known:** none. Found by the runner's unit tests before any
+  test-set call. No frozen file was edited; the rule is in
+  `models/prompts.py` (`FRAME_FOR`).
