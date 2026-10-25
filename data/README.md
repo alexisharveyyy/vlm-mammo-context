@@ -155,7 +155,8 @@ must never be read as clinical data.
   one: in the test set each combination has 124 to 126 cases, and age and
   history are each split 125/125 or 126/124 within each label.
 
-The assignment will be restated in the preregistration (Phase 3).
+The assignment is restated in the pre-specified analysis plan
+(`docs/PREREGISTRATION.md`, frozen at tag `prereg-v1` before any test-set run).
 
 ## ROI crops
 

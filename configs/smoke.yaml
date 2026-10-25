@@ -7,7 +7,7 @@
 #
 # The prompts are provisional neutral prompts for checking the adapters and
 # the parser only. The study prompts and their paraphrases are fixed in
-# Phase 3 (prompts/ and the preregistration).
+# Phase 3 (prompts/ and the pre-specified analysis plan, docs/PREREGISTRATION.md).
 
 split: dev
 cases:

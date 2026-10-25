@@ -32,8 +32,14 @@ repository should be used to interpret a real patient's imaging.
 
 ## Status
 
-Phase 3 of 8: prompt conditions and preregistration (draft under review).
-No test-set results yet. See `docs/PREREGISTRATION.md` and
+Phase 4 of 8: baseline on the test set.
+
+The hypotheses, outcomes and statistical tests are a pre-specified analysis
+plan, frozen at tag `prereg-v1` before any test-set run:
+`docs/PREREGISTRATION.md`, SHA-256
+`3ae8ae33638b2eb6353eeb199acaa869d1369d21d95527862e8afd68acde8423`.
+The plan was not registered with an external registry. Changes made after the
+tag are logged in `docs/DEVIATIONS.md`; execution follows
 `docs/RUN_DESIGN.md`.
 
 ## Languages
