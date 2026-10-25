@@ -1,0 +1,6 @@
+{"call_key": "internvl3_5_8b|full|neutral|2|plain|P_00012_LEFT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
+{"call_key": "internvl3_5_8b|full|neutral|3|plain|P_00012_LEFT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
+{"call_key": "internvl3_5_8b|roi|neutral|2|plain|P_00012_LEFT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
+{"call_key": "internvl3_5_8b|roi|neutral|3|plain|P_00012_LEFT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
+{"call_key": "internvl3_5_8b|full|neutral|3|plain|P_00032_RIGHT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
+{"call_key": "internvl3_5_8b|full|neutral|3|plain|P_00043_LEFT_MLO", "rules": "lenient", "errors": ["assessment_unreadable"], "raw_text": "BI-RADS: 0\nAssessment: None\nConfidence: 0"}
