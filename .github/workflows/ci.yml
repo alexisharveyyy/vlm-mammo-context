@@ -30,8 +30,9 @@ jobs:
   analysis:
     runs-on: ubuntu-latest
     # R 4.4.0 (the version in analysis/renv.lock) comes preinstalled, so no
-    # system packages are installed on each run.
-    container: rocker/r-ver:4.4.0
+    # system packages are installed on each run. Pinned by digest (the
+    # multi-architecture index of rocker/r-ver:4.4.0).
+    container: rocker/r-ver:4.4.0@sha256:73adabf378930f8744f56bac1fe5e99870532eb4ced1a15075991bac909d21f3
     steps:
       # The only system libraries needed: git for the commit in reports, and
       # libuv for the binary build of the fs package.
