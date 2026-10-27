@@ -34,6 +34,10 @@ repository should be used to interpret a real patient's imaging.
 
 Phase 4 of 8: baseline on the test set.
 
+The baseline is in [reports/baseline.md](reports/baseline.md). On full images
+with the neutral prompt, none of the three models is above chance by the rule in
+docs/DEVIATIONS.md, entry 2. All three stay in the study.
+
 The hypotheses, outcomes and statistical tests are a pre-specified analysis
 plan, frozen at tag `prereg-v1` before any test-set run:
 `docs/PREREGISTRATION.md`, SHA-256
