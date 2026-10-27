@@ -1,0 +1,249 @@
+:root {
+  --bg: #fbfbf9;
+  --fg: #1d1f23;
+  --muted: #5d6470;
+  --line: #dcdfe4;
+  --panel: #ffffff;
+  --accent: #2f5d8a;
+  --mal: #b4433a;
+  --ben: #2e7d5b;
+  --warn: #a8761c;
+  --flip: #fff3d6;
+  --select: #e8eef6;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a;
+    --fg: #e6e8eb;
+    --muted: #9aa2ad;
+    --line: #2d3238;
+    --panel: #1c1f23;
+    --accent: #8fb6dd;
+    --mal: #e2867d;
+    --ben: #7cc7a2;
+    --warn: #d8b25e;
+    --flip: #3a3220;
+    --select: #243140;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.top,
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+h1 {
+  margin: 24px 0 4px;
+  font-size: 22px;
+}
+
+h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+}
+
+.lede,
+.meta,
+.hint,
+.legend {
+  color: var(--muted);
+}
+
+.meta {
+  font-size: 12px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.filters label.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  padding-bottom: 4px;
+}
+
+select,
+input[type="search"],
+button {
+  font: inherit;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.summary {
+  padding: 10px 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.list,
+.detail {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+th {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr:hover,
+tbody tr.selected {
+  background: var(--select);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.label.malignant {
+  color: var(--mal);
+}
+
+.label.benign {
+  color: var(--ben);
+}
+
+.marks {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.ans {
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+  border-radius: 3px;
+  font: 600 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #fff;
+}
+
+.ans.M {
+  background: var(--mal);
+}
+
+.ans.B {
+  background: var(--ben);
+}
+
+.ans.A,
+.ans.F {
+  background: var(--warn);
+}
+
+.ans.E {
+  background: #6b7280;
+}
+
+.ans.none {
+  color: var(--muted);
+  background: transparent;
+  border: 1px dashed var(--line);
+}
+
+.grid {
+  margin-top: 12px;
+}
+
+.grid td.flip {
+  background: var(--flip);
+}
+
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.legend {
+  padding: 16px 0 32px;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.legend .ans {
+  margin-left: 8px;
+}
+
+.local {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.local img {
+  max-height: 320px;
+  max-width: 48%;
+  background: #000;
+}

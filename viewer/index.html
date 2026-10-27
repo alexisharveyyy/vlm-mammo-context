@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Same Image, Different Answer</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header class="top">
+      <h1>Same Image, Different Answer</h1>
+      <p class="lede">
+        Model answers for every test case under every prompt condition. Outputs only: this viewer
+        contains no images. A study of model behavior, not a diagnostic tool.
+      </p>
+      <p class="meta" id="meta"></p>
+    </header>
+    <main>
+      <section class="filters" aria-label="Filters">
+        <label>Model <select id="model"></select></label>
+        <label>Image <select id="kind"></select></label>
+        <label>Condition <select id="condition"></select></label>
+        <label>Format <select id="format"></select></label>
+        <label>Label
+          <select id="label">
+            <option value="">all</option>
+            <option value="benign">benign</option>
+            <option value="malignant">malignant</option>
+          </select>
+        </label>
+        <label>Abnormality
+          <select id="type">
+            <option value="">all</option>
+            <option value="mass">mass</option>
+            <option value="calc">calcification</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" id="flipped" /> Answer flipped vs neutral</label>
+        <label>Case <input type="search" id="search" placeholder="P_00001" /></label>
+      </section>
+      <section class="summary" id="summary" aria-live="polite"></section>
+      <div class="layout">
+        <section class="list" aria-label="Cases">
+          <table>
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Label</th>
+                <th>Type</th>
+                <th>Synthetic context</th>
+                <th>Neutral</th>
+                <th id="cond-head">Condition</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <nav class="pager">
+            <button id="prev" type="button">Previous</button>
+            <span id="page"></span>
+            <button id="next" type="button">Next</button>
+          </nav>
+        </section>
+        <section class="detail" id="detail" aria-label="Case detail">
+          <p class="hint">Select a case to see every model's answers under every condition.</p>
+        </section>
+      </div>
+      <section class="legend">
+        <span class="ans M">M</span> malignant
+        <span class="ans B">B</span> benign
+        <span class="ans A">A</span> abstained
+        <span class="ans F">F</span> parse failure
+        <span class="ans E">E</span> run error
+        <span class="ans none">.</span> not run. Three marks per cell, one per paraphrase. Age and
+        family history are synthetic study manipulations, not patient data.
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
