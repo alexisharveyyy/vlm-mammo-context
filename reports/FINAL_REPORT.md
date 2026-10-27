@@ -217,7 +217,30 @@ answer-order sensitivity; and the strict parser's case sensitivity.
 
 [[PENDING: threats added in Phase 7 and how the results bear on each]]
 
-## 11. Data, license and citation
+## 11. Reproduction
+
+Every result regenerates from committed outputs with one command, run from
+the repository root at the commit given. Model outputs come from the
+commits recorded in each call; the commit below is the one that produced
+the report or table.
+
+| Result | Output | Command | Config | Commit |
+|---|---|---|---|---|
+| Baseline (8.1) | `reports/baseline.md` | `uv run python -m eval.baseline` | `configs/models.yaml` `038826f2` | [[PENDING: commit]] |
+| Primary outcome (8.2) | `reports/analysis.md`, `reports/analysis/contrasts.csv` | `Rscript analysis/run_analysis.R --final` | `analysis/renv.lock` [[PENDING: SHA-256]] | [[PENDING: commit]] |
+| Key secondary (8.3) | `reports/analysis.md`, `reports/analysis/contrasts.csv` | `Rscript analysis/run_analysis.R --final` | `analysis/renv.lock` [[PENDING: SHA-256]] | [[PENDING: commit]] |
+| Descriptive (8.4) | `reports/analysis.md`, `reports/analysis/*.csv`, `reports/figures/*.png` | `Rscript analysis/run_analysis.R --final` | `analysis/renv.lock` [[PENDING: SHA-256]] | [[PENDING: commit]] |
+| Sensitivity S1, S3 (8.5) | `reports/analysis/flips.csv`, `reports/analysis/contrasts.csv` | `Rscript analysis/run_analysis.R --final` | `analysis/renv.lock` [[PENDING: SHA-256]] | [[PENDING: commit]] |
+| Sensitivity S2 and robustness (8.5, 8.6) | `reports/robustness.md`, `reports/robustness/*.csv` | `Rscript analysis/run_robustness.R --final` | `configs/robustness.yaml` [[PENDING: SHA-256]] | [[PENDING: commit]] |
+| Python cross-check | console: 0 mismatches | `uv run python -m eval.crosscheck --robustness` | none | [[PENDING: commit]] |
+| Exploratory 1 (8.7) | `reports/exploratory/surface_features.md` | `uv run python -m eval.surface_features` | none | [[PENDING: commit]] |
+| Phase 7 variant runs | `runs/robustness/<variant>/` | `sh scripts/run_variant.sh <variant>` | `configs/models.yaml`, `configs/robustness.yaml` [[PENDING: SHA-256]] | [[PENDING: commits recorded in the outputs]] |
+| Model outputs, tiers T0 to T4 | `runs/<model>/` | `sh scripts/run_tier.sh <tier>` | `configs/models.yaml` `038826f2` | [[PENDING: commits recorded in the outputs]] |
+
+[[PENDING: fresh-clone check: date, commit and result of rerunning every
+command above in a new clone]]
+
+## 12. Data, license and citation
 
 CBIS-DDSM is used under CC BY 3.0 and the TCIA Data Usage Policy; the
 required citations are in `data/README.md`. MedGemma is used under the
