@@ -138,8 +138,10 @@ LLaVA-Med was planned and dropped before the plan was frozen.
 - **Sensitivity:** S1 parse failures counted as flips; S2 the strict parser;
   S3 `p_malignant` without low-mass answers.
 - **Robustness (Phase 7, `docs/ROBUSTNESS.md`):** agreement across
-  paraphrases, the context sentence after the task, the strict parser, and
-  sampled decoding for Qwen3-VL, read with a rule fixed before the results.
+  paraphrases and the strict parser for all primary contrasts; the context
+  sentence after the task (all models) and sampled decoding (Qwen3-VL) for
+  the colleague contrasts only (`docs/DEVIATIONS.md`, entry 7). Read with a
+  rule fixed before the results.
 - **Exploratory:** plan section 9 and `docs/EXPLORATORY.md`, reported with
   unadjusted intervals and labeled exploratory.
 - **Code:** R under `analysis/` produces every number; `eval/crosscheck.py`
@@ -204,6 +206,10 @@ From `docs/DEVIATIONS.md`, which gives the reasons and what was known when:
    and abstention tests use T0, whose values were already reported.
 5. **Case-level `p_malignant` over valid answers only** in the baseline
    (2026-10-27): matches plan section 5; changes no label.
+6. **Second decoding setting** (2026-10-27): Qwen3-VL, sampling at
+   temperature 0.7, top_p 1.0, seed 1; chosen from T0 only.
+7. **Scope of the position and decoding checks** (2026-10-27): the
+   colleague contrasts only, decided blind to T1 to T4.
 
 [[PENDING: any later deviation entries]]
 

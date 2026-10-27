@@ -141,4 +141,7 @@ conclusions, and what the study does about it.
   Qwen3-VL, 896 px on the long side for MedGemma and InternVL3.5 before
   their own tiling), which may lose fine calcifications.
 - **One view, one decoding setting:** one MLO image per patient, and greedy
-  decoding; Phase 7 adds one sampled setting for one model.
+  decoding; Phase 7 adds one sampled setting for one model (Qwen3-VL).
+- **Robustness scope:** the position and decoding checks cover only the
+  colleague contrasts; the age and history contrasts are not checked for
+  either (`docs/DEVIATIONS.md`, entry 7; `docs/EXPLORATORY.md`).
