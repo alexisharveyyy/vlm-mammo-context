@@ -6,7 +6,9 @@
 #
 # The study settings (configs/models.yaml) are not changed; a variant only
 # overrides what it lists here. The variant block's SHA-256 is recorded in
-# every call.
+# every call. Scope decided on 2026-10-27, before any tier T1 to T4 output was
+# read (docs/ROBUSTNESS.md, docs/DEVIATIONS.md entry 7): the colleague
+# contrasts only.
 
 variants:
   position_end:
@@ -16,14 +18,13 @@ variants:
     image_kind: full
     # neutral has no context sentence, so its prompt is the same in both
     # positions; the study's neutral outputs are the reference.
-    conditions: [colleague_benign, colleague_malignant, age_42, age_68, history_yes, history_no]
+    conditions: [colleague_benign, colleague_malignant]
 
   sampled:
     description: sampling at temperature 0.7 (seed 1) instead of greedy decoding
     models: [qwen3_vl_8b]
     image_kind: full
-    conditions:
-      [neutral, colleague_benign, colleague_malignant, age_42, age_68, history_yes, history_no]
+    conditions: [neutral, colleague_benign, colleague_malignant]
     decoding:
       do_sample: true
       temperature: 0.7

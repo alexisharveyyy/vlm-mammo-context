@@ -169,7 +169,7 @@ def test_variant_runs_record_the_variant_and_move_the_context(tmp_path):
         FakeAdapter(), CASES, tmp_path, prov, loader, "dev", log=lambda m: None, position="end"
     )
     calls = run.calls_for_cells(run.variant_cells(variant), "fake", ["A", "B"])
-    assert len(calls) == 2 * 6 * 3
+    assert len(calls) == 2 * 2 * 3
     runner.run(calls)
     records = lines(tmp_path)
     assert len(records) == len(calls)

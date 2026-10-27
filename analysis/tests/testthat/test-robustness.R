@@ -45,7 +45,9 @@ test_that("the checks recover the planted variant effects", {
     file.path(runs, "robustness"), variants_path, resamples = 200
   )
   ch <- r$checks
-  expect_equal(as.vector(table(ch$check)[c("R1", "R2", "R3", "R4")]), c(36, 24, 12, 8))
+  # R2 and R4 cover only the colleague contrasts (H1, H2) that the variants rerun.
+  expect_equal(as.vector(table(ch$check)[c("R1", "R2", "R3", "R4")]), c(36, 12, 12, 4))
+  expect_true(all(ch$hypothesis[ch$check %in% c("R2", "R4")] %in% c("H1", "H2")))
   expect_false(any(grepl("^pending", ch$note)))
   # position_end scales the context effects by 1.25.
   diff <- ch[ch$check == "R2" & grepl("difference", ch$outcome), ]

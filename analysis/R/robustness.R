@@ -125,7 +125,9 @@ paraphrase_rows <- function(s) {
 
 # R2 and R4: the primary contrasts in a variant, and their difference from the
 # study (variant minus study). Conditions in the variant carry "@suffix";
-# reference conditions the variant did not rerun come from the study.
+# reference conditions the variant did not rerun come from the study. Only
+# hypotheses whose condition the variant reran are included (H1 and H2 in the
+# scope of configs/robustness.yaml).
 variant_rows <- function(s, variant, suffix, check, label, models) {
   rows <- list()
   rerun <- variant$conditions
@@ -135,6 +137,7 @@ variant_rows <- function(s, variant, suffix, check, label, models) {
     for (h in seq_len(nrow(HYPOTHESES))) {
       cond <- HYPOTHESES$condition[h]
       ref <- HYPOTHESES$reference[h]
+      if (!cond %in% rerun) next
       contrast <- paste(cond, "vs", ref)
       keys <- c(
         cell_key(m, "full", name(cond)), cell_key(m, "full", name(ref)),
