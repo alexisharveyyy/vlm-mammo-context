@@ -55,11 +55,24 @@ from the strictly valid answers, with bootstrap p-values and Holm within
 these 12. Reported with the number of answers per cell that are valid under
 the lenient but not the strict rules.
 
-The strict rules are case-sensitive. On the tier T0 outputs, 9,999 of
-MedGemma's 10,000 valid answers write "Benign" or "Malignant" with a capital
-letter, as do 5,482 of InternVL's 9,459, so this check will have almost no
-data for MedGemma and about 40% of the data for InternVL. That is reported
-as such; the frozen rules are not changed here.
+The strict rules are case-sensitive, and they stay as frozen. Most of
+MedGemma's answers and many of InternVL's write "Benign" or "Malignant"
+with a capital letter, which only the lenient rules accept. Coverage on the
+tier T0 outputs (valid answers under the lenient rules that are also valid
+under the strict rules; `models.parse.parse_strict`):
+
+| Model | All T0 cells | Full image, `neutral`, forced |
+|---|---|---|
+| Qwen3-VL | 7,581 of 7,581 (100%) | 1,500 of 1,500 (100%) |
+| MedGemma 1.5 | 1 of 10,000 (0.01%) | 0 of 1,500 (0%) |
+| InternVL3.5 | 3,977 of 9,459 (42.0%) | 444 of 1,500 (29.6%) |
+
+So sensitivity 2 cannot be computed for MedGemma (no case has a strictly
+valid answer in the reference cell; its rows are reported as having no
+data), and for InternVL it rests on a minority of the answers. The
+reference cell is the same in every primary contrast's `neutral` arm, so
+these shares bound the data available to S2. This is also listed in
+`docs/THREATS.md`.
 
 ### R4. Second decoding setting for one model (new runs: `sampled`)
 

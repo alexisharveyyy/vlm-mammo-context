@@ -103,9 +103,12 @@ conclusions, and what the study does about it.
 
 ## Other known limits
 
-- **Strict parser:** the frozen strict rules require a lowercase class word,
-  so sensitivity 2 keeps almost none of MedGemma's answers and about 40% of
-  InternVL's (`docs/ROBUSTNESS.md`, R3).
+- **Strict parser:** the frozen strict rules, kept unchanged, require a
+  lowercase class word. On tier T0 they accept 100% of Qwen3-VL's valid
+  answers, 0.01% of MedGemma's (1 of 10,000; none in the full-image
+  `neutral` cell) and 42.0% of InternVL3.5's (29.6% in that cell). So
+  sensitivity 2 cannot be computed for MedGemma and rests on a minority of
+  InternVL3.5's answers (`docs/ROBUSTNESS.md`, R3).
 - **Abstention:** under the plain format Qwen3-VL abstains on 99.4% of
   full-image calls; the forced format is primary for this reason, and
   forced answers may not reflect what the model would say unprompted.
