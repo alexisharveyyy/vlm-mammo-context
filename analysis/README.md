@@ -12,7 +12,8 @@ From the repository root, with R 4.4.0:
 
     Rscript -e 'renv::restore(project = "analysis")'     # once
     Rscript analysis/run_analysis.R --final              # writes reports/
-    uv run python -m eval.crosscheck                     # must report 0 mismatches
+    Rscript analysis/run_robustness.R --final            # Phase 7, docs/ROBUSTNESS.md
+    uv run python -m eval.crosscheck --robustness        # must report 0 mismatches
 
 `run_analysis.R` writes `reports/analysis.md`, the tables in
 `reports/analysis/` (`contrasts.csv`, `cells.csv`, `flips.csv`,
@@ -40,7 +41,10 @@ never written to `runs/`.
 | `R/io.R` | reading the run outputs and manifests; abstention rule; answer order |
 | `R/stats.R` | Wilson intervals, AUROC, Brier, ECE, BI-RADS consistency, the paired case bootstrap and its p-value |
 | `R/outcomes.R` | case-level values, every contrast with its family, Holm and Benjamini-Hochberg |
-| `R/report.R` | the Markdown report and figures |
+| `R/report.R` | the Markdown reports and figures |
+| `R/robustness.R` | Phase 7 checks: paraphrase agreement, context position, strict parser, sampled decoding |
+| `R/cli.R` | command line options and the `--final` commit check |
+| `run_robustness.R` | Phase 7 entry; writes `reports/robustness.md` and `reports/robustness/` |
 | `run_analysis.R` | command line entry |
 | `renv.lock` | pinned R and package versions |
 
