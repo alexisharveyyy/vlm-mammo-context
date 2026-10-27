@@ -135,3 +135,26 @@ already known when the change was made.
 - **Results known:** chosen from the tier T0 outputs only, which had been
   reported in `reports/baseline.md`. No tier T1 to T4 output had been read,
   and no Phase 7 run has been made.
+
+## 7. Scope of the Phase 7 position and decoding checks (2026-10-27)
+
+- **What:** the two Phase 7 checks that need new model runs cover only the
+  colleague contrasts on full images, forced format:
+  - position of the context sentence (variant `position_end`):
+    `colleague_benign` and `colleague_malignant`, all three models; the
+    study's `neutral` outputs are the reference, since `neutral` has no
+    context sentence;
+  - second decoding setting (variant `sampled`): Qwen3-VL at temperature
+    0.7, top_p 1.0, seed 1, on `neutral`, `colleague_benign` and
+    `colleague_malignant`.
+
+  This narrows entry 6, which listed all six context conditions of the
+  primary contrasts for the decoding check. The age and history contrasts
+  (H3, H4) are checked by agreement across paraphrases and the strict
+  parser, which need no new runs, but not by these two checks.
+- **Why:** the plan names the checks without a scope. The narrowed scope
+  costs about 16 hours of runs instead of about 44, and keeps the contrasts
+  where a prompt sentence states an answer outright.
+- **Results known:** decided by the study owner on 2026-10-27, blind to
+  tiers T1 to T4: no T1 to T4 output had been read, and no Phase 7 run had
+  been made. The runs start only after Phase 5 is complete.
