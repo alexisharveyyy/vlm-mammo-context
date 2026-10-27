@@ -98,3 +98,21 @@ already known when the change was made.
   family and its Holm correction are unchanged. The bootstrap p-value keeps
   its conservative handling of ties: a resample exactly at 0 counts as the
   other side of 0.
+
+## 5. Phase 4 case-level `p_malignant` averaged over valid answers only (2026-10-27)
+
+- **What:** `eval/baseline.py` now averages case-level `p_malignant` and
+  verbal P(malignant) over valid answers only. The first version averaged
+  `p_malignant` over every call without a run error, including abstentions
+  and parse failures. Valid answers are now also required to be parsed.
+  The R analysis uses the same rule.
+- **Why:** section 5 of the plan defines case-level values as averages over
+  the paraphrases with a valid answer.
+- **Results known:** yes. Found after the Phase 4 report, when the R
+  analysis was checked against it. The two rules agree on every cell where
+  all calls are valid, including the full-image `neutral` cells that decide
+  the above-chance labels, so no label can change. On the committed T0
+  outputs, only two Qwen3-VL cells change: `roi` (AUROC 0.566 to 0.567) and
+  `blank_roi` (AUROC 0.535 to 0.497, Brier 0.253 to 0.274, ECE 0.076 to
+  0.161). `reports/baseline.md` is regenerated with the plan's rule when
+  the analysis branch is merged after Phase 5.

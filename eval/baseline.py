@@ -101,7 +101,8 @@ def summarize(df: pd.DataFrame, labels: pd.Series, offsets: pd.Series) -> dict:
     out["parse_failures"] = int((~ok["parse_ok"]).sum()) - out["abstentions"]
     out["parse_failure_rate"] = out["parse_failures"] / max(len(ok), 1)
     out["parse_failure_ci"] = metrics.wilson(out["parse_failures"], len(ok))
-    answered = ok[ok["malignant"].notna()].copy()
+    # Valid answers (plan section 5): parsed, with an assessment.
+    answered = ok[ok["parse_ok"] & ok["malignant"].notna()].copy()
     answered["truth"] = answered["case_id"].map(labels).eq("malignant")
     n = len(answered)
     mal = int(answered["malignant"].astype(bool).sum())
@@ -133,8 +134,10 @@ def summarize(df: pd.DataFrame, labels: pd.Series, offsets: pd.Series) -> dict:
     mass = ok["class_mass"].dropna()
     out["low_mass_rate"] = float((mass < LOW_MASS).mean()) if len(mass) else np.nan
 
-    ok = ok.assign(verbal=[verbal_p(r) for r in ok.itertuples()])
-    case = ok.groupby("case_id").agg(p=("p_malignant", "mean"), v=("verbal", "mean"))
+    # Case-level values average over valid answers only (plan section 5;
+    # docs/DEVIATIONS.md, entry 5).
+    answered = answered.assign(verbal=[verbal_p(r) for r in answered.itertuples()])
+    case = answered.groupby("case_id").agg(p=("p_malignant", "mean"), v=("verbal", "mean"))
     case["truth"] = case.index.to_series().map(labels).eq("malignant").to_numpy()
     for name, col in [("auroc", "p"), ("auroc_verbal", "v")]:
         c = case.dropna(subset=[col])
