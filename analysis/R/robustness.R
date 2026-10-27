@@ -210,8 +210,13 @@ strict_counts <- function(lenient, strict) {
 
 # The reading rule of docs/ROBUSTNESS.md, applied to one check estimate.
 reading <- function(primary, check) {
-  if (is.na(primary$estimate) || is.na(check$estimate)) {
+  if (is.na(primary$estimate) || grepl("^pending", check$note)) {
     return("pending")
+  }
+  # Runs complete but no case has valid answers in both conditions (for
+  # example MedGemma under the strict parser, docs/ROBUSTNESS.md R3).
+  if (is.na(check$estimate)) {
+    return("no data")
   }
   covers0 <- check$ci_low <= 0 && check$ci_high >= 0
   if (isTRUE(primary$p_adjusted < 0.05)) {

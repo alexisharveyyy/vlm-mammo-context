@@ -78,3 +78,16 @@ test_that("checks without their runs are pending, not errors", {
   expect_true(all(ch$reading[ch$check %in% c("R2", "R4") & !grepl("difference", ch$outcome)] == "pending"))
   expect_true(all(r$sampled_agreement$note == "pending"))
 })
+
+test_that("readings follow the rule in docs/ROBUSTNESS.md", {
+  sig <- data.frame(estimate = 0.2, p_adjusted = 0.01)
+  ns <- data.frame(estimate = 0.01, p_adjusted = 0.4)
+  row <- function(est, lo, hi, note = "") data.frame(estimate = est, ci_low = lo, ci_high = hi, note = note)
+  expect_equal(reading(sig, row(0.15, 0.05, 0.25)), "robust")
+  expect_equal(reading(sig, row(0.15, -0.01, 0.25)), "sensitive")
+  expect_equal(reading(sig, row(-0.1, -0.2, -0.05)), "sensitive")
+  expect_equal(reading(ns, row(0.02, -0.03, 0.07)), "unchanged")
+  expect_equal(reading(ns, row(0.1, 0.05, 0.15)), "sensitive")
+  expect_equal(reading(sig, row(NA, NA, NA, "0 of 500 cases")), "no data")
+  expect_equal(reading(sig, row(NA, NA, NA, "pending: x incomplete")), "pending")
+})
