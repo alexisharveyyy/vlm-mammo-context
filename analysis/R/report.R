@@ -17,13 +17,14 @@ md_table <- function(df) {
   c(header, rule, body)
 }
 
-contrast_table <- function(x, pct = TRUE) {
-  data.frame(
+contrast_table <- function(x, pct = TRUE, tests = TRUE) {
+  out <- data.frame(
     Model = x$model, Image = x$image_kind, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, pct),
     p = fmt_p(x$p), `Adjusted p` = fmt_p(x$p_adjusted), Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
     Note = x$note, check.names = FALSE
   )
+  if (tests) out else out[, setdiff(names(out), c("p", "Adjusted p"))]
 }
 
 write_figures <- function(con, cells, syc, fig_dir) {
@@ -99,11 +100,21 @@ render_report <- function(con, cells, flips, syc, meta) {
     out, "## Primary outcome: malignant rate shift (Holm over 12 tests)", "",
     md_table(cbind(Hypothesis = prim$hypothesis, contrast_table(prim))), ""
   )
-  sec <- con[con$family == "secondary", ]
+  sec <- con[con$family == "key secondary", ]
+  out <- c(out, paste0(
+    "Key secondary family: ", sum(!is.na(sec$p)), " tests with p-values, Benjamini-Hochberg ",
+    "(docs/DEVIATIONS.md, entry 4)."
+  ), "")
   for (o in unique(sec$outcome)) {
     x <- sec[sec$outcome == o, ]
-    out <- c(out, paste0("## Secondary: ", o, " (Benjamini-Hochberg)"), "",
+    out <- c(out, paste0("## Key secondary: ", o), "",
       md_table(contrast_table(x, pct = !grepl("AUROC|p_malignant", o))), "")
+  }
+  desc <- con[con$family == "descriptive", ]
+  for (o in unique(desc$outcome)) {
+    x <- desc[desc$outcome == o, ]
+    out <- c(out, paste0("## Descriptive: ", o, " (estimates and 95% intervals, no tests)"), "",
+      md_table(contrast_table(x, pct = !grepl("AUROC|p_malignant", o), tests = FALSE)), "")
   }
   if (!is.null(syc) && nrow(syc)) {
     out <- c(out, "## Sycophancy rates", "", md_table(data.frame(

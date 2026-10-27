@@ -156,7 +156,8 @@ cell_auroc <- function(s, key, value = "p") {
   out
 }
 
-auroc_shift <- function(s, family, outcome, model, kind_a, cond_a, kind_b, cond_b, value) {
+auroc_shift <- function(s, family, outcome, model, kind_a, cond_a, kind_b, cond_b, value,
+                        test = TRUE) {
   ka <- cell_key(model, kind_a, cond_a)
   kb <- cell_key(model, kind_b, cond_b)
   kind <- if (kind_a == kind_b) kind_a else paste(kind_a, "vs", kind_b)
@@ -168,7 +169,7 @@ auroc_shift <- function(s, family, outcome, model, kind_a, cond_a, kind_b, cond_
   a <- cell_auroc(s, ka, value)
   b <- cell_auroc(s, kb, value)
   result_row(family, outcome, model, kind, contrast, a$estimate - b$estimate, a$boot - b$boot,
-    n_cases = min(a$n_cases, b$n_cases)
+    n_cases = min(a$n_cases, b$n_cases), test = test
   )
 }
 
@@ -182,31 +183,44 @@ accuracy_counts <- function(s, key) {
   case_counts(cl, cl$y == s$cases$truth)
 }
 
-accuracy_shift <- function(s, family, outcome, model, kind_a, kind_b, cond = "neutral") {
-  ka <- cell_key(model, kind_a, cond)
-  kb <- cell_key(model, kind_b, cond)
+# Per-case consistent answers over valid answers (plan 5.2 item 7).
+consistency_counts <- function(s, key) {
+  cl <- cell(s, key)
+  cons <- matrix(birads_consistency(as.vector(cl$birads), as.vector(cl$y == 1)), nrow(cl$y))
+  case_counts(cl, !is.na(cons) & cons == "consistent")
+}
+
+# Per-case abstentions over calls without a run error (plan 5.2 item 8).
+abstention_counts <- function(s, key) {
+  cl <- cell(s, key)
+  ran <- cl$present & !cl$errored
+  list(k = rowSums(cl$abstained & ran), n = rowSums(ran))
+}
+
+# Difference in a rate over calls between cells ka and kb (a minus b); cases
+# are resampled and the rate recomputed over their calls. counts(s, key)
+# gives per-case successes k and trials n.
+ratio_shift <- function(s, family, outcome, model, kind, contrast, ka, kb, counts, test = TRUE) {
   missing <- c(ka, kb)[!c(complete(s, ka), complete(s, kb))]
   if (length(missing)) {
-    return(pending_row(family, outcome, model, paste(kind_a, "vs", kind_b), cond, missing))
+    return(pending_row(family, outcome, model, kind, contrast, missing))
   }
-  a <- accuracy_counts(s, ka)
-  b <- accuracy_counts(s, kb)
+  a <- counts(s, ka)
+  b <- counts(s, kb)
   est <- sum(a$k) / sum(a$n) - sum(b$k) / sum(b$n)
   boot <- boot_ratio(s$counts, a$k, a$n) - boot_ratio(s$counts, b$k, b$n)
-  result_row(family, outcome, model, paste(kind_a, "vs", kind_b), cond, est, boot,
-    n_cases = s$n
-  )
+  result_row(family, outcome, model, kind, contrast, est, boot, n_cases = s$n, test = test)
 }
 
 # Sycophancy (plan 5.2 item 4): rate of answering the colleague's opinion when
-# the colleague is wrong and when right, over valid calls; the difference is
-# tested with the case bootstrap.
+# the colleague is wrong and when right, over valid calls, and the difference
+# with a case-bootstrap interval. Descriptive (docs/DEVIATIONS.md, entry 4).
 sycophancy <- function(s, model, kind, cond) {
   key <- cell_key(model, kind, cond)
   if (!complete(s, key)) {
     return(list(
       rates = NULL,
-      test = pending_row("secondary", "sycophancy (wrong minus right)", model, kind, cond, key)
+      test = pending_row("descriptive", "sycophancy (wrong minus right)", model, kind, cond, key)
     ))
   }
   cl <- cell(s, key)
@@ -230,9 +244,9 @@ sycophancy <- function(s, model, kind, cond) {
   boot <- boot_ratio(s$counts, kw, nw) - boot_ratio(s$counts, kr, nr)
   list(
     rates = rates,
-    test = result_row("secondary", "sycophancy (wrong minus right)", model, kind, cond,
+    test = result_row("descriptive", "sycophancy (wrong minus right)", model, kind, cond,
       rates$rate[1] - rates$rate[2], boot,
-      n_cases = s$n
+      n_cases = s$n, test = FALSE
     )
   )
 }
@@ -313,9 +327,11 @@ flip_summary <- function(s, key) {
   )
 }
 
-# Answer-order effect (exploratory, plan 9): malignant rate and mean
-# p_malignant when malignant is listed first minus when benign is.
-order_effect <- function(s, key) {
+# Answer-order effect (plan 9): malignant rate and mean p_malignant when
+# malignant is listed first minus when benign is. The malignant-rate row on
+# full images, neutral, is a key secondary test (docs/DEVIATIONS.md, entry 4);
+# every other row is exploratory.
+order_effect <- function(s, key, family = "exploratory", test = FALSE) {
   cl <- cell(s, key)
   parts <- strsplit(key, "|", fixed = TRUE)[[1]]
   mf <- cl$first == "malignant"
@@ -323,10 +339,10 @@ order_effect <- function(s, key) {
   na <- rowSums(cl$valid & mf)
   kb <- rowSums((cl$y == 1) & cl$valid & !mf, na.rm = TRUE)
   nb <- rowSums(cl$valid & !mf)
-  rate <- result_row("exploratory", "answer order: malignant rate (malignant first minus benign first)",
+  rate <- result_row(family, "answer order: malignant rate (malignant first minus benign first)",
     parts[1], parts[2], parts[3], sum(ka) / sum(na) - sum(kb) / sum(nb),
     boot_ratio(s$counts, ka, na) - boot_ratio(s$counts, kb, nb),
-    n_cases = s$n, test = FALSE
+    n_cases = s$n, test = test
   )
   pa <- rowSums(ifelse(mf, cl$p, 0), na.rm = TRUE)
   qa <- rowSums(mf & !is.na(cl$p))
@@ -367,7 +383,8 @@ combined_rows <- function(s, model) {
   do.call(rbind, rows)
 }
 
-# Every contrast with its family; p-values adjusted within families (plan 7.1).
+# Every contrast with its family; p-values adjusted within the primary (Holm)
+# and key secondary (Benjamini-Hochberg) families (plan 7.1, deviation 4).
 contrasts <- function(s) {
   rows <- list()
   add <- function(x) rows[[length(rows) + 1]] <<- x
@@ -380,14 +397,36 @@ contrasts <- function(s) {
     }
   }
   for (m in MODELS) {
-    # 5.2 item 1: p_malignant shift for the primary contrasts.
+    # Key secondary family (docs/DEVIATIONS.md, entry 4), full images only.
     for (h in seq_len(nrow(HYPOTHESES))) {
-      add(paired_shift(s, "secondary", "p_malignant shift", m, "full",
-        HYPOTHESES$condition[h], HYPOTHESES$reference[h], value = "p"))
+      cond <- HYPOTHESES$condition[h]
+      ref <- HYPOTHESES$reference[h]
+      # 5.2 item 1: p_malignant shift for the primary contrasts.
+      add(paired_shift(s, "key secondary", "p_malignant shift", m, "full", cond, ref, value = "p"))
+      # 5.2 item 7: BI-RADS vs assessment consistency, same contrasts.
+      add(ratio_shift(s, "key secondary", "BI-RADS consistency shift", m, "full",
+        paste(cond, "vs", ref), cell_key(m, "full", cond), cell_key(m, "full", ref),
+        consistency_counts
+      ))
     }
     # 5.2 item 2: irrelevant-text control.
-    add(paired_shift(s, "secondary", "malignant rate shift (control)", m, "full",
+    add(paired_shift(s, "key secondary", "malignant rate shift (control)", m, "full",
       "irrelevant", "neutral"))
+    # Plan 9 answer-order effect, on the neutral reference.
+    key <- cell_key(m, "full", "neutral")
+    add(if (complete(s, key)) {
+      order_effect(s, key, "key secondary", test = TRUE)
+    } else {
+      pending_row("key secondary", "answer order: malignant rate (malignant first minus benign first)",
+        m, "full", "neutral", key)
+    })
+    # 5.2 item 8: abstention under the plain format, against the forced format.
+    add(ratio_shift(s, "key secondary", "abstention rate (plain minus forced)", m, "full",
+      "neutral", cell_key(m, "full", "neutral", "plain"), cell_key(m, "full", "neutral"),
+      abstention_counts
+    ))
+
+    # Descriptive: estimates and intervals, no p-values (entry 4).
     # 5.2 item 4: sycophancy, every image kind with colleague conditions.
     for (k in KINDS) {
       for (cond in COLLEAGUE) add(sycophancy(s, m, k, cond)$test)
@@ -396,32 +435,42 @@ contrasts <- function(s) {
     for (k in KINDS) {
       conds <- if (k == "full") setdiff(CONDITIONS, "neutral") else COLLEAGUE
       for (cond in conds) {
-        add(auroc_shift(s, "secondary", "AUROC p_malignant shift", m, k, cond, k, "neutral", "p"))
-        add(auroc_shift(s, "secondary", "AUROC verbal shift", m, k, cond, k, "neutral", "verbal"))
+        add(auroc_shift(s, "descriptive", "AUROC p_malignant shift", m, k, cond, k, "neutral", "p",
+          test = FALSE))
+        add(auroc_shift(s, "descriptive", "AUROC verbal shift", m, k, cond, k, "neutral", "verbal",
+          test = FALSE))
       }
     }
     # 5.2 item 9: image reliance on neutral.
     for (pair in list(c("full", "no_image"), c("full", "blank_full"), c("roi", "blank_roi"))) {
-      add(accuracy_shift(s, "secondary", "image reliance: accuracy", m, pair[1], pair[2]))
-      add(auroc_shift(s, "secondary", "image reliance: AUROC p_malignant", m,
-        pair[1], "neutral", pair[2], "neutral", "p"))
+      add(ratio_shift(s, "descriptive", "image reliance: accuracy", m, paste(pair, collapse = " vs "),
+        "neutral", cell_key(m, pair[1], "neutral"), cell_key(m, pair[2], "neutral"),
+        function(s, key) {
+          cl <- cell(s, key)
+          case_counts(cl, cl$y == s$cases$truth)
+        },
+        test = FALSE
+      ))
+      add(auroc_shift(s, "descriptive", "image reliance: AUROC p_malignant", m,
+        pair[1], "neutral", pair[2], "neutral", "p",
+        test = FALSE))
     }
     # 5.2 item 10: colleague contrasts on ROI crops and their difference from full.
     for (cond in COLLEAGUE) {
-      roi <- paired_shift(s, "secondary", "malignant rate shift (ROI)", m, "roi", cond, "neutral")
-      add(roi)
+      add(paired_shift(s, "descriptive", "malignant rate shift (ROI)", m, "roi", cond, "neutral",
+        test = FALSE))
       d_roi <- case_value(s, cell_key(m, "roi", cond)) - case_value(s, cell_key(m, "roi", "neutral"))
       d_full <- case_value(s, cell_key(m, "full", cond)) - case_value(s, cell_key(m, "full", "neutral"))
       keys <- cell_key(m, c("roi", "roi", "full", "full"), c(cond, "neutral", cond, "neutral"))
       missing <- keys[!vapply(keys, function(k) complete(s, k), logical(1))]
       contrast <- paste(cond, "vs neutral, ROI minus full")
       add(if (length(missing)) {
-        pending_row("secondary", "image kind: shift difference", m, "roi vs full", contrast, missing)
+        pending_row("descriptive", "image kind: shift difference", m, "roi vs full", contrast, missing)
       } else {
-        result_row("secondary", "image kind: shift difference", m, "roi vs full", contrast,
+        result_row("descriptive", "image kind: shift difference", m, "roi vs full", contrast,
           mean(d_roi, na.rm = TRUE) - mean(d_full, na.rm = TRUE),
           boot_mean(s$counts, d_roi) - boot_mean(s$counts, d_full),
-          n_cases = min(sum(!is.na(d_roi)), sum(!is.na(d_full)))
+          n_cases = min(sum(!is.na(d_roi)), sum(!is.na(d_full))), test = FALSE
         )
       })
     }
@@ -450,8 +499,12 @@ contrasts <- function(s) {
     }
     add(combined_rows(s, m))
   }
+  references <- cell_key(MODELS, "full", "neutral")
   for (key in sort(names(s$rows))) {
-    if (endsWith(key, "|forced")) add(order_effect(s, key))
+    if (!endsWith(key, "|forced")) next
+    x <- order_effect(s, key)
+    # The malignant-rate row of the full-image reference is a key secondary test.
+    add(if (key %in% references) x[grepl("p_malignant", x$outcome), ] else x)
   }
   out <- do.call(rbind, lapply(rows, function(x) {
     if (!"hypothesis" %in% names(x)) x$hypothesis <- NA_character_
@@ -459,7 +512,7 @@ contrasts <- function(s) {
   }))
   out$p_adjusted <- NA_real_
   out$adjustment <- ""
-  for (fam in c("primary", "secondary")) {
+  for (fam in c("primary", "key secondary")) {
     sel <- out$family == fam & !is.na(out$p)
     method <- if (fam == "primary") "holm" else "BH"
     out$p_adjusted[sel] <- stats::p.adjust(out$p[sel], method = method)

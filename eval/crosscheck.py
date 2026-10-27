@@ -7,7 +7,8 @@ recomputes, independently of the R code: per cell the call, error,
 abstention, parse-failure and valid counts, malignant rate, accuracy,
 BI-RADS consistency, low-mass rate, AUROC, Brier and ECE; flip rates versus
 neutral (with sensitivity 1); sycophancy rates; and the point estimate and
-case count of every paired shift. Exits 1 if any number differs beyond
+case count of every paired shift; and the estimate of every key secondary
+test (deviation 4). Exits 1 if any number differs beyond
 rounding. Bootstrap intervals and p-values are not compared (the two
 languages draw different random numbers).
 """
@@ -24,6 +25,7 @@ import pandas as pd
 
 from eval import metrics
 from eval.baseline import is_abstention
+from models.prompts import answer_order
 
 ROOT = Path(__file__).resolve().parents[1]
 TOLERANCE = 1e-9
@@ -107,6 +109,32 @@ def cell_numbers(cell: pd.DataFrame, truth: pd.Series) -> dict:
         "brier": metrics.brier(case_p.to_numpy(), y) if len(case_p) else math.nan,
         "ece": metrics.ece(case_p.to_numpy(), y) if len(case_p) else math.nan,
     }
+
+
+def consistent_rate(cell: pd.DataFrame) -> float:
+    valid = cell[cell["valid"]]
+    cons = [
+        metrics.birads_consistency(None if b is None else int(b), bool(m))
+        for b, m in zip(valid["birads"], valid["y"], strict=True)
+    ]
+    return sum(c == "consistent" for c in cons) / len(valid)
+
+
+def abstention_rate(cell: pd.DataFrame) -> float:
+    ran = cell[~cell["errored"]]
+    return ran["abstained"].sum() / len(ran)
+
+
+def order_shift(cell: pd.DataFrame, offsets: pd.Series) -> float:
+    valid = cell[cell["valid"]]
+    first = pd.Series(
+        [
+            answer_order(int(offsets[c]), int(p))[0]
+            for c, p in zip(valid["case_id"], valid["paraphrase"], strict=True)
+        ],
+        index=valid.index,
+    )
+    return valid.loc[first == "malignant", "y"].mean() - valid.loc[first == "benign", "y"].mean()
 
 
 def flip_numbers(a: pd.DataFrame, b: pd.DataFrame) -> dict:
@@ -197,6 +225,29 @@ def main() -> int:
             {"estimate": d.mean() if len(d) else math.nan, "n_cases": len(d)},
             pd.Series(r._asdict()),
         )
+
+    offsets = pd.read_csv(ROOT / "data" / "manifests" / "answer_order.csv", dtype=str).set_index(
+        "case_id"
+    )["answer_order_offset"]
+    key = con[(con["family"] == "key secondary") & con["estimate"].notna()]
+    for r in key.itertuples(index=False):
+        full = {
+            (cond, fmt): groups[(r.model, "full", cond, fmt)]
+            for (m, k, cond, fmt) in groups
+            if m == r.model and k == "full"
+        }
+        if r.outcome == "BI-RADS consistency shift":
+            cond, ref = r.contrast.split(" vs ")
+            ours = consistent_rate(full[(cond, "forced")]) - consistent_rate(full[(ref, "forced")])
+        elif r.outcome.startswith("abstention rate"):
+            ours = abstention_rate(full[("neutral", "plain")]) - abstention_rate(
+                full[("neutral", "forced")]
+            )
+        elif r.outcome.startswith("answer order"):
+            ours = order_shift(full[("neutral", "forced")], offsets)
+        else:
+            continue
+        compare(f"{r.family} {r.outcome} {r.model}", {"estimate": ours}, pd.Series(r._asdict()))
 
     for m in mismatches[:50]:
         print("MISMATCH", m)

@@ -54,3 +54,47 @@ already known when the change was made.
   when the first report showed identical abstention and parse failure
   rates. It changes no above-chance label, which depends only on the AUROC
   of `p_malignant`.
+
+## 4. Secondary analyses split into a key secondary family and descriptive outcomes (2026-10-27)
+
+- **What:** section 7.1 put every secondary contrast with a p-value into one
+  Benjamini-Hochberg family. The secondary analyses are now split in two.
+  - **Key secondary family** (Benjamini-Hochberg at q = 0.05), full images
+    and forced format unless stated, per model:
+    - the paired `p_malignant` shift for each of the four primary contrasts
+      (`colleague_malignant` and `colleague_benign` vs `neutral`, `age_68`
+      vs `age_42`, `history_yes` vs `history_no`);
+    - `irrelevant` vs `neutral` on the primary outcome (the control);
+    - the answer-order effect: the malignant rate when malignant is listed
+      first minus when benign is, on `neutral`;
+    - the abstention rate on `neutral` under the plain format minus the
+      forced format;
+    - BI-RADS vs assessment consistency: the change in the consistent share
+      for each of the four primary contrasts.
+
+    That is 11 tests per model, 33 in all. p-values use the paired case
+    bootstrap of section 7. Rate differences are over calls, with cases
+    resampled.
+  - **Descriptive**, with estimates and 95% intervals but no p-values or
+    corrections: the colleague contrasts on ROI crops and their difference
+    from full images, AUROC shifts versus `neutral` for `p_malignant` and
+    verbal confidence on every image kind, image reliance (accuracy and
+    AUROC), and sycophancy for every image kind.
+  - Sensitivity and exploratory analyses are unchanged (sections 8 and 9),
+    except that the answer-order effect on full images under `neutral`
+    moves from exploratory into the key secondary family. Its other cells
+    stay exploratory.
+- **Why:** the original family would have held about 170 tests, mostly
+  descriptive checks (ROI and verbal-confidence versions, image reliance,
+  sycophancy by image kind). Correcting them together with the contrasts
+  the study is about would dilute those contrasts. The key family keeps the
+  pre-specified secondary outcome (the `p_malignant` shift), the control,
+  and three per-model properties of the answers.
+- **Results known:** decided before any tier T1 to T4 output was read. The
+  `p_malignant`, control and consistency tests use T1 and T2 outputs, which
+  had not been read. The answer-order and abstention tests use only the
+  tier T0 outputs, and their descriptive values were already reported in
+  `reports/baseline.md` (Phase 4) when this decision was made. The primary
+  family and its Holm correction are unchanged. The bootstrap p-value keeps
+  its conservative handling of ties: a resample exactly at 0 counts as the
+  other side of 0.
