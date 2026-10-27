@@ -1,6 +1,6 @@
 {
   "split": "test",
-  "generated_from_commit": "f8d39016e02cb5632afcf10086e446cad73473de",
+  "generated_from_commit": "4352db7e399f4b881488b714aaed747a7e274c9d",
   "command": "uv run python -m eval.baseline",
   "results": {
     "qwen3_vl_8b/full/forced": {
@@ -33,6 +33,18 @@
       "birads_consistent": 63,
       "birads_inconsistent": 0,
       "birads_incomplete": 1437,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.24064171122994651,
+      "malignant_first_malignant_ci": [
+        0.21138234623736796,
+        0.2725514067527904
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.005319148936170213,
+      "benign_first_malignant_ci": [
+        0.002070399571104888,
+        0.01359619119671278
+      ],
       "birads_consistent_rate": 0.042,
       "birads_consistent_ci": [
         0.03296459689144124,
@@ -91,6 +103,18 @@
       "birads_consistent": 9,
       "birads_inconsistent": 0,
       "birads_incomplete": 0,
+      "malignant_first_calls": 9,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.2991450484195441
+      ],
+      "benign_first_calls": 0,
+      "benign_first_malignant_rate": NaN,
+      "benign_first_malignant_ci": [
+        NaN,
+        NaN
+      ],
       "birads_consistent_rate": 1.0,
       "birads_consistent_ci": [
         0.7008549515804559,
@@ -149,6 +173,18 @@
       "birads_consistent": 248,
       "birads_inconsistent": 0,
       "birads_incomplete": 1252,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.6684491978609626,
+      "malignant_first_malignant_ci": [
+        0.6339268111314689,
+        0.7012502358955417
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.16533333333333333,
       "birads_consistent_ci": [
         0.14739359663035867,
@@ -207,6 +243,18 @@
       "birads_consistent": 0,
       "birads_inconsistent": 0,
       "birads_incomplete": 1500,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 1.0,
+      "malignant_first_malignant_ci": [
+        0.9948905999055709,
+        0.9999999999999999
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.0,
       "birads_consistent_ci": [
         0.0,
@@ -265,6 +313,18 @@
       "birads_consistent": 970,
       "birads_inconsistent": 0,
       "birads_incomplete": 524,
+      "malignant_first_calls": 742,
+      "malignant_first_malignant_rate": 0.016172506738544475,
+      "malignant_first_malignant_ci": [
+        0.009275144791357246,
+        0.028053778790762134
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0026595744680851063,
+      "benign_first_malignant_ci": [
+        0.000729654493412361,
+        0.009644821171006478
+      ],
       "birads_consistent_rate": 0.6492637215528781,
       "birads_consistent_ci": [
         0.6247112493060533,
@@ -323,6 +383,18 @@
       "birads_consistent": 425,
       "birads_inconsistent": 0,
       "birads_incomplete": 0,
+      "malignant_first_calls": 238,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.015884202979201578
+      ],
+      "benign_first_calls": 187,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.020129058142986548
+      ],
       "birads_consistent_rate": 1.0,
       "birads_consistent_ci": [
         0.9910422401060335,
@@ -381,6 +453,18 @@
       "birads_consistent": 0,
       "birads_inconsistent": 0,
       "birads_incomplete": 1153,
+      "malignant_first_calls": 401,
+      "malignant_first_malignant_rate": 1.0,
+      "malignant_first_malignant_ci": [
+        0.9905112020100799,
+        1.0
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.07313829787234043,
+      "benign_first_malignant_ci": [
+        0.056619928345907074,
+        0.09399559755858078
+      ],
       "birads_consistent_rate": 0.0,
       "birads_consistent_ci": [
         0.0,
@@ -439,6 +523,18 @@
       "birads_consistent": 1029,
       "birads_inconsistent": 471,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.001336898395721925,
+      "malignant_first_malignant_ci": [
+        0.0002360343887240833,
+        0.007533500999570123
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.005319148936170213,
+      "benign_first_malignant_ci": [
+        0.002070399571104888,
+        0.01359619119671278
+      ],
       "birads_consistent_rate": 0.686,
       "birads_consistent_ci": [
         0.6620629847053756,
@@ -497,6 +593,18 @@
       "birads_consistent": 1090,
       "birads_inconsistent": 408,
       "birads_incomplete": 2,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.001336898395721925,
+      "malignant_first_malignant_ci": [
+        0.0002360343887240833,
+        0.007533500999570123
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0026595744680851063,
+      "benign_first_malignant_ci": [
+        0.000729654493412361,
+        0.009644821171006478
+      ],
       "birads_consistent_rate": 0.7266666666666667,
       "birads_consistent_ci": [
         0.7035554198689427,
@@ -555,6 +663,18 @@
       "birads_consistent": 1000,
       "birads_inconsistent": 0,
       "birads_incomplete": 0,
+      "malignant_first_calls": 500,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        4.336808689942018e-19,
+        0.007624340461552241
+      ],
+      "benign_first_calls": 500,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        4.336808689942018e-19,
+        0.007624340461552241
+      ],
       "birads_consistent_rate": 1.0,
       "birads_consistent_ci": [
         0.996173241514445,
@@ -613,6 +733,18 @@
       "birads_consistent": 1500,
       "birads_inconsistent": 0,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.0051094000944290445
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 1.0,
       "birads_consistent_ci": [
         0.9974455692798185,
@@ -671,6 +803,18 @@
       "birads_consistent": 1065,
       "birads_inconsistent": 435,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.0051094000944290445
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.71,
       "birads_consistent_ci": [
         0.6865235380990367,
@@ -729,6 +873,18 @@
       "birads_consistent": 1125,
       "birads_inconsistent": 375,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.0051094000944290445
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.75,
       "birads_consistent_ci": [
         0.7274670190746881,
@@ -787,6 +943,18 @@
       "birads_consistent": 248,
       "birads_inconsistent": 1252,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.0051094000944290445
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.16533333333333333,
       "birads_consistent_ci": [
         0.14739359663035867,
@@ -845,6 +1013,18 @@
       "birads_consistent": 35,
       "birads_inconsistent": 0,
       "birads_incomplete": 1465,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.03342245989304813,
+      "malignant_first_malignant_ci": [
+        0.022739473541847032,
+        0.048873308899211085
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.2632978723404255,
+      "benign_first_malignant_ci": [
+        0.2330798119176912,
+        0.2959219438798129
+      ],
       "birads_consistent_rate": 0.023333333333333334,
       "birads_consistent_ci": [
         0.016824677337497887,
@@ -903,6 +1083,18 @@
       "birads_consistent": 23,
       "birads_inconsistent": 0,
       "birads_incomplete": 732,
+      "malignant_first_calls": 250,
+      "malignant_first_malignant_rate": 0.056,
+      "malignant_first_malignant_ci": [
+        0.03364764921901088,
+        0.0917907207329439
+      ],
+      "benign_first_calls": 505,
+      "benign_first_malignant_rate": 0.01782178217821782,
+      "benign_first_malignant_ci": [
+        0.009403874924926394,
+        0.03352002296522299
+      ],
       "birads_consistent_rate": 0.030463576158940398,
       "birads_consistent_ci": [
         0.02038390685660152,
@@ -961,6 +1153,18 @@
       "birads_consistent": 248,
       "birads_inconsistent": 0,
       "birads_incomplete": 1252,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.3315508021390374,
+      "malignant_first_malignant_ci": [
+        0.2987497641044583,
+        0.36607318886853113
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.0,
+      "benign_first_malignant_ci": [
+        0.0,
+        0.005082360561020009
+      ],
       "birads_consistent_rate": 0.16533333333333333,
       "birads_consistent_ci": [
         0.14739359663035867,
@@ -1019,6 +1223,18 @@
       "birads_consistent": 0,
       "birads_inconsistent": 0,
       "birads_incomplete": 1500,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.0,
+      "malignant_first_malignant_ci": [
+        0.0,
+        0.0051094000944290445
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.33111702127659576,
+      "benign_first_malignant_ci": [
+        0.2984139015966212,
+        0.3655367893375532
+      ],
       "birads_consistent_rate": 0.0,
       "birads_consistent_ci": [
         0.0,
@@ -1077,6 +1293,18 @@
       "birads_consistent": 640,
       "birads_inconsistent": 0,
       "birads_incomplete": 860,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 0.516042780748663,
+      "malignant_first_malignant_ci": [
+        0.4802390854322909,
+        0.5516825380940911
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 0.738031914893617,
+      "benign_first_malignant_ci": [
+        0.7054519225736701,
+        0.7681923791805251
+      ],
       "birads_consistent_rate": 0.4266666666666667,
       "birads_consistent_ci": [
         0.40185587945924867,
@@ -1135,6 +1363,18 @@
       "birads_consistent": 185,
       "birads_inconsistent": 0,
       "birads_incomplete": 1019,
+      "malignant_first_calls": 502,
+      "malignant_first_malignant_rate": 0.23705179282868527,
+      "malignant_first_malignant_ci": [
+        0.20193452023046396,
+        0.2761628254962329
+      ],
+      "benign_first_calls": 702,
+      "benign_first_malignant_rate": 0.09401709401709402,
+      "benign_first_malignant_ci": [
+        0.07458284429503022,
+        0.11787037182471334
+      ],
       "birads_consistent_rate": 0.1536544850498339,
       "birads_consistent_ci": [
         0.13438907761950902,
@@ -1193,6 +1433,18 @@
       "birads_consistent": 1500,
       "birads_inconsistent": 0,
       "birads_incomplete": 0,
+      "malignant_first_calls": 748,
+      "malignant_first_malignant_rate": 1.0,
+      "malignant_first_malignant_ci": [
+        0.9948905999055709,
+        0.9999999999999999
+      ],
+      "benign_first_calls": 752,
+      "benign_first_malignant_rate": 1.0,
+      "benign_first_malignant_ci": [
+        0.99491763943898,
+        1.0
+      ],
       "birads_consistent_rate": 1.0,
       "birads_consistent_ci": [
         0.9974455692798185,
@@ -1227,5 +1479,8 @@
     "medgemma_1_5_4b": "not above chance",
     "internvl3_5_8b": "not above chance"
   },
+  "below_chance": [
+    "qwen3_vl_8b"
+  ],
   "pending": []
 }
