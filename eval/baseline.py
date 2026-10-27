@@ -30,6 +30,7 @@ import pandas as pd
 
 from eval import metrics
 from models.parse import CLASS_WORD, DECORATION
+from models.prompts import answer_order
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = ["qwen3_vl_8b", "medgemma_1_5_4b", "internvl3_5_8b"]
@@ -86,7 +87,7 @@ def verbal_p(row) -> float:
     return row.confidence / 100 if row.malignant else 1 - row.confidence / 100
 
 
-def summarize(df: pd.DataFrame, labels: pd.Series) -> dict:
+def summarize(df: pd.DataFrame, labels: pd.Series, offsets: pd.Series) -> dict:
     out = {
         "calls": len(df),
         "errors": int(df["error"].notna().sum()),
@@ -117,6 +118,16 @@ def summarize(df: pd.DataFrame, labels: pd.Series) -> dict:
     counts = pd.Series([c for c in cons if c]).value_counts()
     for key in ["consistent", "inconsistent", "incomplete"]:
         out[f"birads_{key}"] = int(counts.get(key, 0))
+    first = [
+        answer_order(int(offsets[c]), int(p))[0]
+        for c, p in zip(answered["case_id"], answered["paraphrase"], strict=True)
+    ]
+    for listed in ["malignant", "benign"]:
+        sel = answered["malignant"].astype(bool)[[f == listed for f in first]]
+        k = int(sel.sum())
+        out[f"{listed}_first_calls"] = len(sel)
+        out[f"{listed}_first_malignant_rate"] = k / len(sel) if len(sel) else np.nan
+        out[f"{listed}_first_malignant_ci"] = metrics.wilson(k, len(sel))
     out["birads_consistent_rate"] = out["birads_consistent"] / n if n else np.nan
     out["birads_consistent_ci"] = metrics.wilson(out["birads_consistent"], n)
     mass = ok["class_mass"].dropna()
@@ -176,6 +187,9 @@ def main() -> int:
 
     test = pd.read_csv(ROOT / "data" / "manifests" / f"{args.split}.csv", dtype=str)
     labels = test.set_index("case_id")["label"]
+    offsets = pd.read_csv(ROOT / "data" / "manifests" / "answer_order.csv", dtype=str).set_index(
+        "case_id"
+    )["answer_order_offset"]
     results, pending = {}, []
     for model in MODELS:
         df = load(model, args.split)
@@ -196,7 +210,7 @@ def main() -> int:
                     pending.append(f"{key}: {len(part)} of {expected} calls")
                     if len(part) == 0:
                         continue
-                results[key] = summarize(part, labels)
+                results[key] = summarize(part, labels, offsets)
                 results[key]["complete"] = len(part) >= expected
 
     labels_out = {}
@@ -206,6 +220,11 @@ def main() -> int:
             labels_out[model] = "pending"
         else:
             labels_out[model] = "above chance" if r["auroc_ci"][0] > 0.5 else "not above chance"
+    below = [
+        m
+        for m in MODELS
+        if labels_out[m] != "pending" and results[f"{m}/full/forced"]["auroc_ci"][1] < 0.5
+    ]
 
     args.out.mkdir(parents=True, exist_ok=True)
     command = "uv run python -m eval.baseline" + ("" if args.split == "test" else " --split dev")
@@ -215,12 +234,52 @@ def main() -> int:
         "command": command,
         "results": results,
         "above_chance": labels_out,
+        "below_chance": below,
         "pending": pending,
     }
     (args.out / "baseline.json").write_text(json.dumps(payload, indent=2, default=float) + "\n")
     (args.out / "baseline.md").write_text(render(payload))
     print(json.dumps({"above_chance": labels_out, "pending": pending}, indent=2))
     return 0
+
+
+def summary(payload: dict) -> list[str]:
+    """Plain statements of the results; causes are not examined here."""
+    res, labels = payload["results"], payload["above_chance"]
+    if any(v == "pending" for v in labels.values()):
+        return ["Pending: not every model has complete full-image neutral outputs."]
+    above = [m for m, v in labels.items() if v == "above chance"]
+    lines = [
+        "- No model is above chance."
+        if not above
+        else f"- Above chance: {', '.join(above)}. Not above chance: "
+        + ", ".join(m for m in labels if m not in above)
+        + "."
+    ]
+    for m in payload["below_chance"]:
+        r = res[f"{m}/full/forced"]
+        lines.append(
+            f"- {m} is significantly below chance: AUROC of `p_malignant` "
+            f"{fmt(r['auroc'], r['auroc_ci'], False)}, so the whole 95% interval is below 0.5."
+        )
+    large, small = [], []
+    for m in labels:
+        r = res[f"{m}/full/forced"]
+        mf, bf = r["malignant_first_malignant_ci"], r["benign_first_malignant_ci"]
+        text = (
+            f"{m} {fmt(r['malignant_first_malignant_rate'])} when malignant is listed first "
+            f"and {fmt(r['benign_first_malignant_rate'])} when benign is listed first"
+        )
+        (large if mf[0] > bf[1] or bf[0] > mf[1] else small).append(text)
+    if large:
+        lines.append(
+            "- The answer-order effect is large (the two orders' 95% intervals do not "
+            "overlap). Malignant rate on full images: " + "; ".join(large) + "."
+        )
+    if small:
+        lines.append("- No clear answer-order effect on full images: " + "; ".join(small) + ".")
+    lines.append("- Causes are not examined in this report.")
+    return lines
 
 
 def render(payload: dict) -> str:
@@ -240,6 +299,7 @@ def render(payload: dict) -> str:
         "(10,000 resamples, seed 20261026).",
         "",
     ]
+    out += ["## Summary", "", *summary(payload), ""]
     out += [
         "## Above chance",
         "",
@@ -308,6 +368,29 @@ def render(payload: dict) -> str:
                 fmt(r["parse_failure_rate"], r["parse_failure_ci"]),
                 fmt(r["malignant_rate"], r["malignant_rate_ci"]),
                 fmt(r["accuracy"], r["accuracy_ci"]),
+            ]
+            out.append("| " + " | ".join(cells) + " |")
+    out += [
+        "",
+        "## Answer order, forced format, neutral",
+        "",
+        "Malignant rate over answered calls by the option listed first in the prompt "
+        "(docs/PREREGISTRATION.md, section 4, answer order). Descriptive only; the "
+        "answer-order analysis is a Phase 6 secondary analysis.",
+        "",
+        "| Model | Image | Malignant listed first | Benign listed first | Difference |",
+        "|---|---|---|---|---:|",
+    ]
+    for key, r in res.items():
+        model, kind, answer_format = key.split("/")
+        if answer_format == "forced":
+            diff = r["malignant_first_malignant_rate"] - r["benign_first_malignant_rate"]
+            cells = [
+                model,
+                kind,
+                fmt(r["malignant_first_malignant_rate"], r["malignant_first_malignant_ci"]),
+                fmt(r["benign_first_malignant_rate"], r["benign_first_malignant_ci"]),
+                "n/a" if np.isnan(diff) else f"{100 * diff:+.1f} points",
             ]
             out.append("| " + " | ".join(cells) + " |")
     out += ["", "## Pending", ""]
