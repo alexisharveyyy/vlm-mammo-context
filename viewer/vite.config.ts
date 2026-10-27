@@ -28,5 +28,13 @@ function localImages(): Plugin {
 export default defineConfig({
   base: "./",
   plugins: [localImages()],
-  build: { assetsInlineLimit: 0 },
+  build: {
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, "index.html"),
+        about: resolve(import.meta.dirname, "about.html"),
+      },
+    },
+  },
 });

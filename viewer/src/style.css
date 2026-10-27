@@ -247,3 +247,52 @@ tbody tr.selected {
   max-width: 48%;
   background: #000;
 }
+
+.nav {
+  display: flex;
+  gap: 16px;
+  padding-top: 16px;
+  font-size: 13px;
+}
+
+.nav a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav a[aria-current="page"] {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.prose {
+  padding-bottom: 48px;
+}
+
+.prose > section {
+  max-width: 760px;
+}
+
+.prose h2 {
+  margin-top: 28px;
+}
+
+.prose dt {
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.prose dd {
+  margin: 4px 0 0;
+  color: var(--fg);
+}
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.prose a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
