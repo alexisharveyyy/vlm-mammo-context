@@ -33,6 +33,12 @@ jobs:
     # system packages are installed on each run.
     container: rocker/r-ver:4.4.0
     steps:
+      # The only system libraries needed: git for the commit in reports, and
+      # libuv for the binary build of the fs package.
+      - name: System libraries
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git libuv1
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Install Python
