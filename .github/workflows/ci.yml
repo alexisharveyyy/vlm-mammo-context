@@ -29,8 +29,6 @@ jobs:
 
   analysis:
     runs-on: ubuntu-latest
-    env:
-      SYNTHETIC_RUNS: ${{ runner.temp }}/synthetic_runs
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -44,7 +42,8 @@ jobs:
         with:
           working-directory: analysis
       - name: Synthetic outputs
-        run: uv run python -m eval.synthetic --out "$SYNTHETIC_RUNS"
+        run: echo "SYNTHETIC_RUNS=$RUNNER_TEMP/synthetic_runs" >> "$GITHUB_ENV"
+      - run: uv run python -m eval.synthetic --out "$SYNTHETIC_RUNS"
       - name: R tests
         run: Rscript analysis/tests/testthat.R
       # CI uses 1,000 resamples; the reported analysis uses the planned 10,000.
