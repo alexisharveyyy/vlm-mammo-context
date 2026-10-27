@@ -41,3 +41,7 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Viewer: dependencies, build output and the generated data file
+node_modules/
+viewer/public/data.json
