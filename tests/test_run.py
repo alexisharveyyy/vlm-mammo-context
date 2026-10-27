@@ -146,3 +146,66 @@ def test_tiers_match_the_run_design():
     assert {k for k, _, _ in run.TIERS["T3"]} == {"roi"}
     assert len(run.TIERS["T2"]) == 6 and len(run.TIERS["T4"]) == 6
     assert ("roi", "neutral", "plain") in run.TIERS["T0"]
+
+
+def test_variants_are_full_image_forced_cells_of_study_conditions():
+    for name in ("position_end", "sampled"):
+        variant = run.load_variant(name)
+        cells = run.variant_cells(variant)
+        assert {k for k, _, _ in cells} == {"full"} and {f for _, _, f in cells} == {"forced"}
+        assert set(variant["models"]) <= {"qwen3_vl_8b", "medgemma_1_5_4b", "internvl3_5_8b"}
+        assert all(c in run.prompts.CONDITIONS for _, c, _ in cells)
+    # neutral prompts do not depend on the position, so position_end reuses the study's.
+    assert "neutral" not in run.load_variant("position_end")["conditions"]
+    assert run.load_variant("sampled")["decoding"]["do_sample"] is True
+    with pytest.raises(SystemExit, match="unknown variant"):
+        run.load_variant("nope")
+
+
+def test_variant_runs_record_the_variant_and_move_the_context(tmp_path):
+    variant = run.load_variant("position_end")
+    prov = PROV | {"variant": "position_end", "variant_sha256": run.variant_sha256(variant)}
+    runner = run.Runner(
+        FakeAdapter(), CASES, tmp_path, prov, loader, "dev", log=lambda m: None, position="end"
+    )
+    calls = run.calls_for_cells(run.variant_cells(variant), "fake", ["A", "B"])
+    assert len(calls) == 2 * 6 * 3
+    runner.run(calls)
+    records = lines(tmp_path)
+    assert len(records) == len(calls)
+    assert all(r["variant"] == "position_end" for r in records)
+    call = calls[0]
+    assert (
+        runner.prompt_for(call)
+        .split("\n\n")[0]
+        .endswith(
+            run.prompts.context_sentence(call.condition, call.paraphrase, CASES.iloc[0].to_dict())
+        )
+    )
+    # Resuming under a changed variant block is refused.
+    changed = run.Runner(
+        FakeAdapter(),
+        CASES,
+        tmp_path,
+        prov | {"variant_sha256": "d" * 64},
+        loader,
+        "dev",
+        log=lambda m: None,
+    )
+    with pytest.raises(SystemExit, match="variant_sha256"):
+        changed.run(calls)
+
+
+def test_variant_inputs_are_never_reused_from_the_study(tmp_path):
+    variant = run.load_variant("sampled")
+    study = make(tmp_path)
+    sampled = run.Runner(
+        FakeAdapter(),
+        CASES,
+        tmp_path,
+        PROV | {"variant": "sampled", "variant_sha256": run.variant_sha256(variant)},
+        loader,
+        "dev",
+        log=lambda m: None,
+    )
+    assert study.input_key("x", "prompt") != sampled.input_key("x", "prompt")
