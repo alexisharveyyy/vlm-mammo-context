@@ -8,7 +8,9 @@ abstention, parse-failure and valid counts, malignant rate, accuracy,
 BI-RADS consistency, low-mass rate, AUROC, Brier and ECE; flip rates versus
 neutral (with sensitivity 1); sycophancy rates; and the point estimate and
 case count of every paired shift; and the estimate of every key secondary
-test (deviation 4). Exits 1 if any number differs beyond
+test (deviation 4). With --robustness it also checks the Phase 7 tables of
+analysis/run_robustness.R: strict-parser counts and shifts, agreement across
+paraphrases, and the variant shifts. Exits 1 if any number differs beyond
 rounding. Bootstrap intervals and p-values are not compared (the two
 languages draw different random numbers).
 """
@@ -25,7 +27,9 @@ import pandas as pd
 
 from eval import metrics
 from eval.baseline import is_abstention
+from models.parse import parse_strict
 from models.prompts import answer_order
+from models.run import load_variant
 
 ROOT = Path(__file__).resolve().parents[1]
 TOLERANCE = 1e-9
@@ -50,6 +54,8 @@ def load(runs: Path) -> pd.DataFrame:
             parse_ok = bool(r.get("parse") and r["parse"].get("ok"))
             errored = r.get("error") is not None
             valid = parse_ok and not errored and r.get("malignant") is not None
+            strict = None if errored else parse_strict(r.get("raw_text") or "")
+            strict_ok = strict is not None and strict.ok
             conf = r.get("confidence")
             rows.append(
                 {
@@ -63,6 +69,8 @@ def load(runs: Path) -> pd.DataFrame:
                     "abstained": is_abstention(r.get("raw_text"), parse_ok),
                     "valid": valid,
                     "y": float(r["malignant"]) if valid else np.nan,
+                    "strict_valid": strict_ok,
+                    "y_strict": float(strict.malignant) if strict_ok else np.nan,
                     "p": r["p_malignant"] if valid and r["p_malignant"] is not None else np.nan,
                     "mass": np.nan
                     if errored or r.get("class_mass") is None
@@ -159,10 +167,123 @@ def close(a, b) -> bool:
     return abs(a - b) <= TOLERANCE * max(1.0, abs(a), abs(b))
 
 
+def fleiss_kappa(y: np.ndarray) -> float:
+    """Fleiss' kappa for binary answers, one row per case, one column per rater."""
+    n = y.shape[1]
+    if len(y) == 0:
+        return math.nan
+    pos = y.sum(axis=1)
+    counts = np.column_stack([n - pos, pos])
+    p_j = counts.sum(axis=0) / (len(y) * n)
+    pe = float((p_j**2).sum())
+    if pe == 1:
+        return math.nan
+    p_i = ((counts**2).sum(axis=1) - n) / (n * (n - 1))
+    return (p_i.mean() - pe) / (1 - pe)
+
+
+def shift(a: pd.DataFrame, b: pd.DataFrame, ids: pd.Index, column: str = "y", p=None):
+    """Mean case-level difference a - b over cases valid in both, and the case count."""
+    if p is not None:
+        a, b = a[a["paraphrase"] == p], b[b["paraphrase"] == p]
+    d = (
+        a.groupby("case_id")[column].mean().reindex(ids)
+        - b.groupby("case_id")[column].mean().reindex(ids)
+    ).dropna()
+    return (d.mean() if len(d) else math.nan), len(d)
+
+
+def check_robustness(
+    tables: Path, calls: pd.DataFrame, robustness: Path, ids: pd.Index, compare
+) -> None:
+    groups = dict(tuple(calls.groupby(["model", "kind", "condition", "format"])))
+    for r in pd.read_csv(tables / "strict_counts.csv").itertuples(index=False):
+        cell = groups[(r.model, r.image_kind, r.condition, r.answer_format)]
+        compare(
+            f"strict counts {r.model}/{r.image_kind}/{r.condition}/{r.answer_format}",
+            {
+                "valid_lenient": int(cell["valid"].sum()),
+                "valid_strict": int(cell["strict_valid"].sum()),
+            },
+            pd.Series(r._asdict()),
+        )
+    for r in pd.read_csv(tables / "agreement.csv").itertuples(index=False):
+        cell = groups[(r.model, r.image_kind, r.condition, r.answer_format)]
+        wide = cell.pivot(index="case_id", columns="paraphrase", values="y")
+        y = wide[wide.notna().sum(axis=1) == 3].to_numpy()
+        unanimous = int(np.isin(y.sum(axis=1), [0, 3]).sum())
+        compare(
+            f"agreement {r.model}/{r.image_kind}/{r.condition}/{r.answer_format}",
+            {"cases_all_valid": len(y), "unanimous": unanimous, "fleiss_kappa": fleiss_kappa(y)},
+            pd.Series(r._asdict()),
+        )
+    variants = {
+        "R2": ("position_end", "end"),
+        "R4": ("sampled", "sampled"),
+    }
+    loaded = {
+        check: dict(
+            tuple(load(robustness / name).groupby(["model", "kind", "condition", "format"]))
+        )
+        if (robustness / name).exists()
+        else {}
+        for check, (name, _) in variants.items()
+    }
+    for r in pd.read_csv(tables / "checks.csv").itertuples(index=False):
+        if pd.isna(r.estimate):
+            continue
+        cond, ref = r.contrast.split(" vs ")
+        a, b = groups[(r.model, "full", cond, "forced")], groups[(r.model, "full", ref, "forced")]
+        if r.check == "R1":
+            ours = shift(a, b, ids, p=int(r.outcome.split("paraphrase ")[1][0]))
+        elif r.check == "R3":
+            ours = shift(a, b, ids, column="y_strict")
+        else:
+            rerun = load_variant(variants[r.check][0])["conditions"]
+            vg = loaded[r.check]
+
+            cells = {
+                c: vg[(r.model, "full", c, "forced")]
+                if c in rerun
+                else groups[(r.model, "full", c, "forced")]
+                for c in (cond, ref)
+            }
+            est, n = shift(cells[cond], cells[ref], ids)
+            if "difference" in r.outcome:
+                study, n_study = shift(a, b, ids)
+                ours = (est - study, min(n, n_study))
+            else:
+                ours = (est, n)
+        compare(
+            f"{r.check} {r.outcome} {r.model}/{r.contrast}",
+            {"estimate": ours[0], "n_cases": ours[1]},
+            pd.Series(r._asdict()),
+        )
+    sa = pd.read_csv(tables / "sampled_agreement.csv")
+    for r in sa[sa["pairs"].notna()].itertuples(index=False):
+        m = groups[(r.model, "full", r.condition, "forced")].merge(
+            loaded["R4"][(r.model, "full", r.condition, "forced")], on=["case_id", "paraphrase"]
+        )
+        both = m["valid_x"] & m["valid_y"]
+        compare(
+            f"sampled agreement {r.model}/{r.condition}",
+            {"pairs": int(both.sum()), "same": int((both & (m["y_x"] == m["y_y"])).sum())},
+            pd.Series(r._asdict()),
+        )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--runs", type=Path, default=ROOT / "runs")
     ap.add_argument("--tables", type=Path, default=ROOT / "reports" / "analysis")
+    ap.add_argument(
+        "--robustness",
+        type=Path,
+        nargs="?",
+        const=ROOT / "reports" / "robustness",
+        help="also check the Phase 7 tables in this folder (default reports/robustness)",
+    )
+    ap.add_argument("--variant-runs", type=Path, default=ROOT / "runs" / "robustness")
     args = ap.parse_args()
 
     cases = pd.read_csv(ROOT / "data" / "manifests" / "test.csv", dtype=str)
@@ -248,6 +369,9 @@ def main() -> int:
         else:
             continue
         compare(f"{r.family} {r.outcome} {r.model}", {"estimate": ours}, pd.Series(r._asdict()))
+
+    if args.robustness:
+        check_robustness(args.robustness, calls, args.variant_runs, truth.index, compare)
 
     for m in mismatches[:50]:
         print("MISMATCH", m)
