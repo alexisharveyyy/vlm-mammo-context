@@ -1,0 +1,1231 @@
+{
+  "split": "test",
+  "generated_from_commit": "f8d39016e02cb5632afcf10086e446cad73473de",
+  "command": "uv run python -m eval.baseline",
+  "results": {
+    "qwen3_vl_8b/full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.12266666666666666,
+      "malignant_rate_ci": [
+        0.10702223494636451,
+        0.1402388421037991
+      ],
+      "accuracy": 0.49333333333333335,
+      "accuracy_ci": [
+        0.4680819153569032,
+        0.5186188103860325
+      ],
+      "birads_consistent": 63,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1437,
+      "birads_consistent_rate": 0.042,
+      "birads_consistent_ci": [
+        0.03296459689144124,
+        0.05337526164824502
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.429008,
+      "auroc_ci": [
+        0.3785977118644651,
+        0.4794616700838642
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.522992,
+      "auroc_verbal_ci": [
+        0.47179337668053756,
+        0.572051420889512
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.303932778327815,
+      "ece": 0.19031812230223039,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/full/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 1491,
+      "abstention_rate": 0.994,
+      "abstention_ci": [
+        0.9886360400281666,
+        0.9968401824202942
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 9,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.2991450484195441
+      ],
+      "accuracy": 0.2222222222222222,
+      "accuracy_ci": [
+        0.06322510711784671,
+        0.5474110308930111
+      ],
+      "birads_consistent": 9,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 1.0,
+      "birads_consistent_ci": [
+        0.7008549515804559,
+        1.0
+      ],
+      "low_mass_rate": 0.994,
+      "auroc": 0.481568,
+      "auroc_ci": [
+        0.4314844515831581,
+        0.5324565686151721
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5833333333333334,
+      "auroc_verbal_ci": [
+        0.5,
+        0.75
+      ],
+      "auroc_verbal_cases": 8,
+      "brier": 0.26451697076906167,
+      "ece": 0.07556790555321378,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/no_image/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1494,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.3333333333333333,
+      "malignant_rate_ci": [
+        0.3099298350305162,
+        0.3575883085428776
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 248,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1252,
+      "birads_consistent_rate": 0.16533333333333333,
+      "birads_consistent_ci": [
+        0.14739359663035867,
+        0.1849828356650161
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5,
+      "auroc_ci": [
+        0.45618193429996506,
+        0.5430757136269713
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5,
+      "auroc_verbal_ci": [
+        0.45618193429996506,
+        0.5430757136269713
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.2608725089199873,
+      "ece": 0.083146960832592,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/blank_full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1365,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.49866666666666665,
+      "malignant_rate_ci": [
+        0.4733994740369536,
+        0.5239406711116336
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 0,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1500,
+      "birads_consistent_rate": 0.0,
+      "birads_consistent_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.46424,
+      "auroc_ci": [
+        0.41443715746753246,
+        0.5151533168233108
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.438,
+      "auroc_verbal_ci": [
+        0.4052237059338177,
+        0.47083452316068547
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.2684478800661892,
+      "ece": 0.10009817261806689,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 6,
+      "abstention_rate": 0.004,
+      "abstention_ci": [
+        0.0018344861657217117,
+        0.008699509108698324
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1494,
+      "malignant_rate": 0.009370816599732263,
+      "malignant_rate_ci": [
+        0.005590157484065761,
+        0.015668072906862313
+      ],
+      "accuracy": 0.5046854082998661,
+      "accuracy_ci": [
+        0.4793532489512434,
+        0.529993534660303
+      ],
+      "birads_consistent": 970,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 524,
+      "birads_consistent_rate": 0.6492637215528781,
+      "birads_consistent_ci": [
+        0.6247112493060533,
+        0.6730505714617817
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.56608,
+      "auroc_ci": [
+        0.5158340231329311,
+        0.6170777783125572
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.574352,
+      "auroc_verbal_ci": [
+        0.5240562468743901,
+        0.6238501779479209
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4253052633929286,
+      "ece": 0.4220814890087453,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/roi/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 1075,
+      "abstention_rate": 0.7166666666666667,
+      "abstention_ci": [
+        0.69333168638179,
+        0.7388947269727981
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 425,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.00895775989396656
+      ],
+      "accuracy": 0.5882352941176471,
+      "accuracy_ci": [
+        0.5408581635201359,
+        0.6340316435573994
+      ],
+      "birads_consistent": 425,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 1.0,
+      "birads_consistent_ci": [
+        0.9910422401060335,
+        1.0
+      ],
+      "low_mass_rate": 0.7166666666666667,
+      "auroc": 0.566048,
+      "auroc_ci": [
+        0.5153358608310399,
+        0.61567852764073
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5431034482758621,
+      "auroc_verbal_ci": [
+        0.4852282788531469,
+        0.6004483880693041
+      ],
+      "auroc_verbal_cases": 322,
+      "brier": 0.32979423728819396,
+      "ece": 0.28008618342562225,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "qwen3_vl_8b/blank_roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 822,
+      "abstentions": 347,
+      "abstention_rate": 0.23133333333333334,
+      "abstention_ci": [
+        0.2106960376252335,
+        0.25334320981507735
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1153,
+      "malignant_rate": 0.3954900260190807,
+      "malignant_rate_ci": [
+        0.3676588428136452,
+        0.4240152900915845
+      ],
+      "accuracy": 0.5056374674761491,
+      "accuracy_ci": [
+        0.4768080575273112,
+        0.5344294373782157
+      ],
+      "birads_consistent": 0,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1153,
+      "birads_consistent_rate": 0.0,
+      "birads_consistent_ci": [
+        0.0,
+        0.003320644148257083
+      ],
+      "low_mass_rate": 0.08933333333333333,
+      "auroc": 0.534848,
+      "auroc_ci": [
+        0.48513592093701463,
+        0.5852652675779214
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.491688,
+      "auroc_verbal_ci": [
+        0.4426012467106538,
+        0.5395302635856974
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.2525308589730393,
+      "ece": 0.07614093501032529,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.0033333333333333335,
+      "malignant_rate_ci": [
+        0.0014246155236142537,
+        0.00777945232509936
+      ],
+      "accuracy": 0.502,
+      "accuracy_ci": [
+        0.4767244046291361,
+        0.5272653776479832
+      ],
+      "birads_consistent": 1029,
+      "birads_inconsistent": 471,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 0.686,
+      "birads_consistent_ci": [
+        0.6620629847053756,
+        0.7089867670667169
+      ],
+      "low_mass_rate": 0.09933333333333333,
+      "auroc": 0.477728,
+      "auroc_ci": [
+        0.42822145540347467,
+        0.5292087478489691
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5028,
+      "auroc_verbal_ci": [
+        0.4553855397302479,
+        0.5527939253999624
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4961218161914655,
+      "ece": 0.4958290404662643,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/full/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.002,
+      "malignant_rate_ci": [
+        0.0006804084719908739,
+        0.005863804525309888
+      ],
+      "accuracy": 0.5006666666666667,
+      "accuracy_ci": [
+        0.47539429795900184,
+        0.5259356294667048
+      ],
+      "birads_consistent": 1090,
+      "birads_inconsistent": 408,
+      "birads_incomplete": 2,
+      "birads_consistent_rate": 0.7266666666666667,
+      "birads_consistent_ci": [
+        0.7035554198689427,
+        0.7486199048712419
+      ],
+      "low_mass_rate": 0.5406666666666666,
+      "auroc": 0.473408,
+      "auroc_ci": [
+        0.42310702775175346,
+        0.5245893023742043
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.518672,
+      "auroc_verbal_ci": [
+        0.46986917506524806,
+        0.5673264820140899
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4985646928403762,
+      "ece": 0.4992914118204534,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/no_image/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1494,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 500,
+      "parse_failure_rate": 0.3333333333333333,
+      "parse_failure_ci": [
+        0.3099298350305162,
+        0.3575883085428776
+      ],
+      "answered": 1000,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        2.168404344971009e-19,
+        0.0038267584855551234
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.4690696003681042,
+        0.5309303996318958
+      ],
+      "birads_consistent": 1000,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 1.0,
+      "birads_consistent_ci": [
+        0.996173241514445,
+        1.0
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5,
+      "auroc_ci": [
+        0.45618193429996506,
+        0.5430757136269713
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5,
+      "auroc_verbal_ci": [
+        0.5,
+        0.5
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4999684698206072,
+      "ece": 0.49996846882248297,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/blank_full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1494,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 1500,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 1.0,
+      "birads_consistent_ci": [
+        0.9974455692798185,
+        1.0
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5,
+      "auroc_ci": [
+        0.45692428637302873,
+        0.5438180657000349
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5,
+      "auroc_verbal_ci": [
+        0.5,
+        0.5
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.499969509767441,
+      "ece": 0.4999695087372744,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 1065,
+      "birads_inconsistent": 435,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 0.71,
+      "birads_consistent_ci": [
+        0.6865235380990367,
+        0.7324036009984871
+      ],
+      "low_mass_rate": 0.10333333333333333,
+      "auroc": 0.477616,
+      "auroc_ci": [
+        0.4271261508856502,
+        0.5295040472094213
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.49016,
+      "auroc_verbal_ci": [
+        0.4443534858781238,
+        0.5366119358896411
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4998580815096759,
+      "ece": 0.4998728300898025,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/roi/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 1125,
+      "birads_inconsistent": 375,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 0.75,
+      "birads_consistent_ci": [
+        0.7274670190746881,
+        0.7712557655652212
+      ],
+      "low_mass_rate": 0.5233333333333333,
+      "auroc": 0.465568,
+      "auroc_ci": [
+        0.41448958032261884,
+        0.5173163698823179
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.521616,
+      "auroc_verbal_ci": [
+        0.4707333736556444,
+        0.5728026699318063
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.49998776607687223,
+      "ece": 0.49998788590723703,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "medgemma_1_5_4b/blank_roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1494,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.0,
+      "malignant_rate_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 248,
+      "birads_inconsistent": 1252,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 0.16533333333333333,
+      "birads_consistent_ci": [
+        0.14739359663035867,
+        0.1849828356650161
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5,
+      "auroc_ci": [
+        0.45692428637302873,
+        0.5438180657000349
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5,
+      "auroc_verbal_ci": [
+        0.5,
+        0.5
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.4999287622678676,
+      "ece": 0.49992875695621336,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.14866666666666667,
+      "malignant_rate_ci": [
+        0.13156116054990952,
+        0.16756708610280469
+      ],
+      "accuracy": 0.5166666666666667,
+      "accuracy_ci": [
+        0.4913674119529198,
+        0.541880773689741
+      ],
+      "birads_consistent": 35,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1465,
+      "birads_consistent_rate": 0.023333333333333334,
+      "birads_consistent_ci": [
+        0.016824677337497887,
+        0.03227721328240847
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5468,
+      "auroc_ci": [
+        0.49604553966181764,
+        0.5975591266718332
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.543552,
+      "auroc_verbal_ci": [
+        0.5000626102751389,
+        0.5893579335428828
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.366123684462486,
+      "ece": 0.33886610830264136,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/full/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 745,
+      "abstention_rate": 0.49666666666666665,
+      "abstention_ci": [
+        0.4714050534189805,
+        0.5219453094524873
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 755,
+      "malignant_rate": 0.030463576158940398,
+      "malignant_rate_ci": [
+        0.02038390685660152,
+        0.04529708387122734
+      ],
+      "accuracy": 0.5086092715231788,
+      "accuracy_ci": [
+        0.4729961279115875,
+        0.5441352502556032
+      ],
+      "birads_consistent": 23,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 732,
+      "birads_consistent_rate": 0.030463576158940398,
+      "birads_consistent_ci": [
+        0.02038390685660152,
+        0.04529708387122734
+      ],
+      "low_mass_rate": 0.5406666666666666,
+      "auroc": 0.528368,
+      "auroc_ci": [
+        0.4785325086812501,
+        0.5790753995559488
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5202,
+      "auroc_verbal_ci": [
+        0.4983007013510034,
+        0.5432123752826136
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.48719385035360163,
+      "ece": 0.4845950048131913,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/no_image/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 1494,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.16533333333333333,
+      "malignant_rate_ci": [
+        0.14739359663035867,
+        0.1849828356650161
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 248,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1252,
+      "birads_consistent_rate": 0.16533333333333333,
+      "birads_consistent_ci": [
+        0.14739359663035867,
+        0.1849828356650161
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.5,
+      "auroc_ci": [
+        0.45692428637302873,
+        0.5438180657000349
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5,
+      "auroc_verbal_ci": [
+        0.45692428637302873,
+        0.5438180657000349
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.3205548749025848,
+      "ece": 0.23148331102944425,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/blank_full/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 507,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.166,
+      "malignant_rate_ci": [
+        0.1480283685069244,
+        0.18567799121415685
+      ],
+      "accuracy": 0.498,
+      "accuracy_ci": [
+        0.4727346223520168,
+        0.5232755953708639
+      ],
+      "birads_consistent": 0,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1500,
+      "birads_consistent_rate": 0.0,
+      "birads_consistent_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.496944,
+      "auroc_ci": [
+        0.45320940299219487,
+        0.5402906070804508
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.496976,
+      "auroc_verbal_ci": [
+        0.45346440082169753,
+        0.5397731278236393
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.3974162856728281,
+      "ece": 0.3823461879049741,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 0.6273333333333333,
+      "malignant_rate_ci": [
+        0.6025684188958998,
+        0.6514477194140272
+      ],
+      "accuracy": 0.49,
+      "accuracy_ci": [
+        0.464759897878009,
+        0.5152911907363946
+      ],
+      "birads_consistent": 640,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 860,
+      "birads_consistent_rate": 0.4266666666666667,
+      "birads_consistent_ci": [
+        0.40185587945924867,
+        0.4518521037130447
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.4692,
+      "auroc_ci": [
+        0.4188581472632994,
+        0.5194957832147884
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.466976,
+      "auroc_verbal_ci": [
+        0.41801523313431355,
+        0.5167304690456552
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.3646047831679585,
+      "ece": 0.3131467300387002,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/roi/plain": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 0,
+      "abstentions": 296,
+      "abstention_rate": 0.19733333333333333,
+      "abstention_ci": [
+        0.17797685915991493,
+        0.21823608956936827
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1204,
+      "malignant_rate": 0.1536544850498339,
+      "malignant_rate_ci": [
+        0.13438907761950902,
+        0.17512294988259663
+      ],
+      "accuracy": 0.48588039867109634,
+      "accuracy_ci": [
+        0.45773885087667326,
+        0.5141117593572254
+      ],
+      "birads_consistent": 185,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 1019,
+      "birads_consistent_rate": 0.1536544850498339,
+      "birads_consistent_ci": [
+        0.13438907761950902,
+        0.17512294988259663
+      ],
+      "low_mass_rate": 0.402,
+      "auroc": 0.493152,
+      "auroc_ci": [
+        0.4417380549933744,
+        0.5447145724608591
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.5037442396313364,
+      "auroc_verbal_ci": [
+        0.4560525151411213,
+        0.5503941245933519
+      ],
+      "auroc_verbal_cases": 493,
+      "brier": 0.45725330614722387,
+      "ece": 0.4479150747195333,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    },
+    "internvl3_5_8b/blank_roi/forced": {
+      "calls": 1500,
+      "errors": 0,
+      "reused": 306,
+      "abstentions": 0,
+      "abstention_rate": 0.0,
+      "abstention_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "parse_failures": 0,
+      "parse_failure_rate": 0.0,
+      "parse_failure_ci": [
+        0.0,
+        0.002554430720181488
+      ],
+      "answered": 1500,
+      "malignant_rate": 1.0,
+      "malignant_rate_ci": [
+        0.9974455692798185,
+        1.0
+      ],
+      "accuracy": 0.5,
+      "accuracy_ci": [
+        0.47472931184068445,
+        0.5252706881593155
+      ],
+      "birads_consistent": 1500,
+      "birads_inconsistent": 0,
+      "birads_incomplete": 0,
+      "birads_consistent_rate": 1.0,
+      "birads_consistent_ci": [
+        0.9974455692798185,
+        1.0
+      ],
+      "low_mass_rate": 0.0,
+      "auroc": 0.468288,
+      "auroc_ci": [
+        0.4221159124180705,
+        0.5138222575997029
+      ],
+      "auroc_cases": 500,
+      "auroc_verbal": 0.4328,
+      "auroc_verbal_ci": [
+        0.40419022731649096,
+        0.4608379721071333
+      ],
+      "auroc_verbal_cases": 500,
+      "brier": 0.49860191918603464,
+      "ece": 0.49858521521780785,
+      "commits": [
+        "62956eac0bf5f5b914416ec7d283f3b554450e8e"
+      ],
+      "config_sha256": [
+        "038826f2fa991918b19161aa335809e37971b29271f977498b3868528db3f62b"
+      ],
+      "complete": true
+    }
+  },
+  "above_chance": {
+    "qwen3_vl_8b": "not above chance",
+    "medgemma_1_5_4b": "not above chance",
+    "internvl3_5_8b": "not above chance"
+  },
+  "pending": []
+}
