@@ -8,7 +8,10 @@ gives the date it was added and what was known when it was added.
 
 ## 1. Surface features and Qwen3-VL's below-chance answers (added 2026-10-27)
 
-- **Status:** exploratory, not part of the frozen plan. Not started.
+- **Status:** exploratory, not part of the frozen plan. Done on 2026-10-27
+  with tier T0 only: `uv run python -m eval.surface_features` writes
+  `reports/exploratory/surface_features.md` (aggregates only; the per-case
+  pixel features stay in `data/` and are not committed).
 - **Question:** which surface image features predict Qwen3-VL's
   below-chance answers on full images (`neutral`, forced format)? Candidate
   features include brightness, image size, and mass versus calcification.
