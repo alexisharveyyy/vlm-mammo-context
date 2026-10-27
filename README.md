@@ -32,9 +32,9 @@ repository should be used to interpret a real patient's imaging.
 
 ## Status
 
-Phase 4 of 8: baseline on the test set.
+Phase 5 of 8: context conditions on the test set (tiers T1 to T4).
 
-The baseline is in [reports/baseline.md](reports/baseline.md). On full images
+The Phase 4 baseline is in [reports/baseline.md](reports/baseline.md). On full images
 with the neutral prompt, none of the three models is above chance by the rule in
 docs/DEVIATIONS.md, entry 2. All three stay in the study.
 
