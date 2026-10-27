@@ -51,8 +51,8 @@ tag are logged in `docs/DEVIATIONS.md`; execution follows
 | Language | Role | Status |
 |---|---|---|
 | Python | data download and preprocessing, model runs, run logging, a cross-check of the headline numbers | in use |
-| R | statistics and figures under `analysis/` (bootstrap, Wilson intervals, AUROC, multiple-comparison correction), reading only the committed run outputs; versions pinned with renv | planned (Phase 6) |
-| TypeScript | static results viewer under `viewer/` (Vite), outputs only and no images | planned (Phase 8) |
+| R | statistics and figures under `analysis/` (bootstrap, Wilson intervals, AUROC, multiple-comparison correction), reading only the committed run outputs; versions pinned with renv; a Python script cross-checks the headline numbers | written and tested; runs on the full outputs after Phase 5 |
+| TypeScript | static results viewer under `viewer/` (Vite), outputs only and no images | in progress (Phase 8) |
 
 ## Development
 
