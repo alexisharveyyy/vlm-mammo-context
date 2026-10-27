@@ -43,7 +43,11 @@ utils::write.csv(flips, file.path(tables, "flips.csv"), row.names = FALSE)
 utils::write.csv(syc, file.path(tables, "sycophancy.csv"), row.names = FALSE)
 figures <- write_figures(con, cells, syc, file.path(opt$out, "figures"))
 
-commit <- tryCatch(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), error = function(e) "unknown")
+commit <- suppressWarnings(tryCatch(
+  system2("git", c("rev-parse", "HEAD"), stdout = TRUE, stderr = FALSE),
+  error = function(e) character()
+))
+commit <- if (length(commit) == 1 && nchar(commit) == 40) commit else "unknown"
 command <- paste(c("Rscript analysis/run_analysis.R", args), collapse = " ")
 meta <- list(
   command = trimws(command), commit = commit, r_version = as.character(getRversion()),

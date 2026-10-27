@@ -29,15 +29,22 @@ jobs:
 
   analysis:
     runs-on: ubuntu-latest
+    # R 4.4.0 (the version in analysis/renv.lock) comes preinstalled, so no
+    # system packages are installed on each run.
+    container: rocker/r-ver:4.4.0
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Install Python
         run: uv sync --locked
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: "4.4.0"
-          use-public-rspm: true
+      # Prebuilt Linux binaries from Posit Package Manager for the container's
+      # Ubuntu release, instead of building CRAN sources.
+      - name: Use binary R packages
+        run: |
+          . /etc/os-release
+          echo "RENV_CONFIG_REPOS_OVERRIDE=https://packagemanager.posit.co/cran/__linux__/$VERSION_CODENAME/latest" >> "$GITHUB_ENV"
+      # Restores the package library from the cache keyed by renv.lock, and
+      # saves it after a cache miss.
       - uses: r-lib/actions/setup-renv@v2
         with:
           working-directory: analysis
