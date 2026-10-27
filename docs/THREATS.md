@@ -86,7 +86,31 @@ conclusions, and what the study does about it.
   and does not depend on the label.
 - **Mitigation:** none beyond the dataset's curation. Stated as a limit.
 
-## 7. Answer-order sensitivity
+## 7. Image size and brightness go with the label (dataset confound)
+
+- **Evidence:** in exploratory analysis 1 (`reports/exploratory/surface_features.md`;
+  tier T0 cases only; exploratory, not part of the frozen plan), surface
+  properties of the 500 test images are associated with the biopsy label on
+  their own. As a score for malignancy, image height has an AUROC of 0.580
+  (95% interval 0.529 to 0.630) and mean intensity 0.582 (0.533 to 0.630);
+  the breast area fraction, mean and spread are between 0.566 and 0.577,
+  and image width goes the other way (0.425, 0.375 to 0.479). These
+  properties come from the film, digitizer and site rather than the lesion.
+- **Consequence:** a model can look better or worse than chance through
+  acquisition properties instead of the lesion. For Qwen3-VL, height,
+  brightness and breast area fraction all correlate negatively with
+  `p_malignant` (Spearman about -0.15) while going with malignancy, the
+  direction of its below-chance AUROC; adding the surface features to a
+  regression moves the label coefficient only from -0.021 to -0.016, so
+  they explain a small part of it. Accuracy and AUROC in this dataset are
+  therefore not clean measures of reading the lesion.
+- **Mitigation:** the context effects compare each image with itself, so a
+  property of the image is held fixed within every contrast and cannot by
+  itself create a context effect; it can only change how large the room for
+  a shift is. The association is reported as exploratory and was found on
+  T0 only.
+
+## 8. Answer-order sensitivity
 
 - **Evidence:** in the Phase 4 baseline, the order in which the two options
   are listed changes the answers a lot. On full images under `neutral`,

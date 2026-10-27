@@ -213,6 +213,7 @@ The full list, with evidence and mitigations, is in `docs/THREATS.md`: no
 model reads the images above chance; film mammograms from the 1990s
 digitized on several scanners; one public dataset; small models (4B and 8B,
 not quantized); synthetic age and family history; label and BI-RADS noise;
+image size and brightness associated with the label (a dataset confound);
 answer-order sensitivity; and the strict parser's case sensitivity.
 
 [[PENDING: threats added in Phase 7 and how the results bear on each]]
