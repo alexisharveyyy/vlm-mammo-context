@@ -56,3 +56,28 @@ jobs:
         run: |
           Rscript analysis/run_analysis.R --out "$RUNNER_TEMP/report" --resamples 1000
           uv run python -m eval.crosscheck --tables "$RUNNER_TEMP/report/analysis"
+
+  viewer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: viewer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: viewer/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: |
+          npm run lint
+          npm run typecheck
+      - name: Build
+        run: |
+          npm run data
+          npm run build
+      - name: Check the build contains no images
+        run: npm run check-dist
