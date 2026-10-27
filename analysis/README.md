@@ -11,13 +11,15 @@ manifests; Python runs the models.
 From the repository root, with R 4.4.0:
 
     Rscript -e 'renv::restore(project = "analysis")'     # once
-    Rscript analysis/run_analysis.R                      # writes reports/
+    Rscript analysis/run_analysis.R --final              # writes reports/
     uv run python -m eval.crosscheck                     # must report 0 mismatches
 
 `run_analysis.R` writes `reports/analysis.md`, the tables in
 `reports/analysis/` (`contrasts.csv`, `cells.csv`, `flips.csv`,
 `sycophancy.csv`) and the figures in `reports/figures/`. A full run takes
-about 80 seconds. A contrast whose cells are incomplete is listed as pending,
+about 80 seconds. The reported analysis always uses `--final`, which stops
+before computing anything if the commit cannot be read from git; without it
+the report says "unknown" (development runs only). A contrast whose cells are incomplete is listed as pending,
 never estimated.
 
 ## Tests

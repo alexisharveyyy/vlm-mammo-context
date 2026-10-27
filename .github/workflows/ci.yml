@@ -68,7 +68,7 @@ jobs:
           uv run python -m eval.crosscheck --runs "$SYNTHETIC_RUNS" --tables "$RUNNER_TEMP/synthetic_report/analysis"
       - name: Analysis and cross-check, committed outputs
         run: |
-          Rscript analysis/run_analysis.R --out "$RUNNER_TEMP/report" --resamples 1000
+          Rscript analysis/run_analysis.R --final --out "$RUNNER_TEMP/report" --resamples 1000
           uv run python -m eval.crosscheck --tables "$RUNNER_TEMP/report/analysis"
 
   viewer:
