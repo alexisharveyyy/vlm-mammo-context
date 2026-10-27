@@ -29,3 +29,14 @@ def test_refuses_to_write_into_runs(monkeypatch):
     monkeypatch.setattr(sys, "argv", ["synthetic", "--out", str(synthetic.ROOT / "runs" / "x")])
     with pytest.raises(SystemExit, match="refusing"):
         synthetic.main()
+
+
+def test_writes_variants_under_robustness(tmp_path):
+    n = synthetic.generate(tmp_path, ["T1"], ["medgemma_1_5_4b"], ["position_end", "sampled"])
+    # T1 (2 cells) plus position_end (6 cells); sampled runs only Qwen3-VL.
+    assert n == (2 + 6) * 3 * 500
+    files = sorted((tmp_path / "robustness" / "position_end").rglob("*.jsonl"))
+    assert len(files) == 18
+    record = json.loads(files[0].read_text().splitlines()[0])
+    assert record["variant"] == "position_end"
+    assert not (tmp_path / "robustness" / "sampled").exists()
