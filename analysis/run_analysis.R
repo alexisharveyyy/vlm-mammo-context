@@ -11,38 +11,17 @@
 # or written unless the commit of the code and outputs is known.
 
 args <- commandArgs(trailingOnly = TRUE)
-opt <- list(runs = "runs", manifests = "data/manifests", out = "reports", resamples = "10000")
-final <- FALSE
-i <- 1
-while (i <= length(args)) {
-  if (args[i] == "--final") {
-    final <- TRUE
-    i <- i + 1
-    next
-  }
-  name <- sub("^--", "", args[i])
-  if (!name %in% names(opt) || i == length(args)) stop("unknown or incomplete option ", args[i])
-  opt[[name]] <- args[i + 1]
-  i <- i + 2
-}
-resamples <- as.integer(opt$resamples)
-
-commit <- suppressWarnings(tryCatch(
-  system2("git", c("rev-parse", "HEAD"), stdout = TRUE, stderr = FALSE),
-  error = function(e) character()
-))
-commit <- if (length(commit) == 1 && grepl("^[0-9a-f]{40}$", commit)) commit else "unknown"
-if (final && commit == "unknown") {
-  stop("--final: the commit is unknown (is git installed, and is this a git checkout?)", call. = FALSE)
-}
-
 here <- dirname(normalizePath(sub("^--file=", "", grep("^--file=", commandArgs(), value = TRUE)[1])))
 # Use the package versions pinned in analysis/renv.lock from any directory.
 if (!nzchar(Sys.getenv("RENV_PROJECT"))) {
   Sys.setenv(RENV_PROJECT = here)
   source(file.path(here, "renv", "activate.R"))
 }
-for (f in c("io.R", "stats.R", "outcomes.R", "report.R")) source(file.path(here, "R", f))
+for (f in c("cli.R", "io.R", "stats.R", "outcomes.R", "report.R")) source(file.path(here, "R", f))
+
+opt <- parse_options(args, list(runs = "runs", manifests = "data/manifests", out = "reports", resamples = "10000"))
+resamples <- as.integer(opt$resamples)
+commit <- current_commit(opt$final)
 
 calls <- read_runs(opt$runs)
 cases <- read_cases(opt$manifests)
