@@ -106,18 +106,22 @@ This is a description, not a test.
 
 ## Cost and order
 
-Estimated from the Phase 5 rate on full images (Qwen3-VL about 5.6 s per
-call) and the Phase 2 smoke medians with caching (MedGemma about 2 s,
-InternVL about 4 s):
+Estimated from the tier T0 outputs: the mean generation time per call on
+full images in the forced format (Qwen3-VL 5.11 s, MedGemma 1.71 s,
+InternVL3.5 4.28 s) times the T0 ratio of wall-clock time to generation
+time (1.04, 1.06 and 1.03). Context prompts are a sentence longer than
+`neutral`, and sampling may change the answer length, so these are
+estimates.
 
-| Variant | Calls | Estimated hours |
-|---|---:|---|
-| `position_end` | 9,000 per model | Qwen3-VL 14, MedGemma 5, InternVL 10 |
-| `sampled` | 10,500 (Qwen3-VL) | 16 |
+| Run | Calls | Qwen3-VL | MedGemma | InternVL3.5 | Total |
+|---|---:|---:|---:|---:|---:|
+| `position_end` as designed: six conditions of the primary contrasts | 9,000 per model | 13.3 h | 4.5 h | 11.0 h | 28.8 h |
+| `position_end` limited to `colleague_benign` and `colleague_malignant` (`neutral` is unchanged by position) | 3,000 per model | 4.4 h | 1.5 h | 3.7 h | 9.6 h |
+| `sampled`: `neutral` and the six conditions, Qwen3-VL | 10,500 | 15.5 h | | | 15.5 h |
 
-About 45 hours in all, run after Phase 5 with `sh scripts/run_variant.sh
-<variant>`, `position_end` first. Before the test-set runs, each variant gets
-a dev dry run on three cases, as the tiers did.
+No variant runs until Phase 5 is complete. They run with
+`sh scripts/run_variant.sh <variant>`, `position_end` first, each after a
+dev dry run on three cases, as the tiers did.
 
 ## Outputs
 
