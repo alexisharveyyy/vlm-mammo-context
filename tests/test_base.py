@@ -95,3 +95,23 @@ def test_text_only_predict():
     out = adapter.predict(None, "prompt")
     assert adapter.seen is None
     assert out["meta"]["input_size"] is None and out["meta"]["sent_size"] is None
+
+
+def test_decoding_kwargs_keep_the_greedy_study_setting():
+    assert base.decoding_kwargs({"do_sample": False, "max_new_tokens": 128, "seed": 0}) == {
+        "do_sample": False,
+        "max_new_tokens": 128,
+    }
+    sampled = {
+        "do_sample": True,
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "max_new_tokens": 128,
+        "seed": 1,
+    }
+    assert base.decoding_kwargs(sampled) == {
+        "do_sample": True,
+        "max_new_tokens": 128,
+        "temperature": 0.7,
+        "top_p": 1.0,
+    }
