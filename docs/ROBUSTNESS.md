@@ -9,6 +9,13 @@ parser). This document fixes how each is run and analyzed. It was written on
 2026-10-27, while Phase 5 was running and before any tier T1 to T4 output
 was read; it was developed on synthetic outputs and the tier T0 outputs only.
 
+**Scope of the new runs.** Decided on 2026-10-27 by the study owner, blind
+to tier T1 to T4 (no T1 to T4 output had been read), and logged in
+`docs/DEVIATIONS.md`, entry 7: the two checks that need new model runs (R2
+position, R4 decoding) cover only the colleague contrasts, H1 and H2, on
+full images. The age and history contrasts (H3, H4) are covered by R1 and
+R3, which need no new runs, but not by R2 and R4 (`docs/EXPLORATORY.md`).
+
 Every check here is a robustness check. None adds a confirmatory test, and
 none changes the primary or key secondary families. Sensitivity 2 repeats
 the primary tests under the strict parser, with Holm within its own 12
@@ -35,15 +42,13 @@ context sentence after the task: `<intro> <task> <context>`. The frozen
 prompt text in `prompts/` is unchanged; only its order differs
 (`models/prompts.py`, `position="end"`).
 
-- **Runs:** the six context conditions of the primary contrasts
-  (`colleague_benign`, `colleague_malignant`, `age_42`, `age_68`,
-  `history_yes`, `history_no`), full images, forced format, three
-  paraphrases, all 500 test cases, all three models. `neutral` has no
-  context sentence, so its prompt is identical in both positions and the
-  study's `neutral` outputs are the reference.
-- **Analysis:** for each model and primary contrast, the shift with the
-  context at the end, and its difference from the study shift (end minus
-  middle), each with paired case-bootstrap 95% intervals.
+- **Runs:** `colleague_benign` and `colleague_malignant`, full images,
+  forced format, three paraphrases, all 500 test cases, all three models.
+  `neutral` has no context sentence, so its prompt is identical in both
+  positions and the study's `neutral` outputs are the reference.
+- **Analysis:** for each model and colleague contrast (H1, H2), the shift
+  with the context at the end, and its difference from the study shift (end
+  minus middle), each with paired case-bootstrap 95% intervals.
 
 ### R3. Strict parser (sensitivity 2; no new runs)
 
@@ -87,9 +92,10 @@ first token after "Assessment:", as in the study.
   `neutral`): 74% of its valid greedy answers have `p_malignant` between 0.2
   and 0.8, against 29% for InternVL and 0.4% for MedGemma, so sampling has
   the most room to change its answers (`docs/DEVIATIONS.md`, entry 6).
-- **Runs:** `neutral` and the six context conditions, full images, forced
-  format, three paraphrases, all 500 test cases.
-- **Analysis:** for each primary contrast, the shift under sampling and its
+- **Runs:** `neutral`, `colleague_benign` and `colleague_malignant`, full
+  images, forced format, three paraphrases, all 500 test cases. `neutral` is
+  rerun because sampling changes it too.
+- **Analysis:** for each colleague contrast (H1, H2), the shift under sampling and its
   difference from the greedy shift (sampled minus greedy), with paired
   case-bootstrap 95% intervals; and per condition, the share of (case,
   paraphrase) pairs whose sampled answer equals the greedy answer (Wilson
@@ -115,9 +121,13 @@ estimates.
 
 | Run | Calls | Qwen3-VL | MedGemma | InternVL3.5 | Total |
 |---|---:|---:|---:|---:|---:|
-| `position_end` as designed: six conditions of the primary contrasts | 9,000 per model | 13.3 h | 4.5 h | 11.0 h | 28.8 h |
-| `position_end` limited to `colleague_benign` and `colleague_malignant` (`neutral` is unchanged by position) | 3,000 per model | 4.4 h | 1.5 h | 3.7 h | 9.6 h |
-| `sampled`: `neutral` and the six conditions, Qwen3-VL | 10,500 | 15.5 h | | | 15.5 h |
+| `position_end`: `colleague_benign`, `colleague_malignant` | 3,000 per model | 4.4 h | 1.5 h | 3.7 h | 9.6 h |
+| `sampled`: `neutral`, `colleague_benign`, `colleague_malignant`, Qwen3-VL | 4,500 | 6.6 h | | | 6.6 h |
+| Total | 13,500 | | | | about 16 h |
+
+The first design covered all six context conditions of H1 to H4 (28.8 h for
+the position check and 15.5 h for the decoding check); it was narrowed to
+the scope above before any run (entry 7).
 
 No variant runs until Phase 5 is complete. They run with
 `sh scripts/run_variant.sh <variant>`, `position_end` first, each after a
