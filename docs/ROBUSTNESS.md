@@ -86,8 +86,7 @@ first token after "Assessment:", as in the study.
 - **Model:** Qwen3-VL, chosen on the tier T0 outputs only (full images,
   `neutral`): 74% of its valid greedy answers have `p_malignant` between 0.2
   and 0.8, against 29% for InternVL and 0.4% for MedGemma, so sampling has
-  the most room to change its answers. This can be changed before the runs
-  start.
+  the most room to change its answers (`docs/DEVIATIONS.md`, entry 6).
 - **Runs:** `neutral` and the six context conditions, full images, forced
   format, three paraphrases, all 500 test cases.
 - **Analysis:** for each primary contrast, the shift under sampling and its

@@ -116,3 +116,22 @@ already known when the change was made.
   `blank_roi` (AUROC 0.535 to 0.497, Brier 0.253 to 0.274, ECE 0.076 to
   0.161). `reports/baseline.md` is regenerated with the plan's rule when
   the analysis branch is merged after Phase 5.
+
+## 6. Model and setting for the second decoding check (2026-10-27)
+
+- **What:** the Phase 7 check "a second decoding setting for one model"
+  (plan section 9) is run on Qwen3-VL, with sampling at temperature 0.7,
+  top_p 1.0 and seed 1 set before every call, on full images, forced
+  format, for `neutral` and the six conditions of the primary contrasts
+  (`configs/robustness.yaml`, variant `sampled`; `docs/ROBUSTNESS.md`, R4).
+- **Why:** the plan names the check but not the model or the setting. A
+  second seed alone would not change any answer, because the study decodes
+  greedily and the determinism audits show identical reruns; the second
+  setting therefore samples. Qwen3-VL was chosen because sampling can only
+  change answers whose probabilities are not near 0 or 1: on the tier T0
+  outputs (full images, `neutral`, forced format), 74% of Qwen3-VL's valid
+  answers have `p_malignant` between 0.2 and 0.8, against 29% for
+  InternVL3.5 and 0.4% for MedGemma.
+- **Results known:** chosen from the tier T0 outputs only, which had been
+  reported in `reports/baseline.md`. No tier T1 to T4 output had been read,
+  and no Phase 7 run has been made.
