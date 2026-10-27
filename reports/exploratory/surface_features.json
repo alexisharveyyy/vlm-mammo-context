@@ -1,7 +1,7 @@
 {
   "label": "EXPLORATORY: not part of the pre-specified analysis plan",
   "command": "uv run python -m eval.surface_features",
-  "commit": "9353a80d498bdb284917d8aa843f6d7c4bb3baa7",
+  "commit": "0963d701415adda3f8f4247ec873177ac66c0158",
   "results": {
     "cases": 500,
     "auroc": 0.429008,
