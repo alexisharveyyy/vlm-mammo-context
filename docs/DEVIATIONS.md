@@ -39,3 +39,18 @@ already known when the change was made.
   would not show whether the model reads the image.
 - **Results known:** none. Written before any test-set call. This adds a
   descriptive label; it changes no hypothesis, outcome or test.
+
+## 3. Abstentions counted apart from parse failures in the baseline report (2026-10-27)
+
+- **What:** `eval/baseline.py` counts an answer whose assessment line names
+  neither benign nor malignant (for example "Assessment: indeterminate") as
+  an abstention, and only output with no readable assessment as a parse
+  failure. The first version counted every unparsed answer as both.
+- **Why:** section 5 of the plan defines the abstention rate (item 8) and
+  the parse failure rate (item 11) as separate outcomes. The change brings
+  the report into line with the plan; it does not change the plan. Both
+  kinds of answer remain missing in every other metric, as before.
+- **Results known:** yes. Made after the tier T0 test-set results were seen,
+  when the first report showed identical abstention and parse failure
+  rates. It changes no above-chance label, which depends only on the AUROC
+  of `p_malignant`.
