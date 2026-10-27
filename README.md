@@ -10,6 +10,21 @@ This is a study of model behavior. It is not a diagnostic tool, it is not
 intended for clinical use, and it makes no clinical claims. Nothing in this
 repository should be used to interpret a real patient's imaging.
 
+What the study measures, and what it does not:
+
+- It measures how much the answer to the same image changes when only the
+  prompt text changes. It does not measure how well the models diagnose.
+- In the Phase 4 baseline none of the three models reads the images above
+  chance, so a context effect here is a shift in answers that carry little
+  information about the image.
+- Patient age and family history are synthetic: CBIS-DDSM has neither, so
+  every case is read with both values of each.
+- The images are digitized film mammograms from the 1990s, from one public
+  dataset, read by three small open models (4B and 8B parameters).
+
+The full list, with evidence and mitigations, is in
+[docs/THREATS.md](docs/THREATS.md).
+
 ## Design in brief
 
 - **Data:** CBIS-DDSM from The Cancer Imaging Archive (TCIA), with BI-RADS
@@ -46,19 +61,72 @@ The plan was not registered with an external registry. Changes made after the
 tag are logged in `docs/DEVIATIONS.md`; execution follows
 `docs/RUN_DESIGN.md`.
 
+## Quickstart
+
+Every reported number regenerates from the committed outputs; no images, no
+model weights and no GPU are needed. From the repository root:
+
+```sh
+uv sync                                          # Python 3.12, pinned in uv.lock
+uv run python -m eval.baseline                   # Phase 4: reports/baseline.md
+Rscript -e 'renv::restore(project = "analysis")' # R 4.4.0, pinned in analysis/renv.lock
+Rscript analysis/run_analysis.R --final          # Phase 6: reports/analysis.md, figures
+Rscript analysis/run_robustness.R --final        # Phase 7: reports/robustness.md
+uv run python -m eval.crosscheck --robustness    # recomputes the point estimates in Python
+```
+
+The results viewer (outputs only, no images):
+
+```sh
+cd viewer && npm ci && npm run data && npm run dev
+```
+
+Rerunning the models needs the CBIS-DDSM images (about 30 GB from the NCI
+Imaging Data Commons, verified against the committed checksums) and a machine
+that can run 8B models:
+
+```sh
+uv run python data/download.py metadata && uv run python data/download.py images
+uv run python data/preprocess.py
+uv run python data/download.py roi && uv run python data/preprocess.py --roi
+uv sync --group models
+sh scripts/run_tier.sh T0                        # tiers T0 to T4, docs/RUN_DESIGN.md
+```
+
+The final report, with a reproduction table that gives the command, config and
+commit of every result, is [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md).
+
+## Repository map
+
+| Path | Content |
+|---|---|
+| `docs/PREREGISTRATION.md` | the pre-specified analysis plan (frozen at `prereg-v1`) |
+| `docs/DEVIATIONS.md` | every change to the plan, with date and reason |
+| `docs/RUN_DESIGN.md`, `docs/ROBUSTNESS.md` | how the runs and the Phase 7 checks are done |
+| `docs/THREATS.md`, `docs/EXPLORATORY.md` | threats to validity; exploratory analyses |
+| `data/` | data card, download and preprocessing scripts, manifests and checksums |
+| `prompts/`, `configs/` | prompt text (frozen); model and variant settings |
+| `models/` | model adapters, prompt rendering, the answer parser and the runner |
+| `runs/` | every model output, one JSON line per call |
+| `analysis/` | the statistics in R |
+| `eval/` | the baseline, the Python cross-check, exploratory analyses, synthetic test data |
+| `reports/` | generated reports, tables and figures |
+| `viewer/` | the static results viewer |
+
 ## Languages
 
 | Language | Role | Status |
 |---|---|---|
-| Python | data download and preprocessing, model runs, run logging, a cross-check of the headline numbers | in use |
-| R | statistics and figures under `analysis/` (bootstrap, Wilson intervals, AUROC, multiple-comparison correction), reading only the committed run outputs; versions pinned with renv; a Python script cross-checks the headline numbers | written and tested; runs on the full outputs after Phase 5 |
-| TypeScript | static results viewer under `viewer/` (Vite), outputs only and no images | in progress (Phase 8) |
+| Python | data download and preprocessing, model runs and run logging, the Phase 4 baseline, the cross-check of the R numbers, exploratory analyses | in use |
+| R | the statistics and figures under `analysis/` (paired case bootstrap, Wilson intervals, AUROC with pROC, Holm and Benjamini-Hochberg) and the Phase 7 robustness checks, reading only the committed run outputs; versions pinned with renv | written and tested on synthetic and tier T0 outputs; runs on the full outputs after Phase 5 |
+| TypeScript | the static results viewer under `viewer/` (Vite), outputs only and no images | built against tier T0; published with GitHub Pages once the repository is public |
 
 ## Development
 
 ```sh
 uv sync
-sh scripts/check.sh
+sh scripts/check.sh            # lint, format, tests, audit
+sh scripts/final_audit.sh      # Phase 8: the whole history
 ```
 
 ## Data license and citation
