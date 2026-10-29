@@ -65,3 +65,27 @@ def test_refuses_untracked_code(tmp_path):
     repo = make_repo(tmp_path)
     (repo / "new_module.py").write_text("x = 1\n")
     assert run(repo, sys.executable, "-c", "pass").returncode == 2
+
+
+def test_output_commits_keep_the_pinned_commit(tmp_path):
+    repo = make_repo(tmp_path)
+    show = (sys.executable, "-c", "import os; print(os.environ['PINNED_COMMIT'])")
+    first = run(repo, *show).stdout.strip()
+    (repo / "runs" / "m").mkdir(parents=True)
+    (repo / "runs" / "m" / "out.jsonl").write_text("{}\n")
+    git(repo, "add", "runs")
+    git(repo, "-c", "core.hooksPath=/dev/null", "commit", "-q", "-m", "outputs")
+    result = run(repo, *show)
+    assert result.stdout.strip() == first
+    record = json.loads((repo / "runs" / "run_log.jsonl").read_text().splitlines()[-1])
+    assert record["commit"] == first and record["head"] != first
+
+
+def test_code_commits_change_the_pinned_commit(tmp_path):
+    repo = make_repo(tmp_path)
+    show = (sys.executable, "-c", "import os; print(os.environ['PINNED_COMMIT'])")
+    first = run(repo, *show).stdout.strip()
+    (repo / "config.yaml").write_text("seed: 1\n")
+    git(repo, "add", ".")
+    git(repo, "-c", "core.hooksPath=/dev/null", "commit", "-q", "-m", "change")
+    assert run(repo, *show).stdout.strip() != first

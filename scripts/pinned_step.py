@@ -1,9 +1,12 @@
 """Run an experiment step pinned to a clean commit and a hashed config.
 
 Refuses to start if tracked or untracked (non-ignored) files differ from HEAD,
-except for paths under the output prefixes. Appends one JSON line per run to
-runs/run_log.jsonl with the commit, config hash, command, timing and exit code.
-The child process sees PINNED_COMMIT and PINNED_CONFIG_SHA256 in its environment.
+except for paths under the output prefixes. The pinned commit is the latest
+commit that changed anything outside the output prefixes, so committing
+outputs does not change it. Appends one JSON line per run to
+runs/run_log.jsonl with the pinned commit, HEAD, config hash, command, timing
+and exit code. The child process sees PINNED_COMMIT and PINNED_CONFIG_SHA256
+in its environment.
 
     python scripts/pinned_step.py --config configs/models.yaml -- python -m eval.run ...
 """
@@ -38,6 +41,13 @@ def dirty_paths(output_prefixes: tuple[str, ...] = OUTPUT_PREFIXES) -> list[str]
     return paths
 
 
+def code_commit(output_prefixes: tuple[str, ...] = OUTPUT_PREFIXES) -> str:
+    """Latest commit that changed a path outside the output prefixes."""
+    excludes = [f":(exclude){prefix}" for prefix in output_prefixes]
+    commit = git("log", "-1", "--first-parent", "--format=%H", "--", ".", *excludes).strip()
+    return commit or git("rev-parse", "HEAD").strip()
+
+
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -62,7 +72,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {path}", file=sys.stderr)
         return 2
 
-    commit = git("rev-parse", "HEAD").strip()
+    commit = code_commit()
+    head = git("rev-parse", "HEAD").strip()
     config_hash = sha256_file(args.config)
     env = {**os.environ, "PINNED_COMMIT": commit, "PINNED_CONFIG_SHA256": config_hash}
 
@@ -75,6 +86,7 @@ def main(argv: list[str] | None = None) -> int:
         "started_utc": started.isoformat(timespec="seconds"),
         "elapsed_s": round(elapsed, 3),
         "commit": commit,
+        "head": head,
         "config": str(args.config),
         "config_sha256": config_hash,
         "command": command,
