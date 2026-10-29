@@ -303,6 +303,31 @@ class Runner:
                 )
         return computed
 
+    def audited(self, tier: str) -> bool:
+        """True if this tier already has a determinism audit at the current commit."""
+        path = self.root / self.adapter.key / "determinism_audit.jsonl"
+        return any(
+            r.get("tier") == tier and r.get("commit") == self.prov["commit"]
+            for r in read_records(path)
+        )
+
+    def computed_calls(self, calls: list[Call]) -> list[Call]:
+        """Calls of `calls` whose outputs were computed (not reused, no error), in order.
+
+        Resuming requires every existing line to carry the current commit, so after
+        an uninterrupted run this is exactly the list run() returns, and after a
+        restart it also covers the calls computed before the restart.
+        """
+        done, _ = existing_state(self.root, self.adapter.key)
+        return [
+            c
+            for c in calls
+            if c.key in done
+            and done[c.key]["error"] is None
+            and done[c.key]["reused_from"] is None
+            and done[c.key]["commit"] == self.prov["commit"]
+        ]
+
     def audit(self, computed: list[Call], tier: str, seed: int = 0) -> bool:
         """Rerun a sample uncached and compare exactly. True if all identical."""
         if not computed:
@@ -504,8 +529,13 @@ def main(argv: list[str] | None = None) -> int:
     adapter.set_feature_cache(use_cache)
 
     runner = Runner(adapter, cases, out_root, provenance, loader, args.split)
-    computed = runner.run(calls_for(args.tier, args.model, list(cases["case_id"])))
-    ok = runner.audit(computed, args.tier)
+    calls = calls_for(args.tier, args.model, list(cases["case_id"]))
+    runner.run(calls)
+    if runner.audited(args.tier):
+        print(f"determinism audit: {args.tier} already audited at this commit", flush=True)
+        ok = True
+    else:
+        ok = runner.audit(runner.computed_calls(calls), args.tier)
     watchdog.stop()
     return 0 if ok else 3
 

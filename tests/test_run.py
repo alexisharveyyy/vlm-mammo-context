@@ -149,6 +149,30 @@ def test_tiers_match_the_run_design():
     assert ("roi", "neutral", "plain") in run.TIERS["T0"]
 
 
+def test_computed_calls_match_an_uninterrupted_run(tmp_path):
+    calls = run.calls_for("T4", "fake", ["A", "B", "C"])
+    runner = make(tmp_path)
+    computed = runner.run(calls)
+    assert runner.computed_calls(calls) == computed
+
+
+def test_computed_calls_cover_a_restarted_run(tmp_path):
+    calls = run.calls_for("T1", "fake", ["A", "B"])
+    first = make(tmp_path).run(calls[:5])
+    runner = make(tmp_path)
+    second = runner.run(calls)
+    assert runner.computed_calls(calls) == first + second
+
+
+def test_audit_runs_once_per_tier_and_commit(tmp_path):
+    calls = run.calls_for("T1", "fake", ["A"])
+    runner = make(tmp_path)
+    assert not runner.audited("T1")
+    assert runner.audit(runner.run(calls), "T1")
+    assert runner.audited("T1") and not runner.audited("T2")
+    assert not make(tmp_path, prov={**PROV, "commit": "d" * 40}).audited("T1")
+
+
 def test_watchdog_exits_when_no_call_finishes():
     exits, messages = [], []
     dog = run.Watchdog(0.05, log=messages.append, exit=exits.append, poll_s=0.01).start()
