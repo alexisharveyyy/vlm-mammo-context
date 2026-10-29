@@ -9,7 +9,8 @@ as it finishes, and skipped on restart. Calls are ordered case by case so the
 image-feature cache hits. Identical inputs (same model, revision, config,
 commit, sent pixels and prompt) reuse the first output. After the tier, a
 sample of calls is rerun uncached and compared exactly. Test-set runs refuse
-to start unless the code descends from the prereg-v1 tag.
+to start unless the code descends from the prereg-v1 tag. A watchdog exits
+with STALL_EXIT if no model call finishes for --stall-minutes.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ import os
 import random
 import subprocess
 import sys
+import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -66,6 +68,7 @@ OUTPUT_FIELDS = [
     "meta",
 ]
 COMPARED = ["raw_text", "p_malignant", "class_mass"]
+STALL_EXIT = 4
 
 
 @dataclass(frozen=True)
@@ -330,6 +333,67 @@ class Runner:
         return not mismatches
 
 
+class Watchdog:
+    """Exit the process if no model call finishes for `limit_s` seconds.
+
+    Time is measured with time.monotonic, which on macOS does not advance while
+    the system sleeps, so sleep alone never triggers an exit; it is logged as a
+    gap between the wall clock and the monotonic clock instead.
+    """
+
+    def __init__(
+        self,
+        limit_s: float,
+        log: Callable[[str], None] = print,
+        exit: Callable[[int], None] = os._exit,
+        poll_s: float = 30.0,
+    ):
+        self.limit_s, self.log, self.exit, self.poll_s = limit_s, log, exit, poll_s
+        self.last = time.monotonic()
+        self.stopped = threading.Event()
+        self.thread = threading.Thread(target=self.watch, daemon=True)
+
+    def start(self) -> Watchdog:
+        self.thread.start()
+        return self
+
+    def beat(self) -> None:
+        self.last = time.monotonic()
+
+    def stop(self) -> None:
+        self.stopped.set()
+
+    def watch(self) -> None:
+        wall, mono = time.time(), time.monotonic()
+        while not self.stopped.wait(self.poll_s):
+            now_wall, now_mono = time.time(), time.monotonic()
+            slept = (now_wall - wall) - (now_mono - mono)
+            if slept > 60:
+                self.log(f"watchdog: system slept for about {slept / 60:.0f} min")
+            wall, mono = now_wall, now_mono
+            idle = now_mono - self.last
+            if idle > self.limit_s:
+                self.log(
+                    f"{datetime.now(UTC).isoformat(timespec='seconds')} watchdog: no model "
+                    f"call finished for {idle / 60:.1f} min, exiting with {STALL_EXIT}"
+                )
+                self.exit(STALL_EXIT)
+                return
+
+
+def with_heartbeat(adapter, beat: Callable[[], None]):
+    """Make every finished predict_prepared call reset the watchdog."""
+    predict = adapter.predict_prepared
+
+    def predict_prepared(*args, **kwargs):
+        out = predict(*args, **kwargs)
+        beat()
+        return out
+
+    adapter.predict_prepared = predict_prepared
+    return adapter
+
+
 def cache_check(adapter, load_image, case_rows: list[dict]) -> bool:
     """Phase 2 equivalence check: cached and uncached outputs must be identical."""
     tests = []
@@ -385,6 +449,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, help="first N cases (dev only)")
     ap.add_argument("--out", type=Path, help="default runs/ for test, runs/dev/ for dev")
     ap.add_argument("--no-cache", action="store_true", help="disable image-feature caching")
+    ap.add_argument(
+        "--stall-minutes",
+        type=float,
+        default=15.0,
+        help=f"exit with {STALL_EXIT} if no model call finishes for this long (0: off)",
+    )
     args = ap.parse_args(argv)
 
     if args.split == "test":
@@ -412,7 +482,10 @@ def main(argv: list[str] | None = None) -> int:
         cases = cases.head(args.limit)
     out_root = args.out or (ROOT / "runs" if args.split == "test" else ROOT / "runs" / "dev")
     loader = default_loader(master_sizes())
-    adapter = base.load_adapter(args.model)
+    watchdog = Watchdog(args.stall_minutes * 60, log=lambda m: print(m, flush=True))
+    if args.stall_minutes > 0:
+        watchdog.start()
+    adapter = with_heartbeat(base.load_adapter(args.model), watchdog.beat)
 
     use_cache = not args.no_cache
     if use_cache:
@@ -433,6 +506,7 @@ def main(argv: list[str] | None = None) -> int:
     runner = Runner(adapter, cases, out_root, provenance, loader, args.split)
     computed = runner.run(calls_for(args.tier, args.model, list(cases["case_id"])))
     ok = runner.audit(computed, args.tier)
+    watchdog.stop()
     return 0 if ok else 3
 
 

@@ -1,6 +1,7 @@
 """The resumable runner, with a fake adapter and synthetic images."""
 
 import json
+import time
 
 import numpy as np
 import pandas as pd
@@ -146,3 +147,24 @@ def test_tiers_match_the_run_design():
     assert {k for k, _, _ in run.TIERS["T3"]} == {"roi"}
     assert len(run.TIERS["T2"]) == 6 and len(run.TIERS["T4"]) == 6
     assert ("roi", "neutral", "plain") in run.TIERS["T0"]
+
+
+def test_watchdog_exits_when_no_call_finishes():
+    exits, messages = [], []
+    dog = run.Watchdog(0.05, log=messages.append, exit=exits.append, poll_s=0.01).start()
+    dog.thread.join(timeout=2)
+    assert exits == [run.STALL_EXIT]
+    assert "no model call finished" in messages[-1]
+
+
+def test_watchdog_stays_quiet_while_calls_finish():
+    exits = []
+    dog = run.Watchdog(0.2, log=lambda m: None, exit=exits.append, poll_s=0.01).start()
+    adapter = run.with_heartbeat(FakeAdapter(), dog.beat)
+    sent = adapter.prepare(loader("A", "full"))
+    for _ in range(30):
+        adapter.predict_prepared(sent, "prompt", None)
+        time.sleep(0.02)
+    dog.stop()
+    dog.thread.join(timeout=2)
+    assert exits == []
