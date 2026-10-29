@@ -54,3 +54,39 @@ already known when the change was made.
   when the first report showed identical abstention and parse failure
   rates. It changes no above-chance label, which depends only on the AUROC
   of `p_malignant`.
+
+## 8. Unattended run procedure from tier T2 on (2026-10-29)
+
+Entries 4 to 7 concern the analysis and are added to this file when the
+analysis is merged after Phase 5.
+
+- **What:** from tier T2 on, the runs fixed in `docs/RUN_DESIGN.md` (frozen
+  with the plan at `prereg-v1`) change in five ways: a watchdog exits a
+  model's run with code 4 if no model call finishes for 15 minutes;
+  `scripts/run_tier.sh` retries a model that exits non-zero up to 2 times
+  (never after a determinism audit mismatch) and starts the next tier when a
+  tier finishes; the pinned commit is the latest commit that changed
+  anything outside `runs/`, so committing outputs does not change it; the
+  determinism audit samples every call of the tier computed at the current
+  commit and runs once per tier and commit; and logs are unbuffered.
+- **Why:** MedGemma's T1 run took 44.5 hours instead of about 1.5. The Mac's
+  lid was closed while it ran on battery at 21:02 UTC on 2026-10-27, and
+  `caffeinate` cannot prevent that sleep. From 21:30 UTC the system slept and
+  ran only during its maintenance wakes (about every 18 minutes, a few calls
+  each), until it was woken at 16:33 UTC on 2026-10-29. No call failed and
+  no output was lost: all 3,000 calls were written once, without errors, and
+  the determinism audit found 0 mismatches in 30 calls. Because the progress
+  lines were buffered, the log showed nothing during that time, and the next
+  model waited for a person to notice. The changes let the tiers run
+  unattended and make a stall visible and bounded.
+- **Effect on results:** none intended or expected. The changes decide when
+  calls run, not what a call computes: prompts, images, models, decoding and
+  the fields written are unchanged, and the cache equivalence check and the
+  determinism audit still run for every model. Before T2 started, the new
+  runner reran the tier T0 calls of 3 dev cases for each model: all 189
+  outputs were identical to the earlier dev outputs, and every cache
+  equivalence check and determinism audit passed (`docs/RUN_DESIGN.md`). Sleep itself is not prevented; the Mac must stay on
+  AC power with the lid open.
+- **Results known:** the T0 results and the T1 outputs existed. The T1 files
+  were read only for call keys, timestamps and error fields to find the
+  cause; no T1 answer was read. No analysis result depends on the change.
