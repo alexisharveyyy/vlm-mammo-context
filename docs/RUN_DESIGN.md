@@ -51,6 +51,11 @@ only; no images, no pixel data.
 - **Pinned and logged.** Every run starts through `scripts/pinned_step.py`,
   which refuses uncommitted code and appends the commit, config hash, command,
   timing and exit code to `runs/run_log.jsonl`. Each resume is a new log line.
+  From T2 on (`docs/DEVIATIONS.md`, entry 8), the recorded `commit` is the
+  latest commit on the first-parent line that changed anything outside
+  `runs/`, and the log line also records `head`. A commit that only adds
+  outputs therefore leaves the pinned commit, and so the code, unchanged; up
+  to T1 the two were the same commit.
 - **No sleep.** Every run is wrapped in `caffeinate -dimsu` so macOS does not
   sleep, idle the disk or stop the process while the run is going:
 
@@ -58,8 +63,33 @@ only; no images, no pixel data.
           --config configs/models.yaml -- \
           uv run --group models python -m models.run --tier T1 --model qwen3_vl_8b
 
+- **Stall watchdog.** From T2 on, a watchdog thread in `models.run` exits
+  with code 4 if no model call (cache check, study call or audit call)
+  finishes for 15 minutes (`--stall-minutes`), after logging it. It uses the
+  monotonic clock, which does not advance while macOS sleeps, so sleep alone
+  never triggers it; a sleep is logged instead (`watchdog: system slept for
+  about N min`). A killed call has not been written, so it is redone on
+  restart; a write cut off mid-line is handled as above.
+- **Retries and chaining.** `scripts/run_tier.sh` retries a model that exits
+  non-zero up to 2 times, 60 seconds apart, each retry resuming from the
+  completed calls. A determinism audit mismatch (exit 3) is never retried and
+  stops the chain. When all three models of a tier finish, the script starts
+  the next tier (T1 to T2 to T3 to T4) without waiting. Logs are unbuffered,
+  so progress lines reach `data/logs/` as they are printed.
+- **No change to outputs.** The watchdog, retries, chaining and the pinned
+  commit rule change when calls run, never what a call computes: the prompt,
+  image, model, decoding and the fields written are the same, and each
+  model's cache equivalence check and determinism audit run as before.
+  Checked on 2026-10-29 before T2: the new runner reran the tier T0 calls
+  of the first 3 dev cases (63 calls per model) into a scratch directory.
+  All 189 outputs (`raw_text`, `birads`, `malignant`, `confidence`,
+  `p_malignant`, `class_mass`, `parse`) were identical to the earlier dev
+  outputs, each model's cache equivalence check was identical, and each
+  determinism audit found 0 mismatches in 10 calls.
 - **Progress commits.** Completed JSONL files are committed at the end of each
-  tier (outputs under `runs/` do not block the pinned runner).
+  tier (outputs under `runs/` do not block the pinned runner). From T2 on
+  this happens while the next tier runs; such commits contain only files
+  under `runs/`, so the running tier's pinned commit does not change.
 
 ## Image-feature caching
 
@@ -93,12 +123,17 @@ same 896 x 896 black square).
 
 **Determinism audit.** After each tier, 1% of non-reused calls (at least 10)
 are rerun with caching off and compared exactly. Any difference stops the run
-and is reported.
+and is reported. From T2 on, the sample is drawn from every call of the tier
+computed at the current commit, read back from the outputs, and the audit
+runs once per tier and commit. For an uninterrupted run this is the same list
+and the same sample as before; after a restart it also covers the calls
+computed before the restart, which the earlier rule left out.
 
 ## Priority order (tiers)
 
 Each tier runs all three models (Qwen3-VL, then MedGemma 1.5, then
-InternVL3.5) before the next tier starts. Hours are estimates from the Phase 2
+InternVL3.5) before the next tier starts; from T2 on the next tier starts
+automatically. Hours are estimates from the Phase 2
 smoke medians, with image-feature caching and identical-input reuse.
 
 | Tier | Phase | Calls per model | Content | Estimated hours (Qwen / MedGemma / InternVL) |
