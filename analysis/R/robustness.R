@@ -112,7 +112,7 @@ paraphrase_rows <- function(s) {
           result_row("robustness", outcome, m, "full", contrast, mean(d, na.rm = TRUE),
             boot_mean(s$counts, d),
             n_cases = sum(!is.na(d)), test = FALSE,
-            reference_rate = mean(cell(s, kb)$y[!is.na(d), p])
+            reference = mean(cell(s, kb)$y[!is.na(d), p])
           )
         }
         x$hypothesis <- HYPOTHESES$hypothesis[h]
@@ -155,14 +155,14 @@ variant_rows <- function(s, variant, suffix, check, label, models) {
         ref_std <- mean(case_value(s, keys[4])[!is.na(d_std)])
         a <- result_row("robustness", paste0("malignant rate shift, ", label), m, "full", contrast,
           mean(d_var, na.rm = TRUE), boot_mean(s$counts, d_var),
-          n_cases = sum(!is.na(d_var)), test = FALSE, reference_rate = ref_var
+          n_cases = sum(!is.na(d_var)), test = FALSE, reference = ref_var
         )
         # Reference rates of the variant and of the study.
         b <- result_row("robustness", paste0("shift difference, ", label, " minus study"), m, "full",
           contrast, mean(d_var, na.rm = TRUE) - mean(d_std, na.rm = TRUE),
           boot_mean(s$counts, d_var) - boot_mean(s$counts, d_std),
           n_cases = min(sum(!is.na(d_var)), sum(!is.na(d_std))), test = FALSE,
-          reference_rate = ref_var, reference_rate_2 = ref_std
+          reference = ref_var, reference_2 = ref_std
         )
       }
       for (x in list(a, b)) {
@@ -264,7 +264,7 @@ robustness <- function(calls, cases, robustness_dir, variants_path, resamples) {
   columns <- c(
     "check", "family", "outcome", "model", "image_kind", "contrast", "hypothesis",
     "estimate", "ci_low", "ci_high", "p", "p_adjusted", "n_cases", "note",
-    "reference_rate", "reference_rate_2"
+    "reference", "reference_2"
   )
   checks <- do.call(rbind, lapply(Filter(Negate(is.null), list(r1, r2, r3, r4)), function(x) {
     if (!"p_adjusted" %in% names(x)) x$p_adjusted <- NA_real_

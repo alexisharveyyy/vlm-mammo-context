@@ -7,12 +7,13 @@ recomputes, independently of the R code: per cell the call, error,
 abstention, parse-failure and valid counts, malignant rate, accuracy,
 BI-RADS consistency, low-mass rate, AUROC, Brier and ECE; flip rates versus
 neutral (with sensitivity 1); sycophancy rates; the point estimate, case
-count and reference malignant rate of every paired shift; and the estimate
-of every key secondary test (deviation 4). With --robustness it also checks
-the Phase 7 tables of analysis/run_robustness.R: strict-parser counts and
-shifts, agreement across paraphrases, and the variant shifts. Exits 1 if any
-number differs beyond rounding. Bootstrap intervals and p-values are not compared (the two
-languages draw different random numbers).
+count and reference level of every paired shift; and the estimate of every
+key secondary test (deviation 4), with the reference level of the BI-RADS
+consistency and abstention tests. With --robustness it also checks the
+Phase 7 tables of analysis/run_robustness.R: strict-parser counts and shifts,
+agreement across paraphrases, and the variant shifts. Exits 1 if any number
+differs beyond rounding. Bootstrap intervals and p-values are not compared
+(the two languages draw different random numbers).
 """
 
 from __future__ import annotations
@@ -342,13 +343,12 @@ def main() -> int:
         a = case_value(groups[(r.model, r.image_kind, cond, "forced")], value, truth.index)
         b = case_value(groups[(r.model, r.image_kind, ref, "forced")], value, truth.index)
         d = (a - b).dropna()
-        ref_y = case_value(groups[(r.model, r.image_kind, ref, "forced")], "y", truth.index)
         compare(
             f"{r.family} {r.outcome} {r.model}/{r.image_kind}/{r.contrast}",
             {
                 "estimate": d.mean() if len(d) else math.nan,
                 "n_cases": len(d),
-                "reference_rate": ref_y.reindex(d.index).mean() if len(d) else math.nan,
+                "reference": b.reindex(d.index).mean() if len(d) else math.nan,
             },
             pd.Series(r._asdict()),
         )
@@ -365,16 +365,18 @@ def main() -> int:
         }
         if r.outcome == "BI-RADS consistency shift":
             cond, ref = r.contrast.split(" vs ")
-            ours = consistent_rate(full[(cond, "forced")]) - consistent_rate(full[(ref, "forced")])
+            reference = consistent_rate(full[(ref, "forced")])
+            ours = {"estimate": consistent_rate(full[(cond, "forced")]) - reference}
+            ours["reference"] = reference
         elif r.outcome.startswith("abstention rate"):
-            ours = abstention_rate(full[("neutral", "plain")]) - abstention_rate(
-                full[("neutral", "forced")]
-            )
+            reference = abstention_rate(full[("neutral", "forced")])
+            ours = {"estimate": abstention_rate(full[("neutral", "plain")]) - reference}
+            ours["reference"] = reference
         elif r.outcome.startswith("answer order"):
-            ours = order_shift(full[("neutral", "forced")], offsets)
+            ours = {"estimate": order_shift(full[("neutral", "forced")], offsets)}
         else:
             continue
-        compare(f"{r.family} {r.outcome} {r.model}", {"estimate": ours}, pd.Series(r._asdict()))
+        compare(f"{r.family} {r.outcome} {r.model}", ours, pd.Series(r._asdict()))
 
     if args.robustness:
         check_robustness(args.robustness, calls, args.variant_runs, truth.index, compare)

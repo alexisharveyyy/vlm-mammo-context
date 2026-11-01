@@ -33,18 +33,45 @@ holm_note <- function(resamples, m = 12) {
   )
 }
 
-# Reference malignant rate(s) of a row: "a" or, for two image kinds, "a / b".
-fmt_reference <- function(r1, r2) {
-  ifelse(is.na(r1), "n/a", ifelse(is.na(r2), fmt_pct(r1), paste(fmt_pct(r1), "/", fmt_pct(r2))))
+# Reference level(s) of a row: "a" or, for two image kinds, "a / b"; as a
+# percentage for rates and as a number for p_malignant and AUROC.
+fmt_reference <- function(r1, r2, pct = TRUE) {
+  f <- function(x) ifelse(rep_len(pct, length(x)), fmt_pct(x), fmt_num(x))
+  ifelse(is.na(r1), "n/a", ifelse(is.na(r2), f(r1), paste(f(r1), "/", f(r2))))
+}
+
+# Column name for the reference level of an outcome.
+reference_label <- function(outcome) {
+  if (grepl("AUROC", outcome)) {
+    "Reference AUROC"
+  } else if (grepl("answer order", outcome) && grepl("p_malignant", outcome)) {
+    "Reference mean p_malignant (benign first)"
+  } else if (grepl("answer order", outcome)) {
+    "Reference malignant rate (benign first)"
+  } else if (grepl("p_malignant", outcome)) {
+    "Reference mean p_malignant"
+  } else if (grepl("BI-RADS consistency", outcome)) {
+    "Reference consistency rate"
+  } else if (grepl("accuracy", outcome)) {
+    "Reference accuracy"
+  } else if (grepl("abstention", outcome)) {
+    "Reference abstention rate"
+  } else if (grepl("sycophancy", outcome)) {
+    "Reference rate (colleague right)"
+  } else {
+    "Reference malignant rate"
+  }
 }
 
 REFERENCE_NOTE <- paste(
-  "Reference rate: the malignant rate of the comparison, so floor and ceiling",
-  "effects are visible. For paired shifts it is the reference condition's case-level",
-  "rate over the same cases (condition rate = reference rate + malignant rate shift);",
-  "for other rows it is the reference cell's rate over valid calls, or that of the",
-  "single condition the row is about; for rows comparing two image kinds, neutral in",
-  "each kind (first / second)."
+  "Reference: the level of the table's own outcome in the comparison, so floor and",
+  "ceiling effects are visible (the malignant rate for malignant rate shifts, mean",
+  "p_malignant for p_malignant shifts, the consistency rate, the AUROC, and so on).",
+  "For paired shifts it is the reference condition's case-level value over the same",
+  "cases (condition = reference + shift); for rate and AUROC shifts it is the value of",
+  "the reference cell; for sycophancy, the rate when the colleague is right; for the",
+  "answer order, the benign-first value. Rows that are a difference of shifts show",
+  "the neutral malignant rate, in each image kind (first / second) for ROI minus full."
 )
 
 md_table <- function(df) {
@@ -60,10 +87,11 @@ contrast_table <- function(x, pct = TRUE, tests = TRUE, floor = NA_real_) {
   out <- data.frame(
     Model = x$model, Image = x$image_kind, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, pct),
-    `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
+    Reference = fmt_reference(x$reference, x$reference_2, pct),
     p = fmt_p(x$p), `Adjusted p` = adjusted, Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
     Note = x$note, check.names = FALSE
   )
+  names(out)[names(out) == "Reference"] <- reference_label(x$outcome[1])
   if (tests) out else out[, setdiff(names(out), c("p", "Adjusted p"))]
 }
 
@@ -176,7 +204,7 @@ render_report <- function(con, cells, flips, syc, meta) {
       md_table(data.frame(
         Model = flips$model, Image = flips$image_kind, Condition = flips$condition,
         Pairs = flips$pairs, `Flip rate` = fmt_ci(flips$flip_rate, flips$ci_low, flips$ci_high, TRUE),
-        `Neutral rate` = fmt_pct(flips$reference_rate),
+        `Neutral rate` = fmt_pct(flips$reference),
         `S1 flip rate` = fmt_ci(flips$s1_flip_rate, flips$s1_ci_low, flips$s1_ci_high, TRUE),
         check.names = FALSE
       )), "")
@@ -211,7 +239,7 @@ render_report <- function(con, cells, flips, syc, meta) {
       out <- c(out, paste("##", label), "", md_table(data.frame(
         Outcome = x$outcome, Model = x$model, Image = x$image_kind, Contrast = x$contrast,
         Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, !grepl("p_malignant", x$outcome)),
-        `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
+        Reference = fmt_reference(x$reference, x$reference_2, !grepl("p_malignant", x$outcome)),
         Cases = x$n_cases, check.names = FALSE
       )), "")
     }
@@ -226,7 +254,7 @@ check_table <- function(x, tests = FALSE, floor = NA_real_) {
   out <- data.frame(
     Model = x$model, Hypothesis = x$hypothesis, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, TRUE),
-    `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
+    `Reference malignant rate` = fmt_reference(x$reference, x$reference_2),
     p = fmt_p(x$p), `Holm p` = fmt_holm(x$p_adjusted, floor),
     Cases = ifelse(is.na(x$n_cases), "", x$n_cases), Reading = x$reading, Note = x$note,
     check.names = FALSE
@@ -262,7 +290,7 @@ render_robustness <- function(r, meta) {
   out <- c(out, "## Primary results (reference)", "", md_table(data.frame(
     Model = prim$model, Hypothesis = prim$hypothesis, Contrast = prim$contrast,
     Estimate = fmt_ci(prim$estimate, prim$ci_low, prim$ci_high, TRUE),
-    `Reference rate` = fmt_reference(prim$reference_rate, prim$reference_rate_2),
+    `Reference malignant rate` = fmt_reference(prim$reference, prim$reference_2),
     `Holm p` = fmt_holm(prim$p_adjusted, holm_floor(meta$resamples)), Note = prim$note,
     check.names = FALSE
   )), "", holm_note(meta$resamples), "")

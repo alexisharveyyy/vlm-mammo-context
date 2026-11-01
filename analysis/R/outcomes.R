@@ -103,19 +103,21 @@ complete <- function(s, key) {
   !is.null(cl) && sum(cl$present) == 3 * s$n
 }
 
-# reference_rate (and reference_rate_2 for rows comparing two image kinds) is
-# the malignant rate of the comparison, shown next to each shift so floor and
-# ceiling effects are visible (docs/DEVIATIONS.md, entry 10).
+# reference (and reference_2 for rows comparing two image kinds) is the level
+# of the row's own outcome in the comparison (the malignant rate for malignant
+# rate shifts, mean p_malignant for p_malignant shifts, the AUROC for AUROC
+# shifts, and so on), shown next to each shift so floor and ceiling effects
+# are visible (docs/DEVIATIONS.md, entry 10).
 result_row <- function(family, outcome, model, kind, contrast, estimate, boot,
                        n_cases = NA, note = "", test = TRUE,
-                       reference_rate = NA_real_, reference_rate_2 = NA_real_) {
+                       reference = NA_real_, reference_2 = NA_real_) {
   ci <- percentile_ci(boot)
   data.frame(
     family = family, outcome = outcome, model = model, image_kind = kind,
     contrast = contrast, estimate = estimate, ci_low = ci[1], ci_high = ci[2],
     p = if (test) bootstrap_p(estimate, boot) else NA_real_,
     n_cases = n_cases, note = note,
-    reference_rate = reference_rate, reference_rate_2 = reference_rate_2,
+    reference = reference, reference_2 = reference_2,
     stringsAsFactors = FALSE
   )
 }
@@ -126,7 +128,7 @@ pending_row <- function(family, outcome, model, kind, contrast, missing) {
     contrast = contrast, estimate = NA_real_, ci_low = NA_real_, ci_high = NA_real_,
     p = NA_real_, n_cases = NA_integer_,
     note = paste("pending:", paste(missing, collapse = ", "), "incomplete"),
-    reference_rate = NA_real_, reference_rate_2 = NA_real_,
+    reference = NA_real_, reference_2 = NA_real_,
     stringsAsFactors = FALSE
   )
 }
@@ -140,30 +142,17 @@ cell_malignant_rate <- function(s, key) {
   sum(cl$y == 1 & cl$valid, na.rm = TRUE) / sum(cl$valid)
 }
 
-# Reference malignant rate of a row that did not set one: for rows comparing
-# two image kinds, neutral in each; for "a vs b", cell b; for rows on one
-# condition, that condition; otherwise neutral on the same image kind.
-fill_reference_rates <- function(s, out) {
-  todo <- which(is.na(out$reference_rate) & !is.na(out$estimate))
+# Rows that are a difference of malignant rate shifts (ROI minus full, and the
+# additivity check) have no single reference level: they show the neutral
+# malignant rate, in each image kind for ROI minus full.
+fill_references <- function(s, out) {
+  todo <- which(is.na(out$reference) & !is.na(out$estimate))
   for (i in todo) {
-    m <- out$model[i]
-    kind <- out$image_kind[i]
-    contrast <- out$contrast[i]
-    if (grepl(" vs ", kind, fixed = TRUE)) {
-      kinds <- strsplit(kind, " vs ", fixed = TRUE)[[1]]
-      out$reference_rate[i] <- cell_malignant_rate(s, cell_key(m, kinds[1], "neutral"))
-      out$reference_rate_2[i] <- cell_malignant_rate(s, cell_key(m, kinds[2], "neutral"))
-      next
+    kinds <- strsplit(out$image_kind[i], " vs ", fixed = TRUE)[[1]]
+    out$reference[i] <- cell_malignant_rate(s, cell_key(out$model[i], kinds[1], "neutral"))
+    if (length(kinds) == 2) {
+      out$reference_2[i] <- cell_malignant_rate(s, cell_key(out$model[i], kinds[2], "neutral"))
     }
-    parts <- strsplit(contrast, " vs ", fixed = TRUE)[[1]]
-    ref <- if (length(parts) == 2 && parts[2] %in% CONDITIONS) {
-      parts[2]
-    } else if (contrast %in% CONDITIONS) {
-      contrast
-    } else {
-      "neutral"
-    }
-    out$reference_rate[i] <- cell_malignant_rate(s, cell_key(m, kind, ref))
   }
   out
 }
@@ -182,12 +171,12 @@ paired_shift <- function(s, family, outcome, model, kind, cond, ref, value = "y"
   if (!is.null(mask)) d[!mask] <- NA
   n <- sum(!is.na(d))
   est <- if (n) mean(d, na.rm = TRUE) else NA_real_
-  # Case-level malignant rate of the reference over the same cases, so that
-  # for malignant rate shifts the condition's rate is reference plus shift.
-  ref <- case_value(s, kb, "y")[!is.na(d)]
+  # Case-level level of the reference over the same cases, so that the
+  # condition's level is the reference plus the shift.
+  ref <- case_value(s, kb, value)[!is.na(d)]
   result_row(family, outcome, model, kind, contrast, est, boot_mean(s$counts, d),
     n_cases = n, note = sprintf("%d of %d cases", n, if (is.null(mask)) s$n else sum(mask)),
-    test = test, reference_rate = if (n) mean(ref, na.rm = TRUE) else NA_real_
+    test = test, reference = if (n) mean(ref, na.rm = TRUE) else NA_real_
   )
 }
 
@@ -220,7 +209,7 @@ auroc_shift <- function(s, family, outcome, model, kind_a, cond_a, kind_b, cond_
   a <- cell_auroc(s, ka, value)
   b <- cell_auroc(s, kb, value)
   result_row(family, outcome, model, kind, contrast, a$estimate - b$estimate, a$boot - b$boot,
-    n_cases = min(a$n_cases, b$n_cases), test = test
+    n_cases = min(a$n_cases, b$n_cases), test = test, reference = b$estimate
   )
 }
 
@@ -260,7 +249,9 @@ ratio_shift <- function(s, family, outcome, model, kind, contrast, ka, kb, count
   b <- counts(s, kb)
   est <- sum(a$k) / sum(a$n) - sum(b$k) / sum(b$n)
   boot <- boot_ratio(s$counts, a$k, a$n) - boot_ratio(s$counts, b$k, b$n)
-  result_row(family, outcome, model, kind, contrast, est, boot, n_cases = s$n, test = test)
+  result_row(family, outcome, model, kind, contrast, est, boot, n_cases = s$n, test = test,
+    reference = sum(b$k) / sum(b$n)
+  )
 }
 
 # Sycophancy (plan 5.2 item 4): rate of answering the colleague's opinion when
@@ -297,7 +288,7 @@ sycophancy <- function(s, model, kind, cond) {
     rates = rates,
     test = result_row("descriptive", "sycophancy (wrong minus right)", model, kind, cond,
       rates$rate[1] - rates$rate[2], boot,
-      n_cases = s$n, test = FALSE
+      n_cases = s$n, test = FALSE, reference = rates$rate[2]
     )
   )
 }
@@ -374,7 +365,7 @@ flip_summary <- function(s, key) {
     ci_low = ci[1], ci_high = ci[2],
     s1_pairs = sum(ran), s1_flips = flips_s1, s1_flip_rate = flips_s1 / sum(ran),
     s1_ci_low = ci1[1], s1_ci_high = ci1[2],
-    reference_rate = cell_malignant_rate(s, ref),
+    reference = cell_malignant_rate(s, ref),
     stringsAsFactors = FALSE
   )
 }
@@ -394,7 +385,7 @@ order_effect <- function(s, key, family = "exploratory", test = FALSE) {
   rate <- result_row(family, "answer order: malignant rate (malignant first minus benign first)",
     parts[1], parts[2], parts[3], sum(ka) / sum(na) - sum(kb) / sum(nb),
     boot_ratio(s$counts, ka, na) - boot_ratio(s$counts, kb, nb),
-    n_cases = s$n, test = test
+    n_cases = s$n, test = test, reference = sum(kb) / sum(nb)
   )
   pa <- rowSums(ifelse(mf, cl$p, 0), na.rm = TRUE)
   qa <- rowSums(mf & !is.na(cl$p))
@@ -403,7 +394,7 @@ order_effect <- function(s, key, family = "exploratory", test = FALSE) {
   p <- result_row("exploratory", "answer order: mean p_malignant (malignant first minus benign first)",
     parts[1], parts[2], parts[3], sum(pa) / sum(qa) - sum(pb) / sum(qb),
     boot_ratio(s$counts, pa, qa) - boot_ratio(s$counts, pb, qb),
-    n_cases = s$n, test = FALSE
+    n_cases = s$n, test = FALSE, reference = sum(pb) / sum(qb)
   )
   rbind(rate, p)
 }
@@ -576,7 +567,7 @@ contrasts <- function(s) {
     out$adjustment[out$family == fam] <- method
   }
   out$significant <- !is.na(out$p_adjusted) & out$p_adjusted < 0.05
-  fill_reference_rates(s, out)
+  fill_references(s, out)
 }
 
 sycophancy_rates <- function(s) {
