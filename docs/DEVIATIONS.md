@@ -209,3 +209,26 @@ analysis is merged after Phase 5.
   p-values and are not corrected for multiplicity.
 - **Results known:** yes. Added after the Phase 6 results were seen (tag
   `analysis-v1`, reports at commit `684397b`).
+
+## 10. Reference rates and the p-value floor in the results tables (2026-11-01)
+
+- **What:** two changes to how the reports present results, with no change
+  to any estimate, interval, p-value or test decision.
+  - Every table of shifts in `reports/analysis.md` and `reports/robustness.md`
+    has a "Reference rate" column: the malignant rate of the comparison
+    (for paired shifts, the reference condition's case-level rate over the
+    same cases), and the flip table has the neutral rate. The tables in
+    `reports/analysis/contrasts.csv` and `reports/robustness/checks.csv`
+    have the columns `reference_rate` and `reference_rate_2`.
+  - Holm-adjusted p-values at the resolution limit of the bootstrap are
+    printed as "p < 0.0025" instead of "0.002", with a note: with 10,000
+    resamples and the conservative tie rule the smallest bootstrap p-value
+    is 2/10,001, so the smallest Holm-adjusted p-value over 12 tests is
+    0.0024. The stored values in the CSV tables are unchanged.
+- **Why:** requested by the study owner after reading the results, so that
+  floor and ceiling effects are visible next to each shift, and so that a
+  p-value at the floor is not read as an exact value.
+- **Effect on results:** none. The Python cross-check also recomputes the
+  reference rate of every paired shift.
+- **Results known:** yes. Made after the Phase 6 results were seen (tag
+  `analysis-v1`).
