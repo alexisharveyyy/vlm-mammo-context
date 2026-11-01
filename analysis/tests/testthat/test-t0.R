@@ -20,13 +20,9 @@ test_that("T0 cells agree with reports/baseline.json", {
     expect_equal(x$parse_failures, b$parse_failures, info = key)
     expect_equal(x$accuracy, as.numeric(b$accuracy), tolerance = 1e-12, info = key)
     expect_equal(x$malignant_rate, as.numeric(b$malignant_rate), tolerance = 1e-12, info = key)
-    # The baseline averages p_malignant over every call without a run error;
-    # the plan (section 5) averages over valid answers. They agree when every
-    # call is valid.
-    if (x$valid == x$calls) {
-      expect_equal(x$auroc, as.numeric(b$auroc), tolerance = 1e-12, info = key)
-      expect_equal(x$brier, as.numeric(b$brier), tolerance = 1e-12, info = key)
-      expect_equal(x$ece, as.numeric(b$ece), tolerance = 1e-12, info = key)
-    }
+    # Both average case-level p_malignant over valid answers (deviation 5).
+    expect_equal(x$auroc, as.numeric(b$auroc), tolerance = 1e-12, info = key)
+    expect_equal(x$brier, as.numeric(b$brier), tolerance = 1e-12, info = key)
+    expect_equal(x$ece, as.numeric(b$ece), tolerance = 1e-12, info = key)
   }
 })
