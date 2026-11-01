@@ -4,8 +4,12 @@ A static results viewer (Vite and TypeScript, no backend, no framework). It
 lists every test case with its label and synthetic context, and each model's
 three paraphrase answers under each prompt condition and image kind, with
 filters for model, condition, image kind, answer format, label, abnormality
-type and "answer flipped versus neutral". Selecting a case shows every model
-under every condition.
+type and "answer flipped versus neutral". Every filter starts at "all". When
+the filters match one cell, each case shows its three paraphrase marks under
+neutral and under that cell; when they match several, each case shows its
+malignant answers over its valid answers in those cells and how many of them
+flip against neutral. Selecting a case shows every model under every
+condition.
 
 It contains no images and requests none. The public build is checked for
 that (`npm run check-dist`): no image files, no image references, and only the
