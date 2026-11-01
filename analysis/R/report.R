@@ -146,8 +146,19 @@ render_report <- function(con, cells, flips, syc, meta) {
     `BI-RADS consistent` = fmt_ci(cells$birads_consistent_rate, cells$birads_consistent_ci_low, cells$birads_consistent_ci_high, TRUE),
     `Low mass` = fmt_pct(cells$low_mass_rate), check.names = FALSE
   )), "")
+  irr <- con[con$outcome == VS_IRRELEVANT_OUTCOME, ]
+  if (nrow(irr)) {
+    out <- c(out, "## Exploratory 2: conditions against the irrelevant sentence", "",
+      paste(
+        "Exploratory, added after the results were known (docs/EXPLORATORY.md, entry 2;",
+        "docs/DEVIATIONS.md, entry 9). Each H1 to H4 condition against `irrelevant`",
+        "instead of its plan reference; same paired case bootstrap, no multiplicity",
+        "correction, estimates and 95% intervals only."
+      ), "",
+      md_table(contrast_table(irr, tests = FALSE)), "")
+  }
   for (fam in c("sensitivity", "exploratory")) {
-    x <- con[con$family == fam & !is.na(con$estimate), ]
+    x <- con[con$family == fam & !is.na(con$estimate) & con$outcome != VS_IRRELEVANT_OUTCOME, ]
     if (nrow(x)) {
       label <- if (fam == "sensitivity") "Sensitivity analyses (unadjusted)" else "Exploratory (unadjusted, not part of the plan's tests)"
       out <- c(out, paste("##", label), "", md_table(data.frame(

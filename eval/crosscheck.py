@@ -39,6 +39,7 @@ SHIFT_OUTCOMES = {
     "malignant rate shift (control)": "y",
     "malignant rate shift (ROI)": "y",
     "malignant rate shift (control image)": "y",
+    "malignant rate shift vs irrelevant (exploratory 2)": "y",
     "p_malignant shift": "p",
     "p_malignant shift, low mass excluded (S3)": "p_high_mass",
 }

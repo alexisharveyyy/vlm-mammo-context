@@ -51,6 +51,15 @@ test_that("the analysis recovers the planted effects", {
   expect_true(all(abs(plain$abstention_rate - 0.3) < 0.05))
   flips <- flip_table(s)
   expect_true(all(flips$s1_flip_rate >= flips$flip_rate))
+  # Exploratory 2: six conditions per model against irrelevant, intervals only.
+  irr <- con[con$outcome == VS_IRRELEVANT_OUTCOME, ]
+  expect_equal(nrow(irr), 18)
+  expect_true(all(irr$family == "exploratory" & is.na(irr$p) & !is.na(irr$ci_low)))
+  expect_equal(sort(unique(irr$contrast)), sort(paste(VS_IRRELEVANT, "vs irrelevant")))
+  # irrelevant and neutral carry no planted effect, so H1 against either agrees.
+  h1 <- prim[prim$hypothesis == "H1", ]
+  h1_irr <- irr[irr$contrast == "colleague_malignant vs irrelevant", ]
+  expect_true(all(abs(h1_irr$estimate[match(h1$model, h1_irr$model)] - h1$estimate) < 0.03))
 })
 
 test_that("missing cells are reported as pending, not as results", {

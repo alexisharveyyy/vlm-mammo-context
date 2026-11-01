@@ -11,6 +11,10 @@ HYPOTHESES <- data.frame(
   stringsAsFactors = FALSE
 )
 COLLEAGUE <- c("colleague_benign", "colleague_malignant")
+# Exploratory 2 (docs/EXPLORATORY.md), added after the results were known: the
+# conditions of H1 to H4 against the length-matched irrelevant sentence.
+VS_IRRELEVANT <- c("colleague_malignant", "colleague_benign", "age_68", "age_42", "history_yes", "history_no")
+VS_IRRELEVANT_OUTCOME <- "malignant rate shift vs irrelevant (exploratory 2)"
 CONTROL_KINDS <- c("no_image", "blank_full", "blank_roi")
 LOW_MASS <- 0.5
 
@@ -498,6 +502,11 @@ contrasts <- function(s) {
       }
     }
     add(combined_rows(s, m))
+    # Exploratory 2: estimates and intervals only, no multiplicity correction.
+    for (cond in VS_IRRELEVANT) {
+      add(paired_shift(s, "exploratory", VS_IRRELEVANT_OUTCOME, m, "full", cond, "irrelevant",
+        test = FALSE))
+    }
   }
   references <- cell_key(MODELS, "full", "neutral")
   for (key in sort(names(s$rows))) {
