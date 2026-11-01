@@ -232,3 +232,10 @@ analysis is merged after Phase 5.
   reference rate of every paired shift.
 - **Results known:** yes. Made after the Phase 6 results were seen (tag
   `analysis-v1`).
+
+## Notes
+
+- **Entry 8 and entries 4 to 7 (2026-11-01):** entry 8 says that entries 4
+  to 7 are added to this file when the analysis is merged after Phase 5.
+  That is resolved: the merge of the analysis into main (commit `ec9f10a`)
+  added them, and the entries are now in order. Entry 8 itself is unchanged.
