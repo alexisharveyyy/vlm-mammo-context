@@ -1,4 +1,4 @@
-"family","outcome","model","image_kind","contrast","estimate","ci_low","ci_high","p","n_cases","note","reference_rate","reference_rate_2","hypothesis","p_adjusted"
+"family","outcome","model","image_kind","contrast","estimate","ci_low","ci_high","p","n_cases","note","reference","reference_2","hypothesis","p_adjusted"
 "primary","malignant rate shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.399333333333333,0.378,0.420683333333334,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,"H1",0.0023997600239976
 "primary","malignant rate shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.122666666666667,-0.138666666666667,-0.106666666666667,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,"H2",0.0023997600239976
 "primary","malignant rate shift","qwen3_vl_8b","full","age_68 vs age_42",0.107333333333333,0.0893333333333333,0.126,0.0001999800019998,500,"500 of 500 cases",0.0373333333333333,NA,"H3",0.0023997600239976

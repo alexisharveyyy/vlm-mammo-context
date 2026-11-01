@@ -1,4 +1,4 @@
-"check","family","outcome","model","image_kind","contrast","hypothesis","estimate","ci_low","ci_high","p","p_adjusted","n_cases","note","reference_rate","reference_rate_2","reading"
+"check","family","outcome","model","image_kind","contrast","hypothesis","estimate","ci_low","ci_high","p","p_adjusted","n_cases","note","reference","reference_2","reading"
 "R1","robustness","malignant rate shift, paraphrase 1 only","qwen3_vl_8b","full","colleague_malignant vs neutral","H1",0.442,0.396,0.49,NA,NA,500,"",0.046,NA,"robust"
 "R1","robustness","malignant rate shift, paraphrase 2 only","qwen3_vl_8b","full","colleague_malignant vs neutral","H1",0.662,0.622,0.704,NA,NA,500,"",0.276,NA,"robust"
 "R1","robustness","malignant rate shift, paraphrase 3 only","qwen3_vl_8b","full","colleague_malignant vs neutral","H1",0.094,0.066,0.122,NA,NA,500,"",0.046,NA,"robust"
