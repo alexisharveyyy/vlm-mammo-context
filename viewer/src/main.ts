@@ -189,8 +189,40 @@ function renderDetail(data: Data): void {
   detail.replaceChildren(...parts);
 }
 
+class MissingData extends Error {}
+
+// A missing data.json comes back as the dev server's HTML page or a 404.
+async function loadData(): Promise<Data> {
+  const response = await fetch("./data.json");
+  const text = response.ok ? await response.text() : "";
+  if (!text || text.trimStart().startsWith("<")) throw new MissingData();
+  return JSON.parse(text) as Data;
+}
+
+function showError(e: unknown): void {
+  const box = el("div", "", "notice");
+  if (e instanceof MissingData) {
+    const command = el("code", "npm run data");
+    box.append(
+      el("strong", "The data file is missing. "),
+      "data.json is generated from the committed run outputs and not stored in the repository. From the ",
+      el("code", "viewer/"),
+      " folder run ",
+      command,
+      " and reload the page (",
+      el("code", "npm run dev"),
+      " and ",
+      el("code", "npm run build"),
+      " run it first).",
+    );
+  } else {
+    box.append(el("strong", "Could not read data.json. "), String(e));
+  }
+  $("summary").replaceChildren(box);
+}
+
 async function main(): Promise<void> {
-  const data = (await (await fetch("./data.json")).json()) as Data;
+  const data = await loadData();
   $("meta").textContent =
     `${data.meta.calls.toLocaleString()} model calls from ${data.meta.source}, commit ${data.meta.commit.slice(0, 7)}.`;
   fillSelect(controls.model, data.models);
@@ -223,6 +255,4 @@ async function main(): Promise<void> {
   renderRows(data);
 }
 
-main().catch((e: unknown) => {
-  $("summary").textContent = `Could not load data.json: ${String(e)}`;
-});
+main().catch(showError);
