@@ -69,3 +69,13 @@ test_that("calibration and BI-RADS consistency", {
     c("consistent", "inconsistent", "consistent", "inconsistent", "incomplete", NA)
   )
 })
+
+test_that("Holm-adjusted p-values at the resampling floor print as a bound", {
+  floor <- holm_floor(10000)
+  expect_equal(floor, 12 * 2 / 10001)
+  p <- stats::p.adjust(rep(2 / 10001, 12), "holm")
+  expect_equal(unique(fmt_holm(p, floor)), "p < 0.0025")
+  expect_equal(fmt_holm(c(0.0312, NA), floor), c("0.031", "n/a"))
+  expect_equal(fmt_holm(holm_floor(1000), holm_floor(1000)), "p < 0.024")
+  expect_match(holm_note(10000), "2/10,001")
+})

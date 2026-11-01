@@ -10,6 +10,29 @@ fmt_p <- function(p) {
   ifelse(is.na(p), "n/a", ifelse(p < 0.001, "<0.001", formatC(p, format = "f", digits = 3)))
 }
 
+# Smallest Holm-adjusted p over m tests: with the conservative tie rule the
+# smallest bootstrap p is 2 / (resamples + 1) (stats.R, bootstrap_p).
+holm_floor <- function(resamples, m = 12) m * 2 / (resamples + 1)
+
+# Holm-adjusted p-values at that floor are shown as "p < x", with x the floor
+# rounded up to the next 0.0005 (p < 0.0025 for 10,000 resamples).
+fmt_holm <- function(p, floor) {
+  bound <- formatC(ceiling(floor / 5e-4 - 1e-9) * 5e-4, format = "fg")
+  ifelse(!is.na(p) & p <= floor * (1 + 1e-9), paste("p <", bound), fmt_p(p))
+}
+
+holm_note <- function(resamples, m = 12) {
+  paste0(
+    "Holm-adjusted p-values at the resolution limit are shown as ",
+    fmt_holm(0, holm_floor(resamples, m)), ": with ",
+    formatC(resamples, format = "d", big.mark = ","), " resamples and the conservative tie ",
+    "rule, the smallest possible bootstrap p-value is 2/", formatC(resamples + 1, format = "d", big.mark = ","),
+    " (", formatC(2 / (resamples + 1), format = "fg", digits = 2), "), so the smallest ",
+    "Holm-adjusted p-value over ", m, " tests is ", formatC(holm_floor(resamples, m), format = "fg", digits = 2),
+    ". More resamples would be needed to resolve smaller p-values."
+  )
+}
+
 # Reference malignant rate(s) of a row: "a" or, for two image kinds, "a / b".
 fmt_reference <- function(r1, r2) {
   ifelse(is.na(r1), "n/a", ifelse(is.na(r2), fmt_pct(r1), paste(fmt_pct(r1), "/", fmt_pct(r2))))
@@ -32,12 +55,13 @@ md_table <- function(df) {
   c(header, rule, body)
 }
 
-contrast_table <- function(x, pct = TRUE, tests = TRUE) {
+contrast_table <- function(x, pct = TRUE, tests = TRUE, floor = NA_real_) {
+  adjusted <- ifelse(x$adjustment == "holm", fmt_holm(x$p_adjusted, floor), fmt_p(x$p_adjusted))
   out <- data.frame(
     Model = x$model, Image = x$image_kind, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, pct),
     `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
-    p = fmt_p(x$p), `Adjusted p` = fmt_p(x$p_adjusted), Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
+    p = fmt_p(x$p), `Adjusted p` = adjusted, Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
     Note = x$note, check.names = FALSE
   )
   if (tests) out else out[, setdiff(names(out), c("p", "Adjusted p"))]
@@ -116,7 +140,9 @@ render_report <- function(con, cells, flips, syc, meta) {
   prim <- con[con$family == "primary", ]
   out <- c(
     out, "## Primary outcome: malignant rate shift (Holm over 12 tests)", "",
-    md_table(cbind(Hypothesis = prim$hypothesis, contrast_table(prim))), ""
+    md_table(cbind(Hypothesis = prim$hypothesis,
+      contrast_table(prim, floor = holm_floor(meta$resamples)))), "",
+    holm_note(meta$resamples), ""
   )
   sec <- con[con$family == "key secondary", ]
   out <- c(out, paste0(
@@ -196,12 +222,12 @@ render_report <- function(con, cells, flips, syc, meta) {
   paste0(c(out, ""), collapse = "\n")
 }
 
-check_table <- function(x, tests = FALSE) {
+check_table <- function(x, tests = FALSE, floor = NA_real_) {
   out <- data.frame(
     Model = x$model, Hypothesis = x$hypothesis, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, TRUE),
     `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
-    p = fmt_p(x$p), `Holm p` = fmt_p(x$p_adjusted),
+    p = fmt_p(x$p), `Holm p` = fmt_holm(x$p_adjusted, floor),
     Cases = ifelse(is.na(x$n_cases), "", x$n_cases), Reading = x$reading, Note = x$note,
     check.names = FALSE
   )
@@ -212,7 +238,7 @@ render_robustness <- function(r, meta) {
   ch <- r$checks
   section <- function(check, outcome_pattern, tests = FALSE) {
     x <- ch[ch$check == check & grepl(outcome_pattern, ch$outcome), ]
-    if (nrow(x)) md_table(check_table(x, tests)) else "None."
+    if (nrow(x)) md_table(check_table(x, tests, holm_floor(meta$resamples))) else "None."
   }
   out <- c(
     "# Phase 7 robustness (test set)",
@@ -237,8 +263,9 @@ render_robustness <- function(r, meta) {
     Model = prim$model, Hypothesis = prim$hypothesis, Contrast = prim$contrast,
     Estimate = fmt_ci(prim$estimate, prim$ci_low, prim$ci_high, TRUE),
     `Reference rate` = fmt_reference(prim$reference_rate, prim$reference_rate_2),
-    `Holm p` = fmt_p(prim$p_adjusted), Note = prim$note, check.names = FALSE
-  )), "")
+    `Holm p` = fmt_holm(prim$p_adjusted, holm_floor(meta$resamples)), Note = prim$note,
+    check.names = FALSE
+  )), "", holm_note(meta$resamples), "")
   ag <- r$agreement
   out <- c(out, "## R1. Agreement across paraphrases", "",
     "Cases with three valid answers whose three answers agree, and Fleiss' kappa.", "",
@@ -255,7 +282,8 @@ render_robustness <- function(r, meta) {
     "Difference from the study (end minus middle):", "",
     section("R2", "difference"), "",
     "## R3. Strict parser (sensitivity 2)", "",
-    "The primary analysis with the frozen strict rules; Holm within these 12 tests.", "",
+    "The primary analysis with the frozen strict rules; Holm within these 12 tests.",
+    "Holm-adjusted p-values at the resolution limit are shown as above.", "",
     section("R3", ".", tests = TRUE), "",
     "Valid answers under the lenient and strict rules:", "",
     md_table(data.frame(
