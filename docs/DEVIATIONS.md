@@ -215,11 +215,18 @@ analysis is merged after Phase 5.
 - **What:** two changes to how the reports present results, with no change
   to any estimate, interval, p-value or test decision.
   - Every table of shifts in `reports/analysis.md` and `reports/robustness.md`
-    has a "Reference rate" column: the malignant rate of the comparison
-    (for paired shifts, the reference condition's case-level rate over the
-    same cases), and the flip table has the neutral rate. The tables in
+    has a reference column: the level of that table's own outcome in the
+    comparison. That is the malignant rate for malignant rate shifts, mean
+    `p_malignant` for `p_malignant` shifts, the consistency rate for
+    BI-RADS consistency shifts and the AUROC for AUROC shifts (likewise
+    accuracy, abstention rate, the rate when the colleague is right for
+    sycophancy, and the benign-first value for the answer order). For
+    paired shifts it is the reference condition's case-level value over the
+    same cases. The flip table has the neutral malignant rate. The tables in
     `reports/analysis/contrasts.csv` and `reports/robustness/checks.csv`
-    have the columns `reference_rate` and `reference_rate_2`.
+    have the columns `reference` and `reference_2`. A first version on the
+    same day showed the malignant rate in every table; at the owner's
+    request the tables of other outcomes now show their own level.
   - Holm-adjusted p-values at the resolution limit of the bootstrap are
     printed as "p < 0.0025" instead of "0.002", with a note: with 10,000
     resamples and the conservative tie rule the smallest bootstrap p-value
@@ -229,7 +236,8 @@ analysis is merged after Phase 5.
   floor and ceiling effects are visible next to each shift, and so that a
   p-value at the floor is not read as an exact value.
 - **Effect on results:** none. The Python cross-check also recomputes the
-  reference rate of every paired shift.
+  reference level of every paired shift and of the BI-RADS consistency and
+  abstention tests.
 - **Results known:** yes. Made after the Phase 6 results were seen (tag
   `analysis-v1`).
 
