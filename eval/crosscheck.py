@@ -6,12 +6,12 @@ Reads the run outputs and the tables written by analysis/run_analysis.R, and
 recomputes, independently of the R code: per cell the call, error,
 abstention, parse-failure and valid counts, malignant rate, accuracy,
 BI-RADS consistency, low-mass rate, AUROC, Brier and ECE; flip rates versus
-neutral (with sensitivity 1); sycophancy rates; and the point estimate and
-case count of every paired shift; and the estimate of every key secondary
-test (deviation 4). With --robustness it also checks the Phase 7 tables of
-analysis/run_robustness.R: strict-parser counts and shifts, agreement across
-paraphrases, and the variant shifts. Exits 1 if any number differs beyond
-rounding. Bootstrap intervals and p-values are not compared (the two
+neutral (with sensitivity 1); sycophancy rates; the point estimate, case
+count and reference malignant rate of every paired shift; and the estimate
+of every key secondary test (deviation 4). With --robustness it also checks
+the Phase 7 tables of analysis/run_robustness.R: strict-parser counts and
+shifts, agreement across paraphrases, and the variant shifts. Exits 1 if any
+number differs beyond rounding. Bootstrap intervals and p-values are not compared (the two
 languages draw different random numbers).
 """
 
@@ -342,9 +342,14 @@ def main() -> int:
         a = case_value(groups[(r.model, r.image_kind, cond, "forced")], value, truth.index)
         b = case_value(groups[(r.model, r.image_kind, ref, "forced")], value, truth.index)
         d = (a - b).dropna()
+        ref_y = case_value(groups[(r.model, r.image_kind, ref, "forced")], "y", truth.index)
         compare(
             f"{r.family} {r.outcome} {r.model}/{r.image_kind}/{r.contrast}",
-            {"estimate": d.mean() if len(d) else math.nan, "n_cases": len(d)},
+            {
+                "estimate": d.mean() if len(d) else math.nan,
+                "n_cases": len(d),
+                "reference_rate": ref_y.reindex(d.index).mean() if len(d) else math.nan,
+            },
             pd.Series(r._asdict()),
         )
 

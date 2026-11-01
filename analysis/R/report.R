@@ -10,6 +10,20 @@ fmt_p <- function(p) {
   ifelse(is.na(p), "n/a", ifelse(p < 0.001, "<0.001", formatC(p, format = "f", digits = 3)))
 }
 
+# Reference malignant rate(s) of a row: "a" or, for two image kinds, "a / b".
+fmt_reference <- function(r1, r2) {
+  ifelse(is.na(r1), "n/a", ifelse(is.na(r2), fmt_pct(r1), paste(fmt_pct(r1), "/", fmt_pct(r2))))
+}
+
+REFERENCE_NOTE <- paste(
+  "Reference rate: the malignant rate of the comparison, so floor and ceiling",
+  "effects are visible. For paired shifts it is the reference condition's case-level",
+  "rate over the same cases (condition rate = reference rate + malignant rate shift);",
+  "for other rows it is the reference cell's rate over valid calls, or that of the",
+  "single condition the row is about; for rows comparing two image kinds, neutral in",
+  "each kind (first / second)."
+)
+
 md_table <- function(df) {
   df[] <- lapply(df, as.character)
   header <- paste0("| ", paste(names(df), collapse = " | "), " |")
@@ -22,6 +36,7 @@ contrast_table <- function(x, pct = TRUE, tests = TRUE) {
   out <- data.frame(
     Model = x$model, Image = x$image_kind, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, pct),
+    `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
     p = fmt_p(x$p), `Adjusted p` = fmt_p(x$p_adjusted), Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
     Note = x$note, check.names = FALSE
   )
@@ -93,6 +108,8 @@ render_report <- function(con, cells, flips, syc, meta) {
       " resamples, seed ", BOOTSTRAP_SEED, "; rates over calls with Wilson 95% intervals; ",
       "AUROC with pROC. Input: ", meta$calls, " calls from `", meta$runs, "`."
     ),
+    "",
+    REFERENCE_NOTE,
     ""
   )
   if (!is.null(meta$warning)) out <- c(out, paste("**", meta$warning, "**"), "")
@@ -126,10 +143,14 @@ render_report <- function(con, cells, flips, syc, meta) {
   }
   if (!is.null(flips) && nrow(flips)) {
     out <- c(out, "## Flip rate versus neutral", "",
-      "S1 counts every parse failure as a flip (plan 8, sensitivity 1).", "",
+      paste(
+        "S1 counts every parse failure as a flip (plan 8, sensitivity 1).",
+        "Neutral rate: the malignant rate of the neutral cell over valid calls."
+      ), "",
       md_table(data.frame(
         Model = flips$model, Image = flips$image_kind, Condition = flips$condition,
         Pairs = flips$pairs, `Flip rate` = fmt_ci(flips$flip_rate, flips$ci_low, flips$ci_high, TRUE),
+        `Neutral rate` = fmt_pct(flips$reference_rate),
         `S1 flip rate` = fmt_ci(flips$s1_flip_rate, flips$s1_ci_low, flips$s1_ci_high, TRUE),
         check.names = FALSE
       )), "")
@@ -164,6 +185,7 @@ render_report <- function(con, cells, flips, syc, meta) {
       out <- c(out, paste("##", label), "", md_table(data.frame(
         Outcome = x$outcome, Model = x$model, Image = x$image_kind, Contrast = x$contrast,
         Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, !grepl("p_malignant", x$outcome)),
+        `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
         Cases = x$n_cases, check.names = FALSE
       )), "")
     }
@@ -178,6 +200,7 @@ check_table <- function(x, tests = FALSE) {
   out <- data.frame(
     Model = x$model, Hypothesis = x$hypothesis, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, TRUE),
+    `Reference rate` = fmt_reference(x$reference_rate, x$reference_rate_2),
     p = fmt_p(x$p), `Holm p` = fmt_p(x$p_adjusted),
     Cases = ifelse(is.na(x$n_cases), "", x$n_cases), Reading = x$reading, Note = x$note,
     check.names = FALSE
@@ -204,6 +227,8 @@ render_robustness <- function(r, meta) {
       "result and 95% interval excluding 0; unchanged = interval including 0 for a primary result ",
       "that is not significant; sensitive = anything else. Only R3 has p-values."
     ),
+    "",
+    paste(REFERENCE_NOTE, "In the difference rows, the variant's and the study's reference rates."),
     ""
   )
   if (!is.null(meta$warning)) out <- c(out, paste0("**", meta$warning, "**"), "")
@@ -211,6 +236,7 @@ render_robustness <- function(r, meta) {
   out <- c(out, "## Primary results (reference)", "", md_table(data.frame(
     Model = prim$model, Hypothesis = prim$hypothesis, Contrast = prim$contrast,
     Estimate = fmt_ci(prim$estimate, prim$ci_low, prim$ci_high, TRUE),
+    `Reference rate` = fmt_reference(prim$reference_rate, prim$reference_rate_2),
     `Holm p` = fmt_p(prim$p_adjusted), Note = prim$note, check.names = FALSE
   )), "")
   ag <- r$agreement

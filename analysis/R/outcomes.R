@@ -103,14 +103,20 @@ complete <- function(s, key) {
   !is.null(cl) && sum(cl$present) == 3 * s$n
 }
 
+# reference_rate (and reference_rate_2 for rows comparing two image kinds) is
+# the malignant rate of the comparison, shown next to each shift so floor and
+# ceiling effects are visible (docs/DEVIATIONS.md, entry 10).
 result_row <- function(family, outcome, model, kind, contrast, estimate, boot,
-                       n_cases = NA, note = "", test = TRUE) {
+                       n_cases = NA, note = "", test = TRUE,
+                       reference_rate = NA_real_, reference_rate_2 = NA_real_) {
   ci <- percentile_ci(boot)
   data.frame(
     family = family, outcome = outcome, model = model, image_kind = kind,
     contrast = contrast, estimate = estimate, ci_low = ci[1], ci_high = ci[2],
     p = if (test) bootstrap_p(estimate, boot) else NA_real_,
-    n_cases = n_cases, note = note, stringsAsFactors = FALSE
+    n_cases = n_cases, note = note,
+    reference_rate = reference_rate, reference_rate_2 = reference_rate_2,
+    stringsAsFactors = FALSE
   )
 }
 
@@ -120,8 +126,46 @@ pending_row <- function(family, outcome, model, kind, contrast, missing) {
     contrast = contrast, estimate = NA_real_, ci_low = NA_real_, ci_high = NA_real_,
     p = NA_real_, n_cases = NA_integer_,
     note = paste("pending:", paste(missing, collapse = ", "), "incomplete"),
+    reference_rate = NA_real_, reference_rate_2 = NA_real_,
     stringsAsFactors = FALSE
   )
+}
+
+# Malignant rate over the valid calls of a cell, as in the cell table.
+cell_malignant_rate <- function(s, key) {
+  cl <- cell(s, key)
+  if (is.null(cl) || sum(cl$valid) == 0) {
+    return(NA_real_)
+  }
+  sum(cl$y == 1 & cl$valid, na.rm = TRUE) / sum(cl$valid)
+}
+
+# Reference malignant rate of a row that did not set one: for rows comparing
+# two image kinds, neutral in each; for "a vs b", cell b; for rows on one
+# condition, that condition; otherwise neutral on the same image kind.
+fill_reference_rates <- function(s, out) {
+  todo <- which(is.na(out$reference_rate) & !is.na(out$estimate))
+  for (i in todo) {
+    m <- out$model[i]
+    kind <- out$image_kind[i]
+    contrast <- out$contrast[i]
+    if (grepl(" vs ", kind, fixed = TRUE)) {
+      kinds <- strsplit(kind, " vs ", fixed = TRUE)[[1]]
+      out$reference_rate[i] <- cell_malignant_rate(s, cell_key(m, kinds[1], "neutral"))
+      out$reference_rate_2[i] <- cell_malignant_rate(s, cell_key(m, kinds[2], "neutral"))
+      next
+    }
+    parts <- strsplit(contrast, " vs ", fixed = TRUE)[[1]]
+    ref <- if (length(parts) == 2 && parts[2] %in% CONDITIONS) {
+      parts[2]
+    } else if (contrast %in% CONDITIONS) {
+      contrast
+    } else {
+      "neutral"
+    }
+    out$reference_rate[i] <- cell_malignant_rate(s, cell_key(m, kind, ref))
+  }
+  out
 }
 
 # Paired case-level difference a - b over cases valid in both (plan 5.1, 7).
@@ -138,9 +182,12 @@ paired_shift <- function(s, family, outcome, model, kind, cond, ref, value = "y"
   if (!is.null(mask)) d[!mask] <- NA
   n <- sum(!is.na(d))
   est <- if (n) mean(d, na.rm = TRUE) else NA_real_
+  # Case-level malignant rate of the reference over the same cases, so that
+  # for malignant rate shifts the condition's rate is reference plus shift.
+  ref <- case_value(s, kb, "y")[!is.na(d)]
   result_row(family, outcome, model, kind, contrast, est, boot_mean(s$counts, d),
     n_cases = n, note = sprintf("%d of %d cases", n, if (is.null(mask)) s$n else sum(mask)),
-    test = test
+    test = test, reference_rate = if (n) mean(ref, na.rm = TRUE) else NA_real_
   )
 }
 
@@ -327,6 +374,7 @@ flip_summary <- function(s, key) {
     ci_low = ci[1], ci_high = ci[2],
     s1_pairs = sum(ran), s1_flips = flips_s1, s1_flip_rate = flips_s1 / sum(ran),
     s1_ci_low = ci1[1], s1_ci_high = ci1[2],
+    reference_rate = cell_malignant_rate(s, ref),
     stringsAsFactors = FALSE
   )
 }
@@ -528,7 +576,7 @@ contrasts <- function(s) {
     out$adjustment[out$family == fam] <- method
   }
   out$significant <- !is.na(out$p_adjusted) & out$p_adjusted < 0.05
-  out
+  fill_reference_rates(s, out)
 }
 
 sycophancy_rates <- function(s) {

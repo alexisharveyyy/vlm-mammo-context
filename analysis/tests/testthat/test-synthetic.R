@@ -74,3 +74,28 @@ test_that("missing cells are reported as pending, not as results", {
   expect_true(all(is.na(h2$estimate)))
   expect_true(all(grepl("^pending", h2$note)))
 })
+
+test_that("every result row carries the malignant rate of its comparison", {
+  skip_if(!nzchar(runs), "SYNTHETIC_RUNS not set")
+  s <- study(read_runs(runs), read_cases(file.path(Sys.getenv("REPO_ROOT"), "data", "manifests")),
+    resamples = 10
+  )
+  con <- contrasts(s)
+  done <- con[!is.na(con$estimate), ]
+  expect_false(any(is.na(done$reference_rate)))
+  # Paired malignant rate shifts: condition rate = reference rate + shift.
+  prim <- con[con$family == "primary", ]
+  for (i in seq_len(nrow(prim))) {
+    parts <- strsplit(prim$contrast[i], " vs ")[[1]]
+    a <- case_value(s, cell_key(prim$model[i], "full", parts[1]))
+    b <- case_value(s, cell_key(prim$model[i], "full", parts[2]))
+    ok <- !is.na(a) & !is.na(b)
+    expect_equal(prim$reference_rate[i], mean(b[ok]), tolerance = 1e-12)
+    expect_equal(prim$reference_rate[i] + prim$estimate[i], mean(a[ok]), tolerance = 1e-12)
+  }
+  # Rows comparing two image kinds give neutral in each.
+  rel <- con[con$outcome == "image reliance: accuracy" & con$image_kind == "full vs no_image", ]
+  expect_equal(rel$reference_rate_2[1],
+    cell_malignant_rate(s, cell_key(rel$model[1], "no_image", "neutral")))
+  expect_true(all(!is.na(flip_table(s)$reference_rate)))
+})
