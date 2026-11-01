@@ -194,3 +194,18 @@ analysis is merged after Phase 5.
 - **Results known:** the T0 results and the T1 outputs existed. The T1 files
   were read only for call keys, timestamps and error fields to find the
   cause; no T1 answer was read. No analysis result depends on the change.
+
+## 9. Exploratory comparison against the irrelevant sentence (2026-11-01)
+
+- **What:** an exploratory analysis was added: the conditions of H1 to H4
+  (`colleague_malignant`, `colleague_benign`, `age_68`, `age_42`,
+  `history_yes`, `history_no`) each against `irrelevant` instead of their
+  plan reference, on full images, with the same paired case bootstrap,
+  estimates and 95% intervals only (`docs/EXPLORATORY.md`, entry 2).
+- **Why:** requested by the study owner after reading the results, to see
+  the context effects against a reference that also has an extra sentence.
+- **Effect on results:** none on the primary, key secondary, descriptive or
+  sensitivity analyses. The new rows are in the exploratory family, have no
+  p-values and are not corrected for multiplicity.
+- **Results known:** yes. Added after the Phase 6 results were seen (tag
+  `analysis-v1`, reports at commit `684397b`).
