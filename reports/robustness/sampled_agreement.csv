@@ -1,0 +1,4 @@
+"model","condition","pairs","same","rate","ci_low","ci_high","note"
+"qwen3_vl_8b","neutral",NA,NA,NA,NA,NA,"pending"
+"qwen3_vl_8b","colleague_benign",NA,NA,NA,NA,NA,"pending"
+"qwen3_vl_8b","colleague_malignant",NA,NA,NA,NA,NA,"pending"
