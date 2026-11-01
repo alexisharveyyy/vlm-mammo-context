@@ -1,4 +1,4 @@
-"model","image_kind","condition","complete","pairs","flips","flip_rate","ci_low","ci_high","s1_pairs","s1_flips","s1_flip_rate","s1_ci_low","s1_ci_high","reference_rate"
+"model","image_kind","condition","complete","pairs","flips","flip_rate","ci_low","ci_high","s1_pairs","s1_flips","s1_flip_rate","s1_ci_low","s1_ci_high","reference"
 "internvl3_5_8b","blank_full","colleague_benign",TRUE,1500,249,0.166,0.148028368506924,0.185677991214157,1500,249,0.166,0.148028368506924,0.185677991214157,0.166
 "internvl3_5_8b","blank_full","colleague_malignant",TRUE,1500,1251,0.834,0.814322008785843,0.851971631493076,1500,1251,0.834,0.814322008785843,0.851971631493076,0.166
 "internvl3_5_8b","blank_roi","colleague_benign",TRUE,1500,1500,1,0.997445569279819,1,1500,1500,1,0.997445569279819,1,1

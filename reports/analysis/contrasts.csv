@@ -1,4 +1,4 @@
-"family","outcome","model","image_kind","contrast","estimate","ci_low","ci_high","p","n_cases","note","reference_rate","reference_rate_2","hypothesis","p_adjusted","adjustment","significant"
+"family","outcome","model","image_kind","contrast","estimate","ci_low","ci_high","p","n_cases","note","reference","reference_2","hypothesis","p_adjusted","adjustment","significant"
 "primary","malignant rate shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.399333333333333,0.378,0.420683333333334,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,"H1",0.0023997600239976,"holm",TRUE
 "primary","malignant rate shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.122666666666667,-0.138666666666667,-0.106666666666667,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,"H2",0.0023997600239976,"holm",TRUE
 "primary","malignant rate shift","qwen3_vl_8b","full","age_68 vs age_42",0.107333333333333,0.0893333333333333,0.126,0.0001999800019998,500,"500 of 500 cases",0.0373333333333333,NA,"H3",0.0023997600239976,"holm",TRUE
@@ -11,74 +11,74 @@
 "primary","malignant rate shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.148666666666667,-0.167333333333333,-0.130666666666667,0.0001999800019998,500,"500 of 500 cases",0.148666666666667,NA,"H2",0.0023997600239976,"holm",TRUE
 "primary","malignant rate shift","internvl3_5_8b","full","age_68 vs age_42",0.300666666666667,0.282,0.319333333333334,0.0001999800019998,500,"500 of 500 cases",0.0946666666666666,NA,"H3",0.0023997600239976,"holm",TRUE
 "primary","malignant rate shift","internvl3_5_8b","full","history_yes vs history_no",0.251333333333333,0.238,0.264666666666666,0.0001999800019998,500,"500 of 500 cases",0.00533333333333333,NA,"H4",0.0023997600239976,"holm",TRUE
-"key secondary","p_malignant shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.186243011741331,0.169466280974537,0.203381285154893,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.782666666666667,0.759333333333333,0.805333333333333,0.0001999800019998,500,"",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.310911048798651,-0.318759839185532,-0.302864591632005,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","colleague_benign vs neutral",0.958,0.945333333333333,0.97,0.0001999800019998,500,"",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","qwen3_vl_8b","full","age_68 vs age_42",0.124623766498715,0.117025233779767,0.132357748717787,0.0001999800019998,500,"500 of 500 cases",0.0373333333333333,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","age_68 vs age_42",-0.112,-0.129333333333333,-0.0953333333333333,0.0001999800019998,500,"",0.0373333333333333,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","qwen3_vl_8b","full","history_yes vs history_no",0.264240019865825,0.252829303829537,0.275650218594194,0.0001999800019998,500,"500 of 500 cases",0.0246666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","history_yes vs history_no",-0.502,-0.530666666666667,-0.473333333333333,0.0001999800019998,500,"",0.0246666666666667,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.186243011741331,0.169466280974537,0.203381285154893,0.0001999800019998,500,"500 of 500 cases",0.310911048923973,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.782666666666667,0.759333333333333,0.805333333333333,0.0001999800019998,500,"",0.042,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.310911048798651,-0.318759839185532,-0.302864591632005,0.0001999800019998,500,"500 of 500 cases",0.310911048923973,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","colleague_benign vs neutral",0.958,0.945333333333333,0.97,0.0001999800019998,500,"",0.042,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","qwen3_vl_8b","full","age_68 vs age_42",0.124623766498715,0.117025233779767,0.132357748717787,0.0001999800019998,500,"500 of 500 cases",0.192864271255325,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","age_68 vs age_42",-0.112,-0.129333333333333,-0.0953333333333333,0.0001999800019998,500,"",0.24,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","qwen3_vl_8b","full","history_yes vs history_no",0.264240019865825,0.252829303829537,0.275650218594194,0.0001999800019998,500,"500 of 500 cases",0.0864987311722819,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","qwen3_vl_8b","full","history_yes vs history_no",-0.502,-0.530666666666667,-0.473333333333333,0.0001999800019998,500,"",0.708,NA,NA,0.000235690716642621,"BH",TRUE
 "key secondary","malignant rate shift (control)","qwen3_vl_8b","full","irrelevant vs neutral",-0.0673333333333333,-0.084,-0.0513333333333333,0.0001999800019998,500,"500 of 500 cases",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.235322562293776,0.203292552458699,0.269096751071962,0.0001999800019998,500,"",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.231277026019147,0.219227664367068,0.243781019694904,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"key secondary","abstention rate (plain minus forced)","qwen3_vl_8b","full","neutral",0.994,0.989333333333333,0.998,0.0001999800019998,500,"",0.122666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","full","colleague_malignant",0.0066666666666666,-0.0288342997761687,0.041692866041188,NA,500,"",0.522,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","roi","colleague_malignant",-0.02,-0.0695118198065984,0.0290792229023269,NA,500,"",0.736666666666667,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"key secondary","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.235322562293776,0.203292552458699,0.269096751071962,0.0001999800019998,500,"",0.00531914893617021,NA,NA,0.000235690716642621,"BH",TRUE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.231277026019147,0.219227664367068,0.243781019694904,NA,500,"",0.195580905282425,NA,NA,NA,"",FALSE
+"key secondary","abstention rate (plain minus forced)","qwen3_vl_8b","full","neutral",0.994,0.989333333333333,0.998,0.0001999800019998,500,"",0,NA,NA,0.000235690716642621,"BH",TRUE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","full","colleague_malignant",0.0066666666666666,-0.0288342997761687,0.041692866041188,NA,500,"",0.518666666666667,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","roi","colleague_malignant",-0.02,-0.0695118198065984,0.0290792229023269,NA,500,"",0.746666666666667,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","no_image","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","no_image","colleague_malignant",0,-0.0296214875809422,0.0290145588117488,NA,500,"",0.832,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","qwen3_vl_8b","blank_roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","age_42 vs neutral",0.0539839999999999,0.00356140843481692,0.104247593947757,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","age_42 vs neutral",0.00496800000000008,-0.0351053796191096,0.0455954634440772,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","age_68 vs neutral",0.0611839999999999,0.0113939996487354,0.110535662048508,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","age_68 vs neutral",0.0251760000000001,-0.0153536394950319,0.0665971301681566,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","history_yes vs neutral",0.0612640000000003,0.0207879530934126,0.101578646490779,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","history_yes vs neutral",0.0048959999999999,-0.0396232646394773,0.0508335760998554,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","history_no vs neutral",0.0873120000000009,0.0313526178400416,0.143651150040588,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","history_no vs neutral",-0.0125760000000001,-0.0608310814541474,0.0370573157785539,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","combined vs neutral",0.0634720000000001,0.00294380246135641,0.124786119564274,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","combined vs neutral",-0.0141359999999999,-0.0710096851240496,0.0438733614043447,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","colleague_benign vs neutral",0.0359200000000005,-0.0190870743034056,0.0918272038525291,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.025352,-0.075091848226844,0.0234326755410342,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.0672800000000005,0.00502567342726565,0.1306123866071,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","colleague_malignant vs neutral",-0.0263120000000002,-0.0919575986206087,0.039458844692817,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","irrelevant vs neutral",0.040432,0.00741036755016361,0.074375883442619,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","full","irrelevant vs neutral",0.0174879999999999,-0.0285833666295911,0.06307236989966,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","roi","colleague_benign vs neutral",-0.0381600000000001,-0.111738256640255,0.0329637096774193,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","roi","colleague_benign vs neutral",-0.124328,-0.186388708900889,-0.0621207205486048,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","roi","colleague_malignant vs neutral",-0.0440000000000006,-0.106539484716786,0.0183062245295796,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","roi","colleague_malignant vs neutral",-0.0368880000000003,-0.102522609696048,0.0289186499453291,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","no_image","colleague_benign vs neutral",0,0,0,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","no_image","colleague_benign vs neutral",0,-0.0435218382176232,0.0444322313714132,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_full","colleague_benign vs neutral",0.0680959999999999,-0.0307374574829932,0.166560618135451,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_full","colleague_benign vs neutral",0.062,0.0300949026639344,0.0940512654366229,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_full","colleague_malignant vs neutral",0.0647360000000001,0.0284461021395081,0.10059136121773,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_full","colleague_malignant vs neutral",0.056,-0.00899645403392774,0.121790206866825,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_roi","colleague_benign vs neutral",0.0704159999999999,0.00875220929520271,0.131017995116543,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_roi","colleague_benign vs neutral",0.00831199999999999,-0.0404912393478077,0.0577671610492302,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_roi","colleague_malignant vs neutral",-0.0172480000000001,-0.0597749851902312,0.0246490734652639,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_roi","colleague_malignant vs neutral",-0.0341360000000001,-0.110664907002801,0.0441951509791369,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","qwen3_vl_8b","full vs no_image","neutral",-0.00666666666666665,-0.0313333333333333,0.0179999999999999,NA,500,"",0.122666666666667,0.333333333333333,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","full vs no_image","neutral",-0.070992,-0.148733608789361,0.00793411893704703,NA,500,"",0.122666666666667,0.333333333333333,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","qwen3_vl_8b","full vs blank_full","neutral",-0.00666666666666665,-0.048,0.034,NA,500,"",0.122666666666667,0.498666666666667,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","full vs blank_full","neutral",-0.0352319999999999,-0.093544968500104,0.0220714706559979,NA,500,"",0.122666666666667,0.498666666666667,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","qwen3_vl_8b","roi vs blank_roi","neutral",-0.000952059176283049,-0.0425635007675968,0.0412522356436549,NA,500,"",0.00937081659973226,0.395490026019081,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","roi vs blank_roi","neutral",0.0701920000000004,-0.006187990949844,0.147156820122006,NA,500,"",0.00937081659973226,0.395490026019081,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","age_42 vs neutral",0.0539839999999999,0.00356140843481692,0.104247593947757,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","age_42 vs neutral",0.00496800000000008,-0.0351053796191096,0.0455954634440772,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","age_68 vs neutral",0.0611839999999999,0.0113939996487354,0.110535662048508,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","age_68 vs neutral",0.0251760000000001,-0.0153536394950319,0.0665971301681566,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","history_yes vs neutral",0.0612640000000003,0.0207879530934126,0.101578646490779,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","history_yes vs neutral",0.0048959999999999,-0.0396232646394773,0.0508335760998554,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","history_no vs neutral",0.0873120000000009,0.0313526178400416,0.143651150040588,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","history_no vs neutral",-0.0125760000000001,-0.0608310814541474,0.0370573157785539,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","combined vs neutral",0.0634720000000001,0.00294380246135641,0.124786119564274,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","combined vs neutral",-0.0141359999999999,-0.0710096851240496,0.0438733614043447,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","colleague_benign vs neutral",0.0359200000000005,-0.0190870743034056,0.0918272038525291,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","colleague_benign vs neutral",-0.025352,-0.075091848226844,0.0234326755410342,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","colleague_malignant vs neutral",0.0672800000000005,0.00502567342726565,0.1306123866071,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","colleague_malignant vs neutral",-0.0263120000000002,-0.0919575986206087,0.039458844692817,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","full","irrelevant vs neutral",0.040432,0.00741036755016361,0.074375883442619,NA,500,"",0.429008,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","full","irrelevant vs neutral",0.0174879999999999,-0.0285833666295911,0.06307236989966,NA,500,"",0.522992,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","roi","colleague_benign vs neutral",-0.0381600000000001,-0.111738256640255,0.0329637096774193,NA,500,"",0.56672,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","roi","colleague_benign vs neutral",-0.124328,-0.186388708900889,-0.0621207205486048,NA,500,"",0.574352,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","roi","colleague_malignant vs neutral",-0.0440000000000006,-0.106539484716786,0.0183062245295796,NA,500,"",0.56672,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","roi","colleague_malignant vs neutral",-0.0368880000000003,-0.102522609696048,0.0289186499453291,NA,500,"",0.574352,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","no_image","colleague_benign vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","no_image","colleague_benign vs neutral",0,-0.0435218382176232,0.0444322313714132,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_full","colleague_benign vs neutral",0.0680959999999999,-0.0307374574829932,0.166560618135451,NA,500,"",0.46424,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_full","colleague_benign vs neutral",0.062,0.0300949026639344,0.0940512654366229,NA,500,"",0.438,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_full","colleague_malignant vs neutral",0.0647360000000001,0.0284461021395081,0.10059136121773,NA,500,"",0.46424,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_full","colleague_malignant vs neutral",0.056,-0.00899645403392774,0.121790206866825,NA,500,"",0.438,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_roi","colleague_benign vs neutral",0.0704159999999999,0.00875220929520271,0.131017995116543,NA,500,"",0.496528,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_roi","colleague_benign vs neutral",0.00831199999999999,-0.0404912393478077,0.0577671610492302,NA,500,"",0.491688,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","qwen3_vl_8b","blank_roi","colleague_malignant vs neutral",-0.0172480000000001,-0.0597749851902312,0.0246490734652639,NA,500,"",0.496528,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","qwen3_vl_8b","blank_roi","colleague_malignant vs neutral",-0.0341360000000001,-0.110664907002801,0.0441951509791369,NA,500,"",0.491688,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","qwen3_vl_8b","full vs no_image","neutral",-0.00666666666666665,-0.0313333333333333,0.0179999999999999,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","full vs no_image","neutral",-0.070992,-0.148733608789361,0.00793411893704703,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","qwen3_vl_8b","full vs blank_full","neutral",-0.00666666666666665,-0.048,0.034,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","full vs blank_full","neutral",-0.0352319999999999,-0.093544968500104,0.0220714706559979,NA,500,"",0.46424,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","qwen3_vl_8b","roi vs blank_roi","neutral",-0.000952059176283049,-0.0425635007675968,0.0412522356436549,NA,500,"",0.505637467476149,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","qwen3_vl_8b","roi vs blank_roi","neutral",0.0701920000000004,-0.006187990949844,0.147156820122006,NA,500,"",0.496528,NA,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","qwen3_vl_8b","roi","colleague_benign vs neutral",-0.00933333333333334,-0.0146666666666667,-0.00466666666666667,NA,500,"500 of 500 cases",0.00933333333333334,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","qwen3_vl_8b","roi vs full","colleague_benign vs neutral, ROI minus full",0.113333333333333,0.0973333333333334,0.13,NA,500,"",0.00937081659973226,0.122666666666667,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","qwen3_vl_8b","roi","colleague_malignant vs neutral",0.727333333333333,0.703316666666666,0.751333333333333,NA,500,"500 of 500 cases",0.00933333333333334,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","qwen3_vl_8b","roi vs full","colleague_malignant vs neutral, ROI minus full",0.328,0.296666666666667,0.358666666666666,NA,500,"",0.00937081659973226,0.122666666666667,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","colleague_malignant vs neutral",0.186243011741331,0.169466280974537,0.203381285154893,NA,500,"500 of 500 cases",0.122666666666667,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","colleague_benign vs neutral",-0.310911048798651,-0.318759839185532,-0.302864591632005,NA,500,"500 of 500 cases",0.122666666666667,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","age_68 vs age_42",0.124623766498715,0.117025233779767,0.132357748717787,NA,500,"500 of 500 cases",0.0373333333333333,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","history_yes vs history_no",0.264240019865825,0.252829303829537,0.275650218594194,NA,500,"500 of 500 cases",0.0246666666666667,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","colleague_malignant vs neutral",0.186243011741331,0.169466280974537,0.203381285154893,NA,500,"500 of 500 cases",0.310911048923973,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","colleague_benign vs neutral",-0.310911048798651,-0.318759839185532,-0.302864591632005,NA,500,"500 of 500 cases",0.310911048923973,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","age_68 vs age_42",0.124623766498715,0.117025233779767,0.132357748717787,NA,500,"500 of 500 cases",0.192864271255325,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","qwen3_vl_8b","full","history_yes vs history_no",0.264240019865825,0.252829303829537,0.275650218594194,NA,500,"500 of 500 cases",0.0864987311722819,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","qwen3_vl_8b","no_image","colleague_benign vs neutral",-0.333333333333333,-0.333333333333334,-0.333333333333333,NA,500,"500 of 500 cases",0.333333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","qwen3_vl_8b","no_image","colleague_malignant vs neutral",0.498666666666667,0.484,0.513333333333334,NA,500,"500 of 500 cases",0.333333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","qwen3_vl_8b","blank_full","colleague_benign vs neutral",-0.498666666666667,-0.513333333333334,-0.484,NA,500,"500 of 500 cases",0.498666666666667,NA,NA,NA,"",FALSE
@@ -129,74 +129,74 @@
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","qwen3_vl_8b","full","age_42 vs irrelevant",-0.018,-0.0306666666666667,-0.00533333333333333,NA,500,"500 of 500 cases",0.0553333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","qwen3_vl_8b","full","history_yes vs irrelevant",0.248,0.231333333333333,0.264666666666666,NA,500,"500 of 500 cases",0.0553333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","qwen3_vl_8b","full","history_no vs irrelevant",-0.0306666666666666,-0.0426666666666667,-0.018,NA,500,"500 of 500 cases",0.0553333333333333,NA,NA,NA,"",FALSE
-"key secondary","p_malignant shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",0.649419560852751,0.635614212000953,0.663272819799024,0.0001999800019998,500,"500 of 500 cases",0.00333333333333334,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.0206666666666667,-0.0726666666666667,0.0326666666666666,0.442755724427557,500,"",0.00333333333333333,NA,NA,0.456591840815918,"BH",FALSE
-"key secondary","p_malignant shift","medgemma_1_5_4b","full","colleague_benign vs neutral",-0.00414250742946117,-0.00729650778910374,-0.00174985366204792,0.0001999800019998,500,"500 of 500 cases",0.00333333333333334,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.314,0.276,0.352666666666667,0.0001999800019998,500,"",0.00333333333333333,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","medgemma_1_5_4b","full","age_68 vs age_42",0.000879712882933806,0.000392406871794984,0.00152050965355269,0.0001999800019998,500,"500 of 500 cases",0.000666666666666664,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","age_68 vs age_42",-0.105333333333333,-0.127333333333333,-0.084,0.0001999800019998,500,"",0.000666666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","medgemma_1_5_4b","full","history_yes vs history_no",0.00122189347918255,0.000733767353898867,0.00185890268039457,0.0001999800019998,500,"500 of 500 cases",0,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","history_yes vs history_no",-0.0546666666666668,-0.0693333333333332,-0.0413333333333333,0.0001999800019998,500,"",0,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",0.649419560852751,0.635614212000953,0.663272819799024,0.0001999800019998,500,"500 of 500 cases",0.00417095953373574,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.0206666666666667,-0.0726666666666667,0.0326666666666666,0.442755724427557,500,"",0.686,NA,NA,0.456591840815918,"BH",FALSE
+"key secondary","p_malignant shift","medgemma_1_5_4b","full","colleague_benign vs neutral",-0.00414250742946117,-0.00729650778910374,-0.00174985366204792,0.0001999800019998,500,"500 of 500 cases",0.00417095953373574,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.314,0.276,0.352666666666667,0.0001999800019998,500,"",0.686,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","medgemma_1_5_4b","full","age_68 vs age_42",0.000879712882933806,0.000392406871794984,0.00152050965355269,0.0001999800019998,500,"500 of 500 cases",0.00265100361308485,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","age_68 vs age_42",-0.105333333333333,-0.127333333333333,-0.084,0.0001999800019998,500,"",0.753333333333333,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","medgemma_1_5_4b","full","history_yes vs history_no",0.00122189347918255,0.000733767353898867,0.00185890268039457,0.0001999800019998,500,"500 of 500 cases",0.001257105244505,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","medgemma_1_5_4b","full","history_yes vs history_no",-0.0546666666666668,-0.0693333333333332,-0.0413333333333333,0.0001999800019998,500,"",0.827333333333333,NA,NA,0.000235690716642621,"BH",TRUE
 "key secondary","malignant rate shift (control)","medgemma_1_5_4b","full","irrelevant vs neutral",-0.00266666666666666,-0.00666666666666667,0,0.0997900209979002,500,"500 of 500 cases",0.00333333333333334,NA,NA,0.10976902309769,"BH",FALSE
-"key secondary","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00398225054044829,-0.0107819191484881,3.55571358727053e-05,0.195180481951805,500,"",0.00333333333333333,NA,NA,0.207772771109986,"BH",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00432794623788475,-0.00903182646678506,-0.000889055002763848,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"key secondary","abstention rate (plain minus forced)","medgemma_1_5_4b","full","neutral",0,0,0,1,500,"",0.00333333333333333,NA,NA,1,"BH",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","full","colleague_malignant",0.0253333333333333,-0.0126723277973008,0.0640094744173663,NA,500,"",0.664666666666667,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","roi","colleague_malignant",-0.0386666666666667,-0.082872118191005,0.00559474972680566,NA,500,"",0.296666666666667,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"key secondary","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00398225054044829,-0.0107819191484881,3.55571358727053e-05,0.195180481951805,500,"",0.00531914893617021,NA,NA,0.207772771109986,"BH",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00432794623788475,-0.00903182646678506,-0.000889055002763848,NA,500,"",0.00632916205769427,NA,NA,NA,"",FALSE
+"key secondary","abstention rate (plain minus forced)","medgemma_1_5_4b","full","neutral",0,0,0,1,500,"",0,NA,NA,1,"BH",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","full","colleague_malignant",0.0253333333333333,-0.0126723277973008,0.0640094744173663,NA,500,"",0.652,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","roi","colleague_malignant",-0.0386666666666667,-0.082872118191005,0.00559474972680566,NA,500,"",0.316,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","no_image","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","no_image","colleague_malignant",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_full","colleague_malignant",0,-0.0296214875809421,0.0290145588117487,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","medgemma_1_5_4b","blank_roi","colleague_malignant",0,0,0,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","age_42 vs neutral",-0.00393599999999938,-0.0136587534212504,0.00586384683440333,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","age_42 vs neutral",0.033032,-0.00233853650322835,0.0678451677365054,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","age_68 vs neutral",0.0020640000000009,-0.00458398470136262,0.00882072294566682,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","age_68 vs neutral",0.0395439999999999,0.00124709500513613,0.0772550530292762,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","history_yes vs neutral",-0.00451199999999924,-0.0133997760008173,0.00433742355454399,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","history_yes vs neutral",0.024456,-0.0123270949222706,0.0597383771351373,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","history_no vs neutral",-0.0060159999999993,-0.0161247062336895,0.00400415795004854,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","history_no vs neutral",-0.00813600000000003,-0.0574190240421577,0.0390067557474016,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","combined vs neutral",-0.00729599999999964,-0.0253968060791483,0.0114088298660883,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","combined vs neutral",0.0358239999999999,-0.00638089396206821,0.076811305270063,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.00129600000000046,-0.0391300888113668,0.0417452142226629,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.00705599999999995,-0.0471716277275016,0.0605124205932373,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.00238399999999961,-0.0320093485215486,0.0272637414640489,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.033248,-0.0945372213722852,0.0254408885251482,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","irrelevant vs neutral",-0.00539199999999951,-0.0124003553710573,0.00168011559346287,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","irrelevant vs neutral",0.00207999999999997,-0.0276824210398602,0.0310119461477875,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","roi","colleague_benign vs neutral",0.0158239999999998,-0.0244367106174461,0.0560005475773539,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","roi","colleague_benign vs neutral",0.0248799999999999,-0.0292424411021489,0.0787976688966967,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","roi","colleague_malignant vs neutral",0.0767679999999997,0.0316011719662058,0.122096260196015,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","roi","colleague_malignant vs neutral",0.065904,-0.0124583540663466,0.141568457698034,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","no_image","colleague_benign vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","no_image","colleague_benign vs neutral",0,-0.0444322313714132,0.0435218382176232,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","no_image","colleague_malignant vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_full","colleague_benign vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_full","colleague_benign vs neutral",0,-0.0444322313714132,0.0435218382176232,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_full","colleague_malignant vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_full","colleague_malignant vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_roi","colleague_benign vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_roi","colleague_benign vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_roi","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_roi","colleague_malignant vs neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","medgemma_1_5_4b","full vs no_image","neutral",0.002,-0.0013333333333333,0.00666666666666665,NA,500,"",0.00333333333333333,0,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","full vs no_image","neutral",-0.0222720000000003,-0.095914104780764,0.0524973983578031,NA,500,"",0.00333333333333333,0,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","medgemma_1_5_4b","full vs blank_full","neutral",0.002,-0.0013333333333333,0.00666666666666665,NA,500,"",0.00333333333333333,0,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","full vs blank_full","neutral",-0.0222720000000003,-0.0812107232316003,0.036899333222336,NA,500,"",0.00333333333333333,0,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","medgemma_1_5_4b","roi vs blank_roi","neutral",0,0,0,NA,500,"",0,0,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","roi vs blank_roi","neutral",-0.022384,-0.0858261971570434,0.0420198025803544,NA,500,"",0,0,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","age_42 vs neutral",-0.00393599999999938,-0.0136587534212504,0.00586384683440333,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","age_42 vs neutral",0.033032,-0.00233853650322835,0.0678451677365054,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","age_68 vs neutral",0.0020640000000009,-0.00458398470136262,0.00882072294566682,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","age_68 vs neutral",0.0395439999999999,0.00124709500513613,0.0772550530292762,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","history_yes vs neutral",-0.00451199999999924,-0.0133997760008173,0.00433742355454399,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","history_yes vs neutral",0.024456,-0.0123270949222706,0.0597383771351373,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","history_no vs neutral",-0.0060159999999993,-0.0161247062336895,0.00400415795004854,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","history_no vs neutral",-0.00813600000000003,-0.0574190240421577,0.0390067557474016,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","combined vs neutral",-0.00729599999999964,-0.0253968060791483,0.0114088298660883,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","combined vs neutral",0.0358239999999999,-0.00638089396206821,0.076811305270063,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.00129600000000046,-0.0391300888113668,0.0417452142226629,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","colleague_benign vs neutral",0.00705599999999995,-0.0471716277275016,0.0605124205932373,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.00238399999999961,-0.0320093485215486,0.0272637414640489,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","colleague_malignant vs neutral",-0.033248,-0.0945372213722852,0.0254408885251482,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","full","irrelevant vs neutral",-0.00539199999999951,-0.0124003553710573,0.00168011559346287,NA,500,"",0.477728,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","full","irrelevant vs neutral",0.00207999999999997,-0.0276824210398602,0.0310119461477875,NA,500,"",0.5028,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","roi","colleague_benign vs neutral",0.0158239999999998,-0.0244367106174461,0.0560005475773539,NA,500,"",0.477616,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","roi","colleague_benign vs neutral",0.0248799999999999,-0.0292424411021489,0.0787976688966967,NA,500,"",0.49016,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","roi","colleague_malignant vs neutral",0.0767679999999997,0.0316011719662058,0.122096260196015,NA,500,"",0.477616,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","roi","colleague_malignant vs neutral",0.065904,-0.0124583540663466,0.141568457698034,NA,500,"",0.49016,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","no_image","colleague_benign vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","no_image","colleague_benign vs neutral",0,-0.0444322313714132,0.0435218382176232,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","no_image","colleague_malignant vs neutral",0,-0.0870436764352464,0.0888644627428265,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","no_image","colleague_malignant vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_full","colleague_benign vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_full","colleague_benign vs neutral",0,-0.0444322313714132,0.0435218382176232,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_full","colleague_malignant vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_full","colleague_malignant vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_roi","colleague_benign vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_roi","colleague_benign vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","medgemma_1_5_4b","blank_roi","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","medgemma_1_5_4b","blank_roi","colleague_malignant vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","medgemma_1_5_4b","full vs no_image","neutral",0.002,-0.0013333333333333,0.00666666666666665,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","full vs no_image","neutral",-0.0222720000000003,-0.095914104780764,0.0524973983578031,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","medgemma_1_5_4b","full vs blank_full","neutral",0.002,-0.0013333333333333,0.00666666666666665,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","full vs blank_full","neutral",-0.0222720000000003,-0.0812107232316003,0.036899333222336,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","medgemma_1_5_4b","roi vs blank_roi","neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","medgemma_1_5_4b","roi vs blank_roi","neutral",-0.022384,-0.0858261971570434,0.0420198025803544,NA,500,"",0.5,NA,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","medgemma_1_5_4b","roi","colleague_benign vs neutral",0,0,0,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","medgemma_1_5_4b","roi vs full","colleague_benign vs neutral, ROI minus full",0.00333333333333334,0,0.008,NA,500,"",0,0.00333333333333333,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","medgemma_1_5_4b","roi","colleague_malignant vs neutral",0.296666666666667,0.274666666666667,0.319333333333333,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","medgemma_1_5_4b","roi vs full","colleague_malignant vs neutral, ROI minus full",-0.364666666666667,-0.393333333333333,-0.335983333333333,NA,500,"",0,0.00333333333333333,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","colleague_malignant vs neutral",0.649690229616202,0.635819496950113,0.663634498668134,NA,500,"500 of 500 cases",0.00333333333333334,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","colleague_benign vs neutral",-0.00387183866600996,-0.00705616476854179,-0.00147113116496146,NA,500,"500 of 500 cases",0.00333333333333334,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","age_68 vs age_42",0.000654205846220228,-0.00019307057323391,0.00179169316248726,NA,500,"500 of 500 cases",0.000666666666666664,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","history_yes vs history_no",0.000687783466049416,0.000292265177743565,0.00128364840328991,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","colleague_malignant vs neutral",0.649690229616202,0.635819496950113,0.663634498668134,NA,500,"500 of 500 cases",0.00390029077028453,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","colleague_benign vs neutral",-0.00387183866600996,-0.00705616476854179,-0.00147113116496146,NA,500,"500 of 500 cases",0.00390029077028453,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","age_68 vs age_42",0.000654205846220228,-0.00019307057323391,0.00179169316248726,NA,500,"500 of 500 cases",0.00251482495531384,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","medgemma_1_5_4b","full","history_yes vs history_no",0.000687783466049416,0.000292265177743565,0.00128364840328991,NA,500,"500 of 500 cases",0.000849745432491198,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","medgemma_1_5_4b","no_image","colleague_benign vs neutral",0,0,0,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","medgemma_1_5_4b","no_image","colleague_malignant vs neutral",0,0,0,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","medgemma_1_5_4b","blank_full","colleague_benign vs neutral",0,0,0,NA,500,"500 of 500 cases",0,NA,NA,NA,"",FALSE
@@ -247,74 +247,74 @@
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","medgemma_1_5_4b","full","age_42 vs irrelevant",0,-0.002,0.002,NA,500,"500 of 500 cases",0.000666666666666665,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","medgemma_1_5_4b","full","history_yes vs irrelevant",-0.000666666666666665,-0.002,0,NA,500,"500 of 500 cases",0.000666666666666665,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","medgemma_1_5_4b","full","history_no vs irrelevant",-0.000666666666666665,-0.002,0,NA,500,"500 of 500 cases",0.000666666666666665,NA,NA,NA,"",FALSE
-"key secondary","p_malignant shift","internvl3_5_8b","full","colleague_malignant vs neutral",0.825409907807463,0.812653080720754,0.837423779813614,0.0001999800019998,500,"500 of 500 cases",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","colleague_malignant vs neutral",0.96,0.946666666666667,0.972,0.0001999800019998,500,"",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.170115623548598,-0.182960348675927,-0.158075394858638,0.0001999800019998,500,"500 of 500 cases",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","colleague_benign vs neutral",0.548,0.532,0.564,0.0001999800019998,500,"",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","internvl3_5_8b","full","age_68 vs age_42",0.168244261843022,0.158369894707537,0.178163055970198,0.0001999800019998,500,"500 of 500 cases",0.0946666666666666,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","age_68 vs age_42",0.0346666666666667,0.0233333333333333,0.0466666666666667,0.0001999800019998,500,"",0.0946666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","p_malignant shift","internvl3_5_8b","full","history_yes vs history_no",0.180841948872636,0.175312138249063,0.186630930685263,0.0001999800019998,500,"500 of 500 cases",0.00533333333333333,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","history_yes vs history_no",0.00666666666666667,0.00266666666666667,0.0113333333333333,0.0003999600039996,500,"",0.00533333333333333,NA,NA,0.000455126901102993,"BH",TRUE
+"key secondary","p_malignant shift","internvl3_5_8b","full","colleague_malignant vs neutral",0.825409907807463,0.812653080720754,0.837423779813614,0.0001999800019998,500,"500 of 500 cases",0.17097426699049,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","colleague_malignant vs neutral",0.96,0.946666666666667,0.972,0.0001999800019998,500,"",0.0233333333333333,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.170115623548598,-0.182960348675927,-0.158075394858638,0.0001999800019998,500,"500 of 500 cases",0.17097426699049,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","colleague_benign vs neutral",0.548,0.532,0.564,0.0001999800019998,500,"",0.0233333333333333,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","internvl3_5_8b","full","age_68 vs age_42",0.168244261843022,0.158369894707537,0.178163055970198,0.0001999800019998,500,"500 of 500 cases",0.150444749601179,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","age_68 vs age_42",0.0346666666666667,0.0233333333333333,0.0466666666666667,0.0001999800019998,500,"",0.0186666666666667,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","p_malignant shift","internvl3_5_8b","full","history_yes vs history_no",0.180841948872636,0.175312138249063,0.186630930685263,0.0001999800019998,500,"500 of 500 cases",0.0386859432804197,NA,NA,0.000235690716642621,"BH",TRUE
+"key secondary","BI-RADS consistency shift","internvl3_5_8b","full","history_yes vs history_no",0.00666666666666667,0.00266666666666667,0.0113333333333333,0.0003999600039996,500,"",0.004,NA,NA,0.000455126901102993,"BH",TRUE
 "key secondary","malignant rate shift (control)","internvl3_5_8b","full","irrelevant vs neutral",-0.141333333333333,-0.158,-0.124666666666667,0.0001999800019998,500,"500 of 500 cases",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"key secondary","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.229875412447377,-0.257816062301976,-0.201868021685134,0.0001999800019998,500,"",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.238078521568594,-0.251491323378162,-0.223623620853199,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"key secondary","abstention rate (plain minus forced)","internvl3_5_8b","full","neutral",0.496666666666667,0.481333333333333,0.512,0.0001999800019998,500,"",0.148666666666667,NA,NA,0.000235690716642621,"BH",TRUE
-"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"key secondary","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.229875412447377,-0.257816062301976,-0.201868021685134,0.0001999800019998,500,"",0.263297872340426,NA,NA,0.000235690716642621,"BH",TRUE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.238078521568594,-0.251491323378162,-0.223623620853199,NA,500,"",0.289696089746029,NA,NA,NA,"",FALSE
+"key secondary","abstention rate (plain minus forced)","internvl3_5_8b","full","neutral",0.496666666666667,0.481333333333333,0.512,0.0001999800019998,500,"",0,NA,NA,0.000235690716642621,"BH",TRUE
+"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","internvl3_5_8b","full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","internvl3_5_8b","roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","no_image","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","internvl3_5_8b","no_image","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_full","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
+"descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
 "descriptive","sycophancy (wrong minus right)","internvl3_5_8b","blank_roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","age_42 vs neutral",0.00372799999999929,-0.0120041610122335,0.0196841738740471,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","age_42 vs neutral",0.0113759999999999,-0.0256346410202317,0.0482675608790142,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","age_68 vs neutral",-0.0021440000000007,-0.0170889614190696,0.0127802721998996,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","age_68 vs neutral",-0.00431199999999998,-0.0440095497693596,0.0359486987451474,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","history_yes vs neutral",0.00924799999999859,-0.00643618387262457,0.0254252287533546,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","history_yes vs neutral",-0.0169679999999999,-0.0646963820952655,0.0290240356794426,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","history_no vs neutral",-0.00683200000000028,-0.0255882337841777,0.0116064755092806,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","history_no vs neutral",-0.0154319999999999,-0.0581320816938427,0.0267801398239064,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","combined vs neutral",-0.0159519999999995,-0.0674740733627809,0.0366591801011231,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","combined vs neutral",-0.00275999999999976,-0.0551150203277989,0.0514004759269064,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.0248959999999995,-0.069126688988855,0.0203340019978482,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.0821199999999999,-0.156108203491625,-0.00993174112902734,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","colleague_malignant vs neutral",-0.0210560000000003,-0.061856891239754,0.0197152942549174,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","colleague_malignant vs neutral",-0.023888,-0.0698835263923096,0.0210358478011835,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","irrelevant vs neutral",-0.0124160000000008,-0.0371761451947681,0.0116981602401168,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","full","irrelevant vs neutral",-0.00502399999999992,-0.0477081156982024,0.0361621290079977,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","roi","colleague_benign vs neutral",0.0468960000000001,-0.0231698550494781,0.116032185663082,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","roi","colleague_benign vs neutral",0.021016,-0.0279601129152182,0.0703134276479386,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","roi","colleague_malignant vs neutral",0.0655200000000001,0.000527896900500023,0.129514900959646,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","roi","colleague_malignant vs neutral",0.077824,0.00754353571203296,0.147114456007717,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","no_image","colleague_benign vs neutral",0,0,0,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","no_image","colleague_benign vs neutral",0,-0.0444322313714133,0.0435218382176232,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","no_image","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","no_image","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_full","colleague_benign vs neutral",0,0,0,NA,500,"",0.166,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","blank_full","colleague_benign vs neutral",0.00302400000000003,-0.0842601111998189,0.092397405271994,NA,500,"",0.166,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_full","colleague_malignant vs neutral",0.00172800000000001,-0.0083854353981776,0.0121120026785968,NA,500,"",0.166,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","blank_full","colleague_malignant vs neutral",0.00302400000000003,-0.0407121569950517,0.047419215396587,NA,500,"",0.166,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_roi","colleague_benign vs neutral",0.0634240000000001,0.0338178039395751,0.0928920328323784,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","blank_roi","colleague_benign vs neutral",0.0672,0.0380211778790925,0.0961529018322722,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_roi","colleague_malignant vs neutral",0.000159999999999993,0,0.000580516916971833,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","AUROC verbal shift","internvl3_5_8b","blank_roi","colleague_malignant vs neutral",0.05232,0.0056557307210069,0.0993290061472003,NA,500,"",1,NA,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","internvl3_5_8b","full vs no_image","neutral",0.0166666666666667,-0.0106666666666667,0.0433499999999998,NA,500,"",0.148666666666667,0.165333333333333,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","full vs no_image","neutral",0.0468000000000005,-0.0387694640356142,0.132225011268682,NA,500,"",0.148666666666667,0.165333333333333,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","internvl3_5_8b","full vs blank_full","neutral",0.0186666666666667,-1.66666666666497e-05,0.038,NA,500,"",0.148666666666667,0.166,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","full vs blank_full","neutral",0.0498560000000005,0.00895999708570715,0.0916069356565371,NA,500,"",0.148666666666667,0.166,NA,NA,"",FALSE
-"descriptive","image reliance: accuracy","internvl3_5_8b","roi vs blank_roi","neutral",-0.01,-0.0506666666666667,0.0306666666666666,NA,500,"",0.627333333333333,1,NA,NA,"",FALSE
-"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","roi vs blank_roi","neutral",0.000911999999999968,-0.060821885955574,0.0624804800115318,NA,500,"",0.627333333333333,1,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","age_42 vs neutral",0.00372799999999929,-0.0120041610122335,0.0196841738740471,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","age_42 vs neutral",0.0113759999999999,-0.0256346410202317,0.0482675608790142,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","age_68 vs neutral",-0.0021440000000007,-0.0170889614190696,0.0127802721998996,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","age_68 vs neutral",-0.00431199999999998,-0.0440095497693596,0.0359486987451474,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","history_yes vs neutral",0.00924799999999859,-0.00643618387262457,0.0254252287533546,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","history_yes vs neutral",-0.0169679999999999,-0.0646963820952655,0.0290240356794426,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","history_no vs neutral",-0.00683200000000028,-0.0255882337841777,0.0116064755092806,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","history_no vs neutral",-0.0154319999999999,-0.0581320816938427,0.0267801398239064,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","combined vs neutral",-0.0159519999999995,-0.0674740733627809,0.0366591801011231,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","combined vs neutral",-0.00275999999999976,-0.0551150203277989,0.0514004759269064,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.0248959999999995,-0.069126688988855,0.0203340019978482,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","colleague_benign vs neutral",-0.0821199999999999,-0.156108203491625,-0.00993174112902734,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","colleague_malignant vs neutral",-0.0210560000000003,-0.061856891239754,0.0197152942549174,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","colleague_malignant vs neutral",-0.023888,-0.0698835263923096,0.0210358478011835,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","full","irrelevant vs neutral",-0.0124160000000008,-0.0371761451947681,0.0116981602401168,NA,500,"",0.5468,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","full","irrelevant vs neutral",-0.00502399999999992,-0.0477081156982024,0.0361621290079977,NA,500,"",0.543544,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","roi","colleague_benign vs neutral",0.0468960000000001,-0.0231698550494781,0.116032185663082,NA,500,"",0.4692,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","roi","colleague_benign vs neutral",0.021016,-0.0279601129152182,0.0703134276479386,NA,500,"",0.466984,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","roi","colleague_malignant vs neutral",0.0655200000000001,0.000527896900500023,0.129514900959646,NA,500,"",0.4692,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","roi","colleague_malignant vs neutral",0.077824,0.00754353571203296,0.147114456007717,NA,500,"",0.466984,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","no_image","colleague_benign vs neutral",0,0,0,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","no_image","colleague_benign vs neutral",0,-0.0444322313714133,0.0435218382176232,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","no_image","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","no_image","colleague_malignant vs neutral",0,-0.0888644627428265,0.0870436764352464,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_full","colleague_benign vs neutral",0,0,0,NA,500,"",0.496944,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","blank_full","colleague_benign vs neutral",0.00302400000000003,-0.0842601111998189,0.092397405271994,NA,500,"",0.496976,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_full","colleague_malignant vs neutral",0.00172800000000001,-0.0083854353981776,0.0121120026785968,NA,500,"",0.496944,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","blank_full","colleague_malignant vs neutral",0.00302400000000003,-0.0407121569950517,0.047419215396587,NA,500,"",0.496976,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_roi","colleague_benign vs neutral",0.0634240000000001,0.0338178039395751,0.0928920328323784,NA,500,"",0.468288,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","blank_roi","colleague_benign vs neutral",0.0672,0.0380211778790925,0.0961529018322722,NA,500,"",0.4328,NA,NA,NA,"",FALSE
+"descriptive","AUROC p_malignant shift","internvl3_5_8b","blank_roi","colleague_malignant vs neutral",0.000159999999999993,0,0.000580516916971833,NA,500,"",0.468288,NA,NA,NA,"",FALSE
+"descriptive","AUROC verbal shift","internvl3_5_8b","blank_roi","colleague_malignant vs neutral",0.05232,0.0056557307210069,0.0993290061472003,NA,500,"",0.4328,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","internvl3_5_8b","full vs no_image","neutral",0.0166666666666667,-0.0106666666666667,0.0433499999999998,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","full vs no_image","neutral",0.0468000000000005,-0.0387694640356142,0.132225011268682,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","internvl3_5_8b","full vs blank_full","neutral",0.0186666666666667,-1.66666666666497e-05,0.038,NA,500,"",0.498,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","full vs blank_full","neutral",0.0498560000000005,0.00895999708570715,0.0916069356565371,NA,500,"",0.496944,NA,NA,NA,"",FALSE
+"descriptive","image reliance: accuracy","internvl3_5_8b","roi vs blank_roi","neutral",-0.01,-0.0506666666666667,0.0306666666666666,NA,500,"",0.5,NA,NA,NA,"",FALSE
+"descriptive","image reliance: AUROC p_malignant","internvl3_5_8b","roi vs blank_roi","neutral",0.000911999999999968,-0.060821885955574,0.0624804800115318,NA,500,"",0.468288,NA,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","internvl3_5_8b","roi","colleague_benign vs neutral",-0.627333333333333,-0.652,-0.602666666666666,NA,500,"500 of 500 cases",0.627333333333333,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","internvl3_5_8b","roi vs full","colleague_benign vs neutral, ROI minus full",-0.478666666666667,-0.507333333333333,-0.449333333333333,NA,500,"",0.627333333333333,0.148666666666667,NA,NA,"",FALSE
 "descriptive","malignant rate shift (ROI)","internvl3_5_8b","roi","colleague_malignant vs neutral",0.372666666666667,0.348,0.397333333333333,NA,500,"500 of 500 cases",0.627333333333333,NA,NA,NA,"",FALSE
 "descriptive","image kind: shift difference","internvl3_5_8b","roi vs full","colleague_malignant vs neutral, ROI minus full",-0.478666666666667,-0.507333333333334,-0.449333333333334,NA,500,"",0.627333333333333,0.148666666666667,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","colleague_malignant vs neutral",0.825409907807463,0.812653080720754,0.837423779813614,NA,500,"500 of 500 cases",0.148666666666667,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","colleague_benign vs neutral",-0.170115623548598,-0.182960348675927,-0.158075394858638,NA,500,"500 of 500 cases",0.148666666666667,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","age_68 vs age_42",0.168244261843022,0.158369894707537,0.178163055970198,NA,500,"500 of 500 cases",0.0946666666666666,NA,NA,NA,"",FALSE
-"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","history_yes vs history_no",0.180841948872636,0.175312138249063,0.186630930685263,NA,500,"500 of 500 cases",0.00533333333333333,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","colleague_malignant vs neutral",0.825409907807463,0.812653080720754,0.837423779813614,NA,500,"500 of 500 cases",0.17097426699049,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","colleague_benign vs neutral",-0.170115623548598,-0.182960348675927,-0.158075394858638,NA,500,"500 of 500 cases",0.17097426699049,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","age_68 vs age_42",0.168244261843022,0.158369894707537,0.178163055970198,NA,500,"500 of 500 cases",0.150444749601179,NA,NA,NA,"",FALSE
+"sensitivity","p_malignant shift, low mass excluded (S3)","internvl3_5_8b","full","history_yes vs history_no",0.180841948872636,0.175312138249063,0.186630930685263,NA,500,"500 of 500 cases",0.0386859432804197,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","internvl3_5_8b","no_image","colleague_benign vs neutral",-0.165333333333333,-0.18,-0.150666666666667,NA,500,"500 of 500 cases",0.165333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","internvl3_5_8b","no_image","colleague_malignant vs neutral",0.834666666666667,0.82,0.849333333333334,NA,500,"500 of 500 cases",0.165333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift (control image)","internvl3_5_8b","blank_full","colleague_benign vs neutral",-0.166,-0.180666666666667,-0.151333333333333,NA,500,"500 of 500 cases",0.166,NA,NA,NA,"",FALSE
@@ -366,125 +366,125 @@
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","internvl3_5_8b","full","history_yes vs irrelevant",0.249333333333333,0.236,0.262666666666666,NA,500,"500 of 500 cases",0.00733333333333333,NA,NA,NA,"",FALSE
 "exploratory","malignant rate shift vs irrelevant (exploratory 2)","internvl3_5_8b","full","history_no vs irrelevant",-0.002,-0.00533333333333333,0.000666666666666667,NA,500,"500 of 500 cases",0.00733333333333333,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_benign",-0.00227244248606654,-0.00231593108892478,-0.00222673525607663,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_benign",-0.00227244248606654,-0.00231593108892478,-0.00222673525607663,NA,500,"",0.0023073537176559,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_malignant",-2.50279641456075e-09,-2.60126198081689e-09,-2.40587773037149e-09,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_full","neutral",-0.331117021276596,-0.350450948215396,-0.310958904109589,NA,500,"",0.166,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","neutral",-0.196386330519279,-0.198296772173536,-0.194494002606813,NA,500,"",0.166,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","colleague_malignant",-2.50279641456075e-09,-2.60126198081689e-09,-2.40587773037149e-09,NA,500,"",0.999999998579036,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_full","neutral",-0.331117021276596,-0.350450948215396,-0.310958904109589,NA,500,"",0.331117021276596,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_full","neutral",-0.196386330519279,-0.198296772173536,-0.194494002606813,NA,500,"",0.215585128913972,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_benign",6.4287174897298e-11,5.32695554997649e-11,7.54388619068106e-11,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_benign",6.4287174897298e-11,5.32695554997649e-11,7.54388619068106e-11,NA,500,"",5.51417989773027e-10,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_malignant",-5.57641487510807e-05,-5.91367702090034e-05,-5.22062222667846e-05,NA,500,"",1,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","colleague_malignant",-5.57641487510807e-05,-5.91367702090034e-05,-5.22062222667846e-05,NA,500,"",0.999999998541007,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","blank_roi","neutral",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","neutral",-0.00131053263788994,-0.00142162434369458,-0.00119665291124003,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","age_42",-0.140829445898282,-0.167157824268949,-0.115163361561315,NA,500,"",0.0946666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","age_42",-0.229723503758761,-0.240375458961544,-0.218630241288551,NA,500,"",0.0946666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","age_68",-0.633896063260894,-0.666943956513138,-0.600282326484846,NA,500,"",0.395333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","age_68",-0.417565700282618,-0.435500976266592,-0.398730264386054,NA,500,"",0.395333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","blank_roi","neutral",-0.00131053263788994,-0.00142162434369458,-0.00119665291124003,NA,500,"",0.999238734159901,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","age_42",-0.140829445898282,-0.167157824268949,-0.115163361561315,NA,500,"",0.164893617021277,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","age_42",-0.229723503758761,-0.240375458961544,-0.218630241288551,NA,500,"",0.265000203475548,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","age_68",-0.633896063260894,-0.666943956513138,-0.600282326484846,NA,500,"",0.711436170212766,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","age_68",-0.417565700282618,-0.435500976266592,-0.398730264386054,NA,500,"",0.526915107318466,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","colleague_benign",-0.00170222877997472,-0.00186253640577752,-0.00154361176060095,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","colleague_benign",-0.00170222877997472,-0.00186253640577752,-0.00154361176060095,NA,500,"",0.00170748819350558,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","colleague_malignant",-0.00667212426569763,-0.0103605467111753,-0.00343173173104993,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","combined",-0.292425190579133,-0.321333333333333,-0.264019718715499,NA,500,"",0.170666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","combined",-0.218907033509311,-0.233444959672825,-0.204340038039067,NA,500,"",0.170666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","history_no",2.84446467174876e-05,-0.00386724044233374,0.00397518329327285,NA,500,"",0.00533333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","history_no",-0.0571831426120431,-0.0620743337404384,-0.0524909033469303,NA,500,"",0.00533333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","history_yes",-0.479967857549209,-0.502042524055247,-0.45798066102391,NA,500,"",0.256666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","history_yes",-0.336413599265715,-0.345511411580501,-0.327046219632988,NA,500,"",0.256666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","irrelevant",-0.00662760268517465,-0.0168582304713942,0.00168790556693987,NA,500,"",0.00733333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","irrelevant",-0.0572361660315625,-0.0656230037158594,-0.0491114131701852,NA,500,"",0.00733333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.238078521568594,-0.251491323378162,-0.223623620853199,NA,500,"",0.148666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","colleague_malignant",-0.00667212426569763,-0.0103605467111753,-0.00343173173104993,NA,500,"",0.999711340765114,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","combined",-0.292425190579133,-0.321333333333333,-0.264019718715499,NA,500,"",0.316489361702128,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","combined",-0.218907033509311,-0.233444959672825,-0.204340038039067,NA,500,"",0.276685975341114,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","history_no",2.84446467174876e-05,-0.00386724044233374,0.00397518329327285,NA,500,"",0.00531914893617021,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","history_no",-0.0571831426120431,-0.0620743337404384,-0.0524909033469303,NA,500,"",0.0672012703962919,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","history_yes",-0.479967857549209,-0.502042524055247,-0.45798066102391,NA,500,"",0.496010638297872,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","history_yes",-0.336413599265715,-0.345511411580501,-0.327046219632988,NA,500,"",0.387286140320226,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","full","irrelevant",-0.00662760268517465,-0.0168582304713942,0.00168790556693987,NA,500,"",0.0106382978723404,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","irrelevant",-0.0572361660315625,-0.0656230037158594,-0.0491114131701852,NA,500,"",0.0646054281027097,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","full","neutral",-0.238078521568594,-0.251491323378162,-0.223623620853199,NA,500,"",0.289696089746029,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_benign",-7.40896799996826e-08,-8.10566545711295e-08,-6.75121831705304e-08,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_benign",-7.40896799996826e-08,-8.10566545711295e-08,-6.75121831705304e-08,NA,500,"",7.7500005850191e-08,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_malignant",-0.000550579432728071,-0.000582257509914696,-0.000516981519167126,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","no_image","neutral",0.331550802139037,0.31129476584022,0.350649350649351,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","neutral",0.126993109602428,0.108503501771753,0.144349540118848,NA,500,"",0.165333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","colleague_malignant",-0.000550579432728071,-0.000582257509914696,-0.000516981519167126,NA,500,"",0.999999989896098,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","no_image","neutral",0.331550802139037,0.31129476584022,0.350649350649351,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","no_image","neutral",0.126993109602428,0.108503501771753,0.144349540118848,NA,500,"",0.205189458315478,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","colleague_benign",-0.000135467791713138,-0.00025484849633749,-4.02958477056635e-05,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","colleague_benign",-0.000135467791713138,-0.00025484849633749,-4.02958477056635e-05,NA,500,"",0.000135679935874109,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","colleague_malignant",-0.000108583977104337,-0.000128314680852817,-9.06347287044473e-05,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","roi","neutral",-0.221989134144954,-0.271231998570144,-0.172867872870113,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","neutral",-0.0794991013520406,-0.119767065906422,-0.0400940585226638,NA,500,"",0.627333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","colleague_malignant",-0.000108583977104337,-0.000128314680852817,-9.06347287044473e-05,NA,500,"",0.999988368893602,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","internvl3_5_8b","roi","neutral",-0.221989134144954,-0.271231998570144,-0.172867872870113,NA,500,"",0.738031914893617,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","internvl3_5_8b","roi","neutral",-0.0794991013520406,-0.119767065906422,-0.0400940585226638,NA,500,"",0.632894758102752,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_benign",4.6247310148607e-05,4.54017688242881e-05,4.70681673373549e-05,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_malignant",-0.333342814882239,-0.334937631713846,-0.333333333333333,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_malignant",-0.15174639762226,-0.158064219362253,-0.146037511378214,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_benign",4.6247310148607e-05,4.54017688242881e-05,4.70681673373549e-05,NA,500,"",1.4566657058394e-05,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_malignant",-0.333342814882239,-0.334937631713846,-0.333333333333333,NA,500,"",0.664893617021277,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","colleague_malignant",-0.15174639762226,-0.158064219362253,-0.146037511378214,NA,500,"",0.564041321444776,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_full","neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","neutral",5.2273282288146e-05,5.18181796460903e-05,5.27147008714189e-05,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_full","neutral",5.2273282288146e-05,5.18181796460903e-05,5.27147008714189e-05,NA,500,"",4.42431929123162e-06,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_benign",6.47388179024415e-05,6.4014776092597e-05,6.54738533542758e-05,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_malignant",-0.00355558083968599,-0.042710402118436,0.0355808574986657,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_malignant",-0.174193593191022,-0.201260350853233,-0.146938351034816,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_benign",6.47388179024415e-05,6.4014776092597e-05,6.54738533542758e-05,NA,500,"",2.36719762880262e-05,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_malignant",-0.00355558083968599,-0.042710402118436,0.0355808574986657,NA,500,"",0.335106382978723,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","colleague_malignant",-0.174193593191022,-0.201260350853233,-0.146938351034816,NA,500,"",0.507079370823664,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","neutral",9.51466829656354e-05,9.38155116136096e-05,9.64825242887523e-05,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","age_42",-0.00132978723404255,-0.00407608695652174,0,NA,500,"",0.000666666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","age_42",-0.00396256595375866,-0.00779196621484959,-0.00145890085886232,NA,500,"",0.000666666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","age_68",-0.00398936170212766,-0.010738255033557,0,NA,500,"",0.002,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","age_68",-0.00517080987645144,-0.00921455623945519,-0.00234494010946765,NA,500,"",0.002,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","blank_roi","neutral",9.51466829656354e-05,9.38155116136096e-05,9.64825242887523e-05,NA,500,"",2.37965645477872e-05,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","age_42",-0.00132978723404255,-0.00407608695652174,0,NA,500,"",0.00132978723404255,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","age_42",-0.00396256595375866,-0.00779196621484959,-0.00145890085886232,NA,500,"",0.00462700316869251,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","age_68",-0.00398936170212766,-0.010738255033557,0,NA,500,"",0.00398936170212766,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","age_68",-0.00517080987645144,-0.00921455623945519,-0.00234494010946765,NA,500,"",0.00610922702107578,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_benign",3.65436424254784e-05,3.24840395679481e-05,4.19300087751623e-05,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_malignant",-0.33379081806804,-0.35738171810749,-0.310312596672717,NA,500,"",0.664666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_malignant",-0.264452280340047,-0.277898330070036,-0.25029180038933,NA,500,"",0.664666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_benign",3.65436424254784e-05,3.24840395679481e-05,4.19300087751623e-05,NA,500,"",1.02290079183926e-05,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_malignant",-0.33379081806804,-0.35738171810749,-0.310312596672717,NA,500,"",0.831117021276596,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","colleague_malignant",-0.264452280340047,-0.277898330070036,-0.25029180038933,NA,500,"",0.785464057516057,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","combined",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","combined",-0.0023441829674123,-0.004735330459043,-0.000690175855074768,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","combined",-0.0023441829674123,-0.004735330459043,-0.000690175855074768,NA,500,"",0.00314852100654349,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","history_no",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","history_no",-0.00149828565851615,-0.00322844475487244,-0.000321480183090345,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","history_no",-0.00149828565851615,-0.00322844475487244,-0.000321480183090345,NA,500,"",0.00200425035955172,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","history_yes",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","history_yes",-0.00285604450006792,-0.00553101583600606,-0.00103459165587949,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","irrelevant",0.00133689839572193,0,0.0040983606557377,NA,500,"",0.000666666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","irrelevant",-0.00227604693637895,-0.00529531188331394,-0.000164061955741776,NA,500,"",0.000666666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00432794623788475,-0.00903182646678506,-0.000889055002763848,NA,500,"",0.00333333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","history_yes",-0.00285604450006792,-0.00553101583600606,-0.00103459165587949,NA,500,"",0.00390321291438809,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","full","irrelevant",0.00133689839572193,0,0.0040983606557377,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","irrelevant",-0.00227604693637895,-0.00529531188331394,-0.000164061955741776,NA,500,"",0.00420501283642256,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","full","neutral",-0.00432794623788475,-0.00903182646678506,-0.000889055002763848,NA,500,"",0.00632916205769427,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_benign",8.0841210729224e-05,7.79715711772246e-05,8.35540487332385e-05,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_benign",8.0841210729224e-05,7.79715711772246e-05,8.35540487332385e-05,NA,500,"",1.02238263937871e-05,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_malignant",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_malignant",0.138501841608688,0.134767237382078,0.142072322235037,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","colleague_malignant",0.138501841608688,0.134767237382078,0.142072322235037,NA,500,"",0.0906115884434232,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","no_image","neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","neutral",6.08476986471461e-05,6.0493439662752e-05,6.1201957631541e-05,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","no_image","neutral",6.08476986471461e-05,6.0493439662752e-05,6.1201957631541e-05,NA,500,"",1.10732819346359e-06,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_benign",4.34599018919045e-05,4.19349454712804e-05,4.50711815498165e-05,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_malignant",-0.389087211286836,-0.421054329916614,-0.35694830538856,NA,500,"",0.296666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_malignant",-0.32737793875495,-0.342210133297285,-0.312388776391316,NA,500,"",0.296666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_benign",4.34599018919045e-05,4.19349454712804e-05,4.50711815498165e-05,NA,500,"",1.46816216383676e-05,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_malignant",-0.389087211286836,-0.421054329916614,-0.35694830538856,NA,500,"",0.490691489361702,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","colleague_malignant",-0.32737793875495,-0.342210133297285,-0.312388776391316,NA,500,"",0.522395687767093,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","medgemma_1_5_4b","roi","neutral",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","neutral",6.23685216447756e-05,1.89906248257581e-05,9.6893946828703e-05,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","medgemma_1_5_4b","roi","neutral",6.23685216447756e-05,1.89906248257581e-05,9.6893946828703e-05,NA,500,"",9.60688074039772e-05,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_benign",4.15309786611716e-10,3.7590320446205e-10,4.56207855837553e-10,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_benign",4.15309786611716e-10,3.7590320446205e-10,4.56207855837553e-10,NA,500,"",8.44078591425678e-11,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_malignant",0.0981835563882173,0.089820748281996,0.106233449836847,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_full","neutral",1,1,1,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","neutral",0.5114183776081,0.504294747188904,0.518456352882178,NA,500,"",0.498666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","colleague_malignant",0.0981835563882173,0.089820748281996,0.106233449836847,NA,500,"",0.880655472289199,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_full","neutral",1,1,1,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_full","neutral",0.5114183776081,0.504294747188904,0.518456352882178,NA,500,"",0.315621129217419,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_benign",3.04382329385509e-10,2.96279182457507e-10,3.12972441884688e-10,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_benign",3.04382329385509e-10,2.96279182457507e-10,3.12972441884688e-10,NA,500,"",4.31890093070346e-11,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_malignant",0,0,0,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_malignant",0.00471168401607547,0.00441582772149521,0.00500370297045532,NA,500,"",1,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_roi","neutral",0.92686170212766,0.909208778249923,0.94414187054322,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","neutral",0.413449835031471,0.407878883239888,0.41898112845139,NA,500,"",0.395490026019081,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","age_42",0.0721996245306633,0.0540447668258727,0.0919046232098216,NA,500,"",0.0373333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","age_42",0.1714808107636,0.160106701607478,0.183038628164969,NA,500,"",0.0373333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","age_68",0.138105870975082,0.10935228781413,0.169102021587019,NA,500,"",0.144666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","age_68",0.134557483749845,0.122039120087962,0.147216826041578,NA,500,"",0.144666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","colleague_malignant",0.00471168401607547,0.00441582772149521,0.00500370297045532,NA,500,"",0.994868695241154,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","blank_roi","neutral",0.92686170212766,0.909208778249923,0.94414187054322,NA,500,"",0.0731382978723404,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","blank_roi","neutral",0.413449835031471,0.407878883239888,0.41898112845139,NA,500,"",0.29325542555749,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","age_42",0.0721996245306633,0.0540447668258727,0.0919046232098216,NA,500,"",0.00132978723404255,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","age_42",0.1714808107636,0.160106701607478,0.183038628164969,NA,500,"",0.107352506954543,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","age_68",0.138105870975082,0.10935228781413,0.169102021587019,NA,500,"",0.0757978723404255,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","age_68",0.134557483749845,0.122039120087962,0.147216826041578,NA,500,"",0.25038870585745,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","colleague_benign",1.68567267347899e-10,9.75947116197283e-11,2.73300777779998e-10,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","colleague_malignant",0.0654511320969394,0.00370828473705377,0.127277801183071,NA,500,"",0.522,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","colleague_malignant",0.0699762461525191,0.00785322289214358,0.131642275897684,NA,500,"",0.522,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","combined",0.268844578450336,0.236166363313307,0.302295780340527,NA,500,"",0.158,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","combined",0.257118884715633,0.237257384561263,0.276762489077508,NA,500,"",0.158,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","history_no",0.0467985550119467,0.0324877532706471,0.0624173965315623,NA,500,"",0.0246666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","history_no",0.128637716411071,0.113280413105997,0.144567822807322,NA,500,"",0.0246666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","history_yes",0.557621743087951,0.522936736756432,0.592840628547624,NA,500,"",0.303333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","history_yes",0.376103198704602,0.35842294544662,0.393110995564914,NA,500,"",0.303333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","irrelevant",0.108295881215155,0.0867859320638792,0.130390412258326,NA,500,"",0.0553333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","irrelevant",0.246864898170936,0.236659919680576,0.257325431248294,NA,500,"",0.0553333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.231277026019147,0.219227664367068,0.243781019694904,NA,500,"",0.122666666666667,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","colleague_benign",1.68567267347899e-10,9.75947116197283e-11,2.73300777779998e-10,NA,500,"",4.12623177864672e-11,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","colleague_malignant",0.0654511320969394,0.00370828473705377,0.127277801183071,NA,500,"",0.48936170212766,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","colleague_malignant",0.0699762461525191,0.00785322289214358,0.131642275897684,NA,500,"",0.462259239250581,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","combined",0.268844578450336,0.236166363313307,0.302295780340527,NA,500,"",0.023936170212766,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","combined",0.257118884715633,0.237257384561263,0.276762489077508,NA,500,"",0.0712832508385258,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","history_no",0.0467985550119467,0.0324877532706471,0.0624173965315623,NA,500,"",0.00132978723404255,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","history_no",0.128637716411071,0.113280413105997,0.144567822807322,NA,500,"",0.0223513899219613,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","history_yes",0.557621743087951,0.522936736756432,0.592840628547624,NA,500,"",0.0252659574468085,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","history_yes",0.376103198704602,0.35842294544662,0.393110995564914,NA,500,"",0.163188622617411,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","full","irrelevant",0.108295881215155,0.0867859320638792,0.130390412258326,NA,500,"",0.00132978723404255,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","irrelevant",0.246864898170936,0.236659919680576,0.257325431248294,NA,500,"",0.10726252596368,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","full","neutral",0.231277026019147,0.219227664367068,0.243781019694904,NA,500,"",0.195580905282425,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_benign",2.96160990563434e-10,2.79098617862093e-10,3.13897499988201e-10,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_malignant",0.335106382978723,0.315068493150685,0.354005167958656,NA,500,"",0.832,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_malignant",0.335381960214012,0.315351589137185,0.354273496704358,NA,500,"",0.832,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","no_image","neutral",0.668449197860963,0.649350649350649,0.68870523415978,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","neutral",0.188093748511551,0.158564427617066,0.218606708828431,NA,500,"",0.333333333333333,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_benign",2.96160990563434e-10,2.79098617862093e-10,3.13897499988201e-10,NA,500,"",5.13678056774727e-11,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_malignant",0.335106382978723,0.315068493150685,0.354005167958656,NA,500,"",0.664893617021277,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","colleague_malignant",0.335381960214012,0.315351589137185,0.354273496704358,NA,500,"",0.664566422293634,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","no_image","neutral",0.668449197860963,0.649350649350649,0.68870523415978,NA,500,"",0,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","no_image","neutral",0.188093748511551,0.158564427617066,0.218606708828431,NA,500,"",0.323056956576315,NA,NA,NA,"",FALSE
 "exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_benign",0,0,0,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_benign",2.16012329405164e-10,1.06678043366003e-10,3.59165472482944e-10,NA,500,"",0,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_malignant",0.317264478325179,0.265332957842635,0.367421044062986,NA,500,"",0.736666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_malignant",0.317052014862612,0.265253322946065,0.367167083856199,NA,500,"",0.736666666666667,NA,NA,NA,"",FALSE
-"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","roi","neutral",0.0135129322704594,0.00409642777552695,0.0240142767383675,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
-"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","neutral",0.0634695687128056,0.0496185177664543,0.0776389648309884,NA,500,"",0.00937081659973226,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_benign",2.16012329405164e-10,1.06678043366003e-10,3.59165472482944e-10,NA,500,"",5.29974293783355e-11,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_malignant",0.317264478325179,0.265332957842635,0.367421044062986,NA,500,"",0.578457446808511,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","colleague_malignant",0.317052014862612,0.265253322946065,0.367167083856199,NA,500,"",0.577466941224552,NA,NA,NA,"",FALSE
+"exploratory","answer order: malignant rate (malignant first minus benign first)","qwen3_vl_8b","roi","neutral",0.0135129322704594,0.00409642777552695,0.0240142767383675,NA,500,"",0.00265957446808511,NA,NA,NA,"",FALSE
+"exploratory","answer order: mean p_malignant (malignant first minus benign first)","qwen3_vl_8b","roi","neutral",0.0634695687128056,0.0496185177664543,0.0776389648309884,NA,500,"",0.0449043931766507,NA,NA,NA,"",FALSE
