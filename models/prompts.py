@@ -33,6 +33,10 @@ ANSWER_FORMATS = ("forced", "plain")
 # blank_full the full-image frame, blank_roi the ROI frame. "blank_image" is
 # the full-size blank image as first named in prompts/frame.yaml.
 FRAME_FOR = {"no_image": "full", "blank_image": "full", "blank_full": "full", "blank_roi": "roi"}
+# Where the context sentence goes. "middle" is the study design
+# (docs/PREREGISTRATION.md, 4.1: <intro> [<context>] <task>); "end" puts it
+# after the task, for the Phase 7 position check (docs/ROBUSTNESS.md).
+POSITIONS = ("middle", "end")
 
 
 @cache
@@ -65,12 +69,20 @@ def render(
     image_kind: str,
     case: dict,
     answer_format: str = "forced",
+    position: str = "middle",
 ) -> str:
     if condition not in CONDITIONS:
         raise ValueError(f"unknown condition {condition!r}")
+    if position not in POSITIONS:
+        raise ValueError(f"unknown position {position!r}")
     frame = _load("frame")[FRAME_FOR.get(image_kind, image_kind)][paraphrase]
     context = context_sentence(condition, paraphrase, case)
-    body = " ".join(part for part in (frame["intro"], context, frame["task"]) if part)
+    parts = (
+        (frame["intro"], context, frame["task"])
+        if position == "middle"
+        else (frame["intro"], frame["task"], context)
+    )
+    body = " ".join(part for part in parts if part)
     first, second = answer_order(int(case["answer_order_offset"]), paraphrase)
     fmt = _load("answer_format")[answer_format].format(first=first, second=second)
     return f"{body}\n\n{fmt}"

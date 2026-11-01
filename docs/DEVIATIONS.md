@@ -55,6 +55,110 @@ already known when the change was made.
   rates. It changes no above-chance label, which depends only on the AUROC
   of `p_malignant`.
 
+## 4. Secondary analyses split into a key secondary family and descriptive outcomes (2026-10-27)
+
+- **What:** section 7.1 put every secondary contrast with a p-value into one
+  Benjamini-Hochberg family. The secondary analyses are now split in two.
+  - **Key secondary family** (Benjamini-Hochberg at q = 0.05), full images
+    and forced format unless stated, per model:
+    - the paired `p_malignant` shift for each of the four primary contrasts
+      (`colleague_malignant` and `colleague_benign` vs `neutral`, `age_68`
+      vs `age_42`, `history_yes` vs `history_no`);
+    - `irrelevant` vs `neutral` on the primary outcome (the control);
+    - the answer-order effect: the malignant rate when malignant is listed
+      first minus when benign is, on `neutral`;
+    - the abstention rate on `neutral` under the plain format minus the
+      forced format;
+    - BI-RADS vs assessment consistency: the change in the consistent share
+      for each of the four primary contrasts.
+
+    That is 11 tests per model, 33 in all. p-values use the paired case
+    bootstrap of section 7. Rate differences are over calls, with cases
+    resampled.
+  - **Descriptive**, with estimates and 95% intervals but no p-values or
+    corrections: the colleague contrasts on ROI crops and their difference
+    from full images, AUROC shifts versus `neutral` for `p_malignant` and
+    verbal confidence on every image kind, image reliance (accuracy and
+    AUROC), and sycophancy for every image kind.
+  - Sensitivity and exploratory analyses are unchanged (sections 8 and 9),
+    except that the answer-order effect on full images under `neutral`
+    moves from exploratory into the key secondary family. Its other cells
+    stay exploratory.
+- **Why:** the original family would have held about 170 tests, mostly
+  descriptive checks (ROI and verbal-confidence versions, image reliance,
+  sycophancy by image kind). Correcting them together with the contrasts
+  the study is about would dilute those contrasts. The key family keeps the
+  pre-specified secondary outcome (the `p_malignant` shift), the control,
+  and three per-model properties of the answers.
+- **Results known:** decided before any tier T1 to T4 output was read. The
+  `p_malignant`, control and consistency tests use T1 and T2 outputs, which
+  had not been read. The answer-order and abstention tests use only the
+  tier T0 outputs, and their descriptive values were already reported in
+  `reports/baseline.md` (Phase 4) when this decision was made. The primary
+  family and its Holm correction are unchanged. The bootstrap p-value keeps
+  its conservative handling of ties: a resample exactly at 0 counts as the
+  other side of 0.
+
+## 5. Phase 4 case-level `p_malignant` averaged over valid answers only (2026-10-27)
+
+- **What:** `eval/baseline.py` now averages case-level `p_malignant` and
+  verbal P(malignant) over valid answers only. The first version averaged
+  `p_malignant` over every call without a run error, including abstentions
+  and parse failures. Valid answers are now also required to be parsed.
+  The R analysis uses the same rule.
+- **Why:** section 5 of the plan defines case-level values as averages over
+  the paraphrases with a valid answer.
+- **Results known:** yes. Found after the Phase 4 report, when the R
+  analysis was checked against it. The two rules agree on every cell where
+  all calls are valid, including the full-image `neutral` cells that decide
+  the above-chance labels, so no label can change. On the committed T0
+  outputs, only two Qwen3-VL cells change: `roi` (AUROC 0.566 to 0.567) and
+  `blank_roi` (AUROC 0.535 to 0.497, Brier 0.253 to 0.274, ECE 0.076 to
+  0.161). `reports/baseline.md` is regenerated with the plan's rule when
+  the analysis branch is merged after Phase 5.
+
+## 6. Model and setting for the second decoding check (2026-10-27)
+
+- **What:** the Phase 7 check "a second decoding setting for one model"
+  (plan section 9) is run on Qwen3-VL, with sampling at temperature 0.7,
+  top_p 1.0 and seed 1 set before every call, on full images, forced
+  format, for `neutral` and the six conditions of the primary contrasts
+  (`configs/robustness.yaml`, variant `sampled`; `docs/ROBUSTNESS.md`, R4).
+- **Why:** the plan names the check but not the model or the setting. A
+  second seed alone would not change any answer, because the study decodes
+  greedily and the determinism audits show identical reruns; the second
+  setting therefore samples. Qwen3-VL was chosen because sampling can only
+  change answers whose probabilities are not near 0 or 1: on the tier T0
+  outputs (full images, `neutral`, forced format), 74% of Qwen3-VL's valid
+  answers have `p_malignant` between 0.2 and 0.8, against 29% for
+  InternVL3.5 and 0.4% for MedGemma.
+- **Results known:** chosen from the tier T0 outputs only, which had been
+  reported in `reports/baseline.md`. No tier T1 to T4 output had been read,
+  and no Phase 7 run has been made.
+
+## 7. Scope of the Phase 7 position and decoding checks (2026-10-27)
+
+- **What:** the two Phase 7 checks that need new model runs cover only the
+  colleague contrasts on full images, forced format:
+  - position of the context sentence (variant `position_end`):
+    `colleague_benign` and `colleague_malignant`, all three models; the
+    study's `neutral` outputs are the reference, since `neutral` has no
+    context sentence;
+  - second decoding setting (variant `sampled`): Qwen3-VL at temperature
+    0.7, top_p 1.0, seed 1, on `neutral`, `colleague_benign` and
+    `colleague_malignant`.
+
+  This narrows entry 6, which listed all six context conditions of the
+  primary contrasts for the decoding check. The age and history contrasts
+  (H3, H4) are checked by agreement across paraphrases and the strict
+  parser, which need no new runs, but not by these two checks.
+- **Why:** the plan names the checks without a scope. The narrowed scope
+  costs about 16 hours of runs instead of about 44, and keeps the contrasts
+  where a prompt sentence states an answer outright.
+- **Results known:** decided by the study owner on 2026-10-27, blind to
+  tiers T1 to T4: no T1 to T4 output had been read, and no Phase 7 run had
+  been made. The runs start only after Phase 5 is complete.
+
 ## 8. Unattended run procedure from tier T2 on (2026-10-29)
 
 Entries 4 to 7 concern the analysis and are added to this file when the

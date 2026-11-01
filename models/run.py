@@ -3,6 +3,10 @@
     caffeinate -dimsu uv run python scripts/pinned_step.py --config configs/models.yaml -- \\
         uv run --group models python -m models.run --tier T0 --model qwen3_vl_8b
 
+A Phase 7 robustness variant (configs/robustness.yaml, docs/ROBUSTNESS.md)
+runs with --variant <name> instead of --tier and writes to
+runs/robustness/<name>/.
+
 Each call (model, image kind, condition, paraphrase, answer format, case) is
 appended to runs/<model>/<image_kind>/<condition>/p<k>[_plain].jsonl as soon
 as it finishes, and skipped on restart. Calls are ordered case by case so the
@@ -31,12 +35,14 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import yaml
 from PIL import Image
 
 from models import images, parse, prompts
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFESTS = ROOT / "data" / "manifests"
+VARIANTS = ROOT / "configs" / "robustness.yaml"
 
 COLLEAGUE = ["colleague_benign", "colleague_malignant"]
 TIERS: dict[str, list[tuple[str, str, str]]] = {
@@ -164,9 +170,29 @@ def existing_state(root: Path, model: str) -> tuple[dict[str, dict], dict[str, d
     return done, by_input
 
 
+def load_variant(name: str) -> dict:
+    variants = yaml.safe_load(VARIANTS.read_text())["variants"]
+    if name not in variants:
+        raise SystemExit(f"unknown variant {name!r}; known: {', '.join(sorted(variants))}")
+    return variants[name]
+
+
+def variant_sha256(variant: dict) -> str:
+    return sha256_text(json.dumps(variant, sort_keys=True))
+
+
+def variant_cells(variant: dict) -> list[tuple[str, str, str]]:
+    return [(variant["image_kind"], c, "forced") for c in variant["conditions"]]
+
+
 def calls_for(tier: str, model: str, case_ids: list[str]) -> list[Call]:
     """All calls of a tier in run order: case, then image kind, then prompt."""
-    cells = TIERS[tier]
+    return calls_for_cells(TIERS[tier], model, case_ids)
+
+
+def calls_for_cells(
+    cells: list[tuple[str, str, str]], model: str, case_ids: list[str]
+) -> list[Call]:
     kinds = list(dict.fromkeys(kind for kind, _, _ in cells))
     out = []
     for case_id in case_ids:
@@ -188,8 +214,10 @@ class Runner:
         load_image: Callable[[str, str], Image.Image | None],
         split: str,
         log: Callable[[str], None] = print,
+        position: str = "middle",
     ):
         self.adapter = adapter
+        self.position = position
         self.cases = cases.set_index("case_id", drop=False)
         self.root = out_root
         self.prov = provenance
@@ -208,6 +236,8 @@ class Runner:
             sent_sha,
             prompt,
         ]
+        if "variant_sha256" in self.prov:
+            parts.append(self.prov["variant_sha256"])
         return sha256_text(json.dumps(parts))
 
     def prompt_for(self, call: Call) -> str:
@@ -217,6 +247,7 @@ class Runner:
             call.image_kind,
             self.cases.loc[call.case_id].to_dict(),
             call.answer_format,
+            self.position,
         )
 
     def predict_with_retry(self, sent, prompt, input_size) -> tuple[dict | None, str | None]:
@@ -236,11 +267,11 @@ class Runner:
         for call in calls:
             record = done.get(call.key)
             if record is not None:
-                for field in ("commit", "config_sha256", "prompt_files_sha256"):
-                    if record.get(field) != self.prov[field]:
+                for field in ("commit", "config_sha256", "prompt_files_sha256", "variant_sha256"):
+                    if record.get(field) != self.prov.get(field):
                         raise SystemExit(
                             f"refusing to resume: {call.key} was written with {field}="
-                            f"{record.get(field)}, current is {self.prov[field]}"
+                            f"{record.get(field)}, current is {self.prov.get(field)}"
                         )
         todo = [c for c in calls if c.key not in done]
         self.log(f"{self.adapter.key}: {len(calls) - len(todo)} done, {len(todo)} to run")
@@ -468,7 +499,9 @@ def git(*args: str) -> subprocess.CompletedProcess:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--tier", required=True, choices=sorted(TIERS))
+    which = ap.add_mutually_exclusive_group(required=True)
+    which.add_argument("--tier", choices=sorted(TIERS))
+    which.add_argument("--variant", help="a Phase 7 variant in configs/robustness.yaml")
     ap.add_argument("--model", required=True)
     ap.add_argument("--split", default="test", choices=["test", "dev"])
     ap.add_argument("--limit", type=int, help="first N cases (dev only)")
@@ -482,6 +515,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
+    variant = load_variant(args.variant) if args.variant else None
+    if variant is not None and args.model not in variant["models"]:
+        ap.error(f"variant {args.variant} does not run {args.model}")
     if args.split == "test":
         if args.limit:
             ap.error("--limit is for the dev split only")
@@ -502,15 +538,21 @@ def main(argv: list[str] | None = None) -> int:
         "config_sha256": os.environ["PINNED_CONFIG_SHA256"],
         "prompt_files_sha256": prompt_files_sha256(),
     }
+    if variant is not None:
+        provenance |= {"variant": args.variant, "variant_sha256": variant_sha256(variant)}
     cases = load_cases(args.split)
     if args.limit:
         cases = cases.head(args.limit)
     out_root = args.out or (ROOT / "runs" if args.split == "test" else ROOT / "runs" / "dev")
+    if variant is not None and args.out is None:
+        out_root = out_root / "robustness" / args.variant
     loader = default_loader(master_sizes())
     watchdog = Watchdog(args.stall_minutes * 60, log=lambda m: print(m, flush=True))
     if args.stall_minutes > 0:
         watchdog.start()
     adapter = with_heartbeat(base.load_adapter(args.model), watchdog.beat)
+    if variant is not None and "decoding" in variant:
+        adapter.cfg["decoding"] = {**adapter.cfg["decoding"], **variant["decoding"]}
 
     use_cache = not args.no_cache
     if use_cache:
@@ -528,14 +570,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"image-feature cache {'on' if use_cache else 'OFF: outputs differed'}")
     adapter.set_feature_cache(use_cache)
 
-    runner = Runner(adapter, cases, out_root, provenance, loader, args.split)
-    calls = calls_for(args.tier, args.model, list(cases["case_id"]))
+    position = variant.get("position", "middle") if variant is not None else "middle"
+    runner = Runner(adapter, cases, out_root, provenance, loader, args.split, position=position)
+    case_ids = list(cases["case_id"])
+    if variant is not None:
+        calls = calls_for_cells(variant_cells(variant), args.model, case_ids)
+    else:
+        calls = calls_for(args.tier, args.model, case_ids)
     runner.run(calls)
-    if runner.audited(args.tier):
-        print(f"determinism audit: {args.tier} already audited at this commit", flush=True)
+    label = args.variant or args.tier
+    if runner.audited(label):
+        print(f"determinism audit: {label} already audited at this commit", flush=True)
         ok = True
     else:
-        ok = runner.audit(runner.computed_calls(calls), args.tier)
+        ok = runner.audit(runner.computed_calls(calls), label)
     watchdog.stop()
     return 0 if ok else 3
 

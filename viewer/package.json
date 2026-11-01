@@ -1,0 +1,27 @@
+{
+  "name": "vlm-mammo-context-viewer",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Static viewer of the study's model outputs. Outputs only, no images.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "data": "node scripts/build-data.ts",
+    "dev": "vite",
+    "build": "vite build",
+    "check-dist": "node scripts/check-dist.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.scripts.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.5",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5"
+  }
+}

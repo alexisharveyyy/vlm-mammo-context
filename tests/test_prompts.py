@@ -114,3 +114,47 @@ def test_answer_order_manifest_counterbalanced():
         assert len(cases) == len(pd.read_csv(MANIFESTS / f"{split}.csv"))
         counts = cases.groupby(["abnormality_type", "label", "answer_order_offset"]).size()
         assert len(counts) == 8 and counts.max() - counts.min() <= 1
+
+
+@pytest.mark.parametrize("condition", prompts.CONDITIONS)
+def test_end_position_moves_only_the_context_sentence(condition):
+    for p in prompts.PARAPHRASES:
+        middle = prompts.render(condition, p, "full", CASE).split("\n\n")
+        end = prompts.render(condition, p, "full", CASE, position="end").split("\n\n")
+        context = prompts.context_sentence(condition, p, CASE)
+        assert end[1] == middle[1]
+        if not context:
+            assert end == middle
+        else:
+            assert end[0].endswith(" " + context)
+            assert end[0].replace(" " + context, "") == middle[0].replace(" " + context, "")
+    with pytest.raises(ValueError, match="position"):
+        prompts.render(condition, 1, "full", CASE, position="start")
+
+
+def test_default_rendering_matches_the_committed_t0_prompts():
+    """Every committed T0 call was made with the prompt the default renders."""
+    import hashlib
+    import json
+
+    runs = MANIFESTS.parents[1] / "runs"
+    cases = pd.read_csv(MANIFESTS / "test.csv", dtype=str).merge(
+        pd.read_csv(MANIFESTS / "answer_order.csv", dtype=str), on="case_id"
+    )
+    rows = cases.set_index("case_id").to_dict("index")
+    checked = 0
+    for path in sorted(runs.glob("*/*/neutral/p*.jsonl")):
+        if path.parts[-4] in ("dev", "smoke", "smoke_forced"):
+            continue
+        for line in path.read_text().splitlines()[:50]:
+            r = json.loads(line)
+            text = prompts.render(
+                r["condition"],
+                r["paraphrase"],
+                r["image_kind"],
+                rows[r["case_id"]],
+                r["answer_format"],
+            )
+            assert hashlib.sha256(text.encode()).hexdigest() == r["prompt_sha256"], r["call_key"]
+            checked += 1
+    assert checked >= 50 or not runs.exists()

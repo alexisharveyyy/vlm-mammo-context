@@ -237,8 +237,7 @@ class TransformersAdapter(Adapter):
         with torch.inference_mode():
             out = self.model.generate(
                 **inputs,
-                do_sample=False,
-                max_new_tokens=self.cfg["decoding"]["max_new_tokens"],
+                **decoding_kwargs(self.cfg["decoding"]),
                 output_logits=True,
                 return_dict_in_generate=True,
                 pad_token_id=self.tokenizer.pad_token_id or self.tokenizer.eos_token_id,
@@ -270,6 +269,24 @@ class TransformersAdapter(Adapter):
                 for label, words in CLASS_WORDS.items()
             }
         return self._class_ids
+
+
+def decoding_kwargs(decoding: dict) -> dict:
+    """generate() arguments for a decoding config.
+
+    The study setting is greedy (do_sample false). The Phase 7 check samples
+    with a temperature and top_p (docs/ROBUSTNESS.md); the seed set before
+    each call makes the samples reproducible. output_logits stays the raw
+    logits, so p_malignant is read the same way under both settings.
+    """
+    kwargs = {
+        "do_sample": bool(decoding.get("do_sample", False)),
+        "max_new_tokens": decoding["max_new_tokens"],
+    }
+    if kwargs["do_sample"]:
+        kwargs["temperature"] = float(decoding["temperature"])
+        kwargs["top_p"] = float(decoding.get("top_p", 1.0))
+    return kwargs
 
 
 ADAPTERS: dict[str, type[Adapter]] = {"transformers": TransformersAdapter}

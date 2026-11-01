@@ -26,3 +26,80 @@ jobs:
         run: uv run pytest -q
       - name: Audit history and tree
         run: uv run python scripts/audit.py
+
+  analysis:
+    runs-on: ubuntu-latest
+    # R 4.4.0 (the version in analysis/renv.lock) comes preinstalled, so no
+    # system packages are installed on each run. Pinned by digest (the
+    # multi-architecture index of rocker/r-ver:4.4.0).
+    container: rocker/r-ver:4.4.0@sha256:73adabf378930f8744f56bac1fe5e99870532eb4ced1a15075991bac909d21f3
+    steps:
+      # The only system libraries needed: git for the commit in reports, and
+      # libuv for the binary build of the fs package.
+      - name: System libraries
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git libuv1
+      - uses: actions/checkout@v4
+      # The container runs as root and the workspace belongs to the runner
+      # user, so git needs the workspace marked safe to read the commit.
+      - name: Trust the workspace for git
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git rev-parse HEAD
+      - uses: astral-sh/setup-uv@v6
+      - name: Install Python
+        run: uv sync --locked
+      # Prebuilt Linux binaries from Posit Package Manager for the container's
+      # Ubuntu release, instead of building CRAN sources.
+      - name: Use binary R packages
+        run: |
+          . /etc/os-release
+          echo "RENV_CONFIG_REPOS_OVERRIDE=https://packagemanager.posit.co/cran/__linux__/$VERSION_CODENAME/latest" >> "$GITHUB_ENV"
+      # Restores the package library from the cache keyed by renv.lock, and
+      # saves it after a cache miss.
+      - uses: r-lib/actions/setup-renv@v2
+        with:
+          working-directory: analysis
+      - name: Synthetic outputs
+        run: echo "SYNTHETIC_RUNS=$RUNNER_TEMP/synthetic_runs" >> "$GITHUB_ENV"
+      - run: uv run python -m eval.synthetic --out "$SYNTHETIC_RUNS"
+      - name: R tests
+        run: Rscript analysis/tests/testthat.R
+      # CI uses 1,000 resamples; the reported analysis uses the planned 10,000.
+      # The cross-check compares point estimates, which do not depend on them.
+      - name: Analysis and cross-check, synthetic outputs
+        run: |
+          Rscript analysis/run_analysis.R --runs "$SYNTHETIC_RUNS" --out "$RUNNER_TEMP/synthetic_report" --resamples 1000
+          Rscript analysis/run_robustness.R --runs "$SYNTHETIC_RUNS" --robustness "$SYNTHETIC_RUNS/robustness" --out "$RUNNER_TEMP/synthetic_report" --resamples 200
+          uv run python -m eval.crosscheck --runs "$SYNTHETIC_RUNS" --tables "$RUNNER_TEMP/synthetic_report/analysis" --robustness "$RUNNER_TEMP/synthetic_report/robustness" --variant-runs "$SYNTHETIC_RUNS/robustness"
+      - name: Analysis and cross-check, committed outputs
+        run: |
+          Rscript analysis/run_analysis.R --final --out "$RUNNER_TEMP/report" --resamples 1000
+          Rscript analysis/run_robustness.R --final --out "$RUNNER_TEMP/report" --resamples 200
+          uv run python -m eval.crosscheck --tables "$RUNNER_TEMP/report/analysis" --robustness "$RUNNER_TEMP/report/robustness"
+
+  viewer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: viewer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: viewer/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: |
+          npm run lint
+          npm run typecheck
+      - name: Build
+        run: |
+          npm run data
+          npm run build
+      - name: Check the build contains no images
+        run: npm run check-dist
