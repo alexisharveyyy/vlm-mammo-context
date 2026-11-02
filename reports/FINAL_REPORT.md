@@ -678,6 +678,7 @@ the report or table.
 | Sensitivity S1, S3 (8.5) | `reports/analysis/flips.csv`, `reports/analysis/contrasts.csv` | `Rscript analysis/run_analysis.R --final` | `analysis/renv.lock` `bc943dd5` | `caa74c3` |
 | Sensitivity S2 and robustness (8.5, 8.6) | `reports/robustness.md`, `reports/robustness/*.csv` | `Rscript analysis/run_robustness.R --final` | `configs/robustness.yaml` `645174b7` | `caa74c3` |
 | Python cross-check | console: 0 mismatches (1,494 numbers without `--robustness`, 1,965 with it) | `uv run python -m eval.crosscheck` and `uv run python -m eval.crosscheck --robustness` | none | `88484b7` |
+| Headline chart (README) | `reports/figures/headline.svg` | `uv run python -m eval.headline` | none (reads `reports/analysis/cells.csv`) | `4688ac9` |
 | Exploratory 1 (8.7) | `reports/exploratory/surface_features.md` | `uv run python -m eval.surface_features` | none | `0963d70` |
 | Phase 7 variant runs | `runs/robustness/<variant>/` | `sh scripts/run_variant.sh <variant>` | `configs/models.yaml` `038826f2`, `configs/robustness.yaml` `645174b7` | `8b3baf1` (all 13,500 calls) |
 | Model outputs, tiers T0 to T4 | `runs/<model>/` | `sh scripts/run_tier.sh <tier>` | `configs/models.yaml` `038826f2` | `62956ea` (T0), `fb78d02` (T1), `ad88f15` (T2 to T4) |
