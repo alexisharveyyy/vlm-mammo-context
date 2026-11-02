@@ -253,6 +253,7 @@ pins the index version.
 | `manifests/png_sha256.csv` | per case: PNG width and height, file SHA-256, pixel SHA-256 |
 | `manifests/roi_dicom_checksums.csv` | per case: selected abnormality, its crop and mask DICOM objects with size, MD5, SHA-256 |
 | `manifests/roi_checksums.csv` | per case: crop and mask object, swap status, IDC descriptions, crop PNG size and SHA-256s |
+| `manifests/idc_viewer.csv` | per test case: study and series UIDs of the full image and of the ROI crop series, for links to the IDC viewer (`data/idc_viewer.py`, idc-index metadata only) |
 
 `test.csv` is frozen at the `splits-v1` tag and never changes after it.
 

@@ -92,3 +92,15 @@ def test_roi_checksums_cover_every_case():
     assert (pngs.crop_object != pngs.mask_object).all()
     birads = dict(zip(cases.case_id, cases.birads_assessment, strict=True))
     assert all(birads[c] == a for c, a in zip(objects.case_id, objects.assessment, strict=True))
+
+
+def test_idc_viewer_links_match_the_manifests():
+    links, cases = read("idc_viewer.csv"), read("test.csv")
+    crops = read("roi_checksums.csv").set_index("case_id").crop_series_instance_uid
+    assert list(links.case_id) == list(cases.case_id)
+    assert (links.full_study_uid.values == cases.study_instance_uid.values).all()
+    assert (links.full_series_uid.values == cases.series_instance_uid.values).all()
+    assert (links.roi_series_uid.values == crops[links.case_id].values).all()
+    uid = r"[0-9]+(\.[0-9]+)+"
+    for column in links.columns[1:]:
+        assert links[column].str.fullmatch(uid).all()
