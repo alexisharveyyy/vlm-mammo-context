@@ -1,4 +1,4 @@
 "model","condition","pairs","same","rate","ci_low","ci_high","note"
-"qwen3_vl_8b","neutral",NA,NA,NA,NA,NA,"pending"
-"qwen3_vl_8b","colleague_benign",NA,NA,NA,NA,NA,"pending"
-"qwen3_vl_8b","colleague_malignant",NA,NA,NA,NA,NA,"pending"
+"qwen3_vl_8b","neutral",1500,1020,0.68,0.65595937257658,0.703121032364155,""
+"qwen3_vl_8b","colleague_benign",1500,1500,1,0.997445569279819,1,""
+"qwen3_vl_8b","colleague_malignant",1500,1329,0.886,0.868921136151361,0.901106843332659,""
