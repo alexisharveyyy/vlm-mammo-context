@@ -5,19 +5,20 @@
 This is a study of model behavior. It is not a diagnostic tool, it is not
 intended for clinical use, and it makes no clinical claims.
 
-> **Status: results filled, text pending.** Setup, data, models, protocol,
-> statistics and deviations are written from the frozen plan and the
-> repository. The results in sections 3, 6, 8, 9 and 12 are copied from the
-> generated reports and the committed outputs (2026-11-02), without
-> interpretation. Four marked placeholders remain: the summary (section 1),
-> the discussion (section 10), the Phase 7 threats (section 11) and the
-> fresh-clone check (section 12). `scripts/final_audit.sh` fails while any
-> placeholder remains.
+> **Status: written; reproduction check pending.** Setup, data, models,
+> protocol, statistics and deviations are written from the frozen plan and
+> the repository. The results in sections 3, 6, 8, 9 and 12 are copied from
+> the generated reports and the committed outputs (2026-11-02), without
+> interpretation. The summary (section 1), the discussion (section 10) and
+> the Phase 7 threats (section 11) are written by the author. One marked
+> placeholder remains: the fresh-clone check (section 12).
+> `scripts/final_audit.sh` fails while any placeholder remains.
 
 ## 1. Summary
 
-[[PENDING: three to five sentences with the headline findings, filled from
-reports/analysis.md and reports/robustness.md after the final run]]
+This study tests whether open vision-language models change their reading of the same mammogram when only the text of the prompt changes. Three models (Qwen3-VL-8B, MedGemma 1.5 4B and InternVL3.5-8B) read 500 test cases from CBIS-DDSM under paired prompt conditions: a neutral prompt, a colleague's stated opinion (benign or malignant), a synthetic patient age (42 or 68), a synthetic family history (present or absent), and a length-matched irrelevant sentence. The analysis plan was frozen before any test-set run, and the study comprised 103,500 model calls.
+
+With the neutral prompt, no model separated benign from malignant cases better than chance (AUROC 0.429 to 0.547), and Qwen3-VL was significantly below chance. The prompt text still moved the answers. A colleague's malignant opinion raised the malignant-answer rate by 39.9, 66.1 and 85.1 percentage points for Qwen3-VL, MedGemma and InternVL3.5. An older age and a positive family history raised it by 10.7 to 30.1 points for Qwen3-VL and InternVL3.5, with no measurable effect on MedGemma. Changing only the order of the two answer options shifted Qwen3-VL and InternVL3.5 by about 23 points. The colleague effect held when the context sentence was moved and under sampled decoding. Models that cannot read these images still return readings that follow the wording of the request, which argues for testing prompt sensitivity, not only accuracy, before such models are considered for clinical decision support.
 
 ## 2. Question and scope
 
@@ -635,7 +636,17 @@ code.
 
 ## 10. Discussion
 
-[[PENDING: discussion, written by author]]
+**Readings that follow the text, not the image.** On the neutral prompt, all three models performed at or below chance, on full images and on ROI crops alike, and their accuracy with the real image was within 2 points of their accuracy with no image or a blank image. Their answers were nonetheless highly responsive to the prompt: the same image received a different reading depending on a single added sentence. Taken together, these results suggest that in this setting the models' answers are determined largely by the text and by fixed response preferences, and very little by the image. The study cannot say what a model would do if it could read the images; it shows that the absence of image skill does not make a model unresponsive to context.
+
+**Authority versus patient details.** The colleague's opinion produced the largest shifts for every model, including MedGemma, which answered benign on 99.7% of full-image calls under the neutral prompt. The models followed the colleague about as often when the colleague was wrong as when the colleague was right: under the malignant opinion, Qwen3-VL agreed on 52.5% of calls when the colleague was wrong and 51.9% when right, MedGemma on 67.7% and 65.2%, and InternVL3.5 on 100% in both cases. MedGemma did not respond to age or family history (shifts of 0.1 and 0.0 points), while Qwen3-VL and InternVL3.5 did (10.7 to 30.1 points). For the two general models, demographic cues and authority cues both moved the answer; for the medical model, only an explicit opinion did. Agreement between the BI-RADS category and the stated assessment rose sharply under the colleague's malignant opinion for Qwen3-VL (+78.3 points) and InternVL3.5 (+96.0 points), but did not change significantly for MedGemma (-2.1 points).
+
+**What the controls show.** The colleague's benign opinion (H2) produced small or null shifts, but this reflects how few malignant answers there were to remove: Qwen3-VL's neutral malignant rate was 12.3% and fell by 12.3 points, InternVL3.5's was 14.9% and fell by 14.9 points, and MedGemma's was 0.3%. H2 therefore says little about whether the models resist a benign suggestion. The length-matched irrelevant sentence was not neutral either: it lowered the malignant rate by 6.7 points for Qwen3-VL and 14.1 points for InternVL3.5. Part of any shift measured against the neutral prompt may therefore come from adding text of any kind. In the exploratory comparison against the irrelevant sentence, the colleague's malignant opinion moved the answers even further (46.7, 66.4 and 99.3 points), while the age and family-history cues gave estimates of similar size to the primary contrasts, carried mainly by the older age and the positive history.
+
+**Formatting matters as much as clinical content.** The order of the answer options moved Qwen3-VL by 23.5 points and InternVL3.5 by 23.0 points in opposite directions, a shift comparable to the age and family-history effects. In the plain answer format, Qwen3-VL abstained on 99.4% of calls and InternVL3.5 on 49.7%, so whether these models give an answer at all depends on how the question is posed. The wording of the cue itself mattered as much: across the three paraphrases, the colleague effect ranged from 9.4 to 66.2 points for Qwen3-VL and from 29.6 to 99.2 points for MedGemma, and InternVL3.5's family-history effect ranged from 50.6% to 0.0%. Clinical content and incidental wording had effects of similar size.
+
+**Decoding choices change the baseline.** Under sampled decoding, Qwen3-VL's neutral malignant rate was 44.3%, against 12.3% under greedy decoding. Greedy answers therefore understate how often this model's output distribution favors a malignant reading. The colleague effect remained clearly positive under sampling (+19.3 points), so the main result does not depend on greedy decoding.
+
+**Implications.** Accuracy alone would describe these models as uninformative. Measured against paired prompts, they are also highly suggestible: a stated opinion, a patient detail, or the order of two words can decide the answer, and the models follow a colleague's opinion whether or not it is correct. Evaluations of vision-language models for clinical use should report
 
 ## 11. Threats to validity
 
@@ -646,7 +657,10 @@ not quantized); synthetic age and family history; label and BI-RADS noise;
 image size and brightness associated with the label (a dataset confound);
 answer-order sensitivity; and the strict parser's case sensitivity.
 
-[[PENDING: threats added in Phase 7 and how the results bear on each]]
+- **Paraphrase dependence.** All single-paraphrase estimates read robust or unchanged except one, but their size varies widely: the colleague effect ranges from 9.4 to 66.2 points for Qwen3-VL and from 29.6 to 99.2 points for MedGemma across the three paraphrases. The exception is InternVL3.5's family-history effect (H4), which is 50.6, 24.8 and 0.0 points. Pooled estimates should be read as averages over wordings that can disagree strongly in size, and InternVL3.5's H4 not as a stable effect of family history.
+- **Strict parser.** Under the strict parse rules, the colleague effect holds for Qwen3-VL (39.9 points) and InternVL3.5 (96.4 points, on 435 of 500 cases), and InternVL3.5's age effect remains positive (7.1 points, on 232 cases). InternVL3.5's family-history effect falls to -0.2 points (-0.6 to 0.0) on the 251 cases the strict parser can read. The strict parser reads none of MedGemma's answers, so all MedGemma results depend on the lenient parser.
+- **Position of the context sentence.** Moving the context sentence to the end of the prompt reduced Qwen3-VL's colleague effect from 39.9 to 27.6 points and left the other models' effects essentially unchanged. The direction and significance of H1 do not depend on sentence position, but its size for Qwen3-VL does. Age and history were not tested in this check.
+- **Sampled decoding.** Sampling raised Qwen3-VL's neutral malignant rate from 12.3% to 44.3%, and the colleague effect remained positive (+19.3 points). The main results use greedy decoding, so absolute rates describe the model's most likely answer, not its full output distribution. Only Qwen3-VL and the colleague conditions were tested.
 
 ## 12. Reproduction
 
