@@ -8,7 +8,8 @@ authors:
     affiliation: Louisiana State University
 repository-code: "https://github.com/alexisharveyyy/vlm-mammo-context"
 license: MIT
-version: 0.0.0
+version: 1.0.0
+date-released: "2026-11-02"
 keywords:
   - vision-language models
   - mammography
