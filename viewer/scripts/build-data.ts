@@ -3,9 +3,10 @@
 //   npm run data
 //
 // Reads runs/<model>/<image_kind>/<condition>/p<k>[_plain].jsonl (test split
-// only) and data/manifests/test.csv. Keeps only the parsed answer of each call
-// and the case fields listed in CASE_FIELDS: no image, path, hash or UID is
-// written.
+// only), data/manifests/test.csv and data/manifests/idc_viewer.csv. Keeps only
+// the parsed answer of each call, the case fields listed in CASE_FIELDS, and
+// the public DICOM study and series UIDs in IDC_FIELDS, which the viewer uses
+// to link each case to the IDC viewer. No image, path or hash is written.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -24,6 +25,7 @@ const CASE_FIELDS = [
   "synthetic_age",
   "synthetic_family_history",
 ];
+const IDC_FIELDS = ["full_study_uid", "full_series_uid", "roi_study_uid", "roi_series_uid"];
 
 interface RunRecord {
   split: string;
@@ -81,6 +83,7 @@ function runFiles(dir: string): string[] {
 }
 
 const cases = readCsv(join(ROOT, "data", "manifests", "test.csv"));
+const idc = new Map(readCsv(join(ROOT, "data", "manifests", "idc_viewer.csv")).map((r) => [r.case_id, r]));
 const index = new Map(cases.map((c, i) => [c.case_id, i]));
 const cells: Record<string, (Answer | null)[]> = {};
 let calls = 0;
@@ -104,7 +107,14 @@ const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding:
 const data = {
   meta: { commit, calls, source: "runs/ (test split)" },
   models: MODELS,
-  cases: cases.map((c) => Object.fromEntries(CASE_FIELDS.map((f) => [f, c[f]]))),
+  cases: cases.map((c) => {
+    const links = idc.get(c.case_id);
+    if (!links) throw new Error(`idc_viewer.csv: no row for ${c.case_id}`);
+    return Object.fromEntries([
+      ...CASE_FIELDS.map((f) => [f, c[f]]),
+      ...IDC_FIELDS.map((f) => [f, links[f]]),
+    ]);
+  }),
   cells,
 };
 mkdirSync(resolve(OUT, ".."), { recursive: true });

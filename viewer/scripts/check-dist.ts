@@ -14,7 +14,10 @@ const FORBIDDEN = [/local-images/, /data:image\//, /<img\b/i, /\.png\b/i, /\.dcm
 const CASE_FIELDS = new Set([
   "case_id", "label", "abnormality_type", "birads_assessment", "breast_density", "subtlety",
   "synthetic_age", "synthetic_family_history",
+  // Public DICOM UIDs for the links to the IDC viewer.
+  "full_study_uid", "full_series_uid", "roi_study_uid", "roi_series_uid",
 ]);
+const UID = /^[0-9]+(\.[0-9]+)+$/;
 
 const problems: string[] = [];
 const files = readdirSync(DIST, { recursive: true, encoding: "utf8" })
@@ -32,6 +35,9 @@ const data = JSON.parse(readFileSync(join(DIST, "data.json"), "utf8")) as {
 };
 for (const key of new Set(data.cases.flatMap((c) => Object.keys(c)))) {
   if (!CASE_FIELDS.has(key)) problems.push(`data.json: unexpected case field ${key}`);
+  if (key.endsWith("_uid") && !data.cases.every((c) => UID.test(c[key]))) {
+    problems.push(`data.json: ${key} is not a DICOM UID in every case`);
+  }
 }
 for (const p of problems) console.error(p);
 console.log(`check-dist: ${files.length} files, ${problems.length} problem(s)`);

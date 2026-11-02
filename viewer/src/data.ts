@@ -12,6 +12,10 @@ export interface Case {
   subtlety: string;
   synthetic_age: string;
   synthetic_family_history: string;
+  full_study_uid: string;
+  full_series_uid: string;
+  roi_study_uid: string;
+  roi_series_uid: string;
 }
 
 export interface Data {
@@ -33,6 +37,27 @@ export const CONDITIONS = [
   "colleague_malignant",
   "irrelevant",
 ];
+
+export const MODEL_NAMES: Record<string, string> = {
+  qwen3_vl_8b: "Qwen3-VL 8B",
+  medgemma_1_5_4b: "MedGemma 1.5 4B",
+  internvl3_5_8b: "InternVL3.5 8B",
+};
+
+export const KIND_NAMES: Record<string, string> = {
+  full: "Full image",
+  roi: "ROI crop",
+  no_image: "No image",
+  blank_full: "Blank (full size)",
+  blank_roi: "Blank (ROI size)",
+};
+
+// The series in the NCI Imaging Data Commons viewer, in the URL form that
+// idc-index builds. The image is shown by IDC; this site never loads it.
+export function idcViewerUrl(study: string, series: string): string {
+  const base = "https://viewer.imaging.datacommons.cancer.gov/v3/viewer/";
+  return `${base}?StudyInstanceUIDs=${study}&initialSeriesInstanceUID=${series}`;
+}
 
 export function cellKey(model: string, kind: string, condition: string, format: string): string {
   return [model, kind, condition, format].join("|");
