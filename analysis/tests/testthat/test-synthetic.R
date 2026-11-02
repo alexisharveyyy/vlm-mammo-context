@@ -51,6 +51,15 @@ test_that("the analysis recovers the planted effects", {
   expect_true(all(abs(plain$abstention_rate - 0.3) < 0.05))
   flips <- flip_table(s)
   expect_true(all(flips$s1_flip_rate >= flips$flip_rate))
+  # Exploratory 2: six conditions per model against irrelevant, intervals only.
+  irr <- con[con$outcome == VS_IRRELEVANT_OUTCOME, ]
+  expect_equal(nrow(irr), 18)
+  expect_true(all(irr$family == "exploratory" & is.na(irr$p) & !is.na(irr$ci_low)))
+  expect_equal(sort(unique(irr$contrast)), sort(paste(VS_IRRELEVANT, "vs irrelevant")))
+  # irrelevant and neutral carry no planted effect, so H1 against either agrees.
+  h1 <- prim[prim$hypothesis == "H1", ]
+  h1_irr <- irr[irr$contrast == "colleague_malignant vs irrelevant", ]
+  expect_true(all(abs(h1_irr$estimate[match(h1$model, h1_irr$model)] - h1$estimate) < 0.03))
 })
 
 test_that("missing cells are reported as pending, not as results", {
@@ -64,4 +73,37 @@ test_that("missing cells are reported as pending, not as results", {
   h2 <- con[con$family == "primary" & con$hypothesis == "H2", ]
   expect_true(all(is.na(h2$estimate)))
   expect_true(all(grepl("^pending", h2$note)))
+})
+
+test_that("every result row carries the reference level of its own outcome", {
+  skip_if(!nzchar(runs), "SYNTHETIC_RUNS not set")
+  s <- study(read_runs(runs), read_cases(file.path(Sys.getenv("REPO_ROOT"), "data", "manifests")),
+    resamples = 10
+  )
+  con <- contrasts(s)
+  done <- con[!is.na(con$estimate), ]
+  expect_false(any(is.na(done$reference)))
+  # Paired shifts: condition level = reference level + shift, in the row's own value.
+  rows <- con[con$family == "primary" | con$outcome == "p_malignant shift", ]
+  for (i in seq_len(nrow(rows))) {
+    value <- if (rows$outcome[i] == "p_malignant shift") "p" else "y"
+    parts <- strsplit(rows$contrast[i], " vs ")[[1]]
+    a <- case_value(s, cell_key(rows$model[i], "full", parts[1]), value)
+    b <- case_value(s, cell_key(rows$model[i], "full", parts[2]), value)
+    ok <- !is.na(a) & !is.na(b)
+    expect_equal(rows$reference[i], mean(b[ok]), tolerance = 1e-12)
+    expect_equal(rows$reference[i] + rows$estimate[i], mean(a[ok]), tolerance = 1e-12)
+  }
+  m <- MODELS[1]
+  # AUROC shifts: the reference cell's AUROC.
+  au <- con[con$outcome == "AUROC p_malignant shift" & con$model == m & con$image_kind == "full", ][1, ]
+  expect_equal(au$reference, cell_auroc(s, cell_key(m, "full", "neutral"), "p")$estimate)
+  # BI-RADS consistency: the reference cell's consistency rate.
+  bc <- con[con$outcome == "BI-RADS consistency shift" & con$model == m, ][1, ]
+  cc <- consistency_counts(s, cell_key(m, "full", strsplit(bc$contrast, " vs ")[[1]][2]))
+  expect_equal(bc$reference, sum(cc$k) / sum(cc$n))
+  # Differences of shifts across image kinds: neutral malignant rate in each kind.
+  dk <- con[con$outcome == "image kind: shift difference" & con$model == m, ][1, ]
+  expect_equal(dk$reference_2, cell_malignant_rate(s, cell_key(m, "full", "neutral")))
+  expect_true(all(!is.na(flip_table(s)$reference)))
 })

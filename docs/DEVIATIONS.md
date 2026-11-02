@@ -194,3 +194,56 @@ analysis is merged after Phase 5.
 - **Results known:** the T0 results and the T1 outputs existed. The T1 files
   were read only for call keys, timestamps and error fields to find the
   cause; no T1 answer was read. No analysis result depends on the change.
+
+## 9. Exploratory comparison against the irrelevant sentence (2026-11-01)
+
+- **What:** an exploratory analysis was added: the conditions of H1 to H4
+  (`colleague_malignant`, `colleague_benign`, `age_68`, `age_42`,
+  `history_yes`, `history_no`) each against `irrelevant` instead of their
+  plan reference, on full images, with the same paired case bootstrap,
+  estimates and 95% intervals only (`docs/EXPLORATORY.md`, entry 2).
+- **Why:** requested by the study owner after reading the results, to see
+  the context effects against a reference that also has an extra sentence.
+- **Effect on results:** none on the primary, key secondary, descriptive or
+  sensitivity analyses. The new rows are in the exploratory family, have no
+  p-values and are not corrected for multiplicity.
+- **Results known:** yes. Added after the Phase 6 results were seen (tag
+  `analysis-v1`, reports at commit `684397b`).
+
+## 10. Reference rates and the p-value floor in the results tables (2026-11-01)
+
+- **What:** two changes to how the reports present results, with no change
+  to any estimate, interval, p-value or test decision.
+  - Every table of shifts in `reports/analysis.md` and `reports/robustness.md`
+    has a reference column: the level of that table's own outcome in the
+    comparison. That is the malignant rate for malignant rate shifts, mean
+    `p_malignant` for `p_malignant` shifts, the consistency rate for
+    BI-RADS consistency shifts and the AUROC for AUROC shifts (likewise
+    accuracy, abstention rate, the rate when the colleague is right for
+    sycophancy, and the benign-first value for the answer order). For
+    paired shifts it is the reference condition's case-level value over the
+    same cases. The flip table has the neutral malignant rate. The tables in
+    `reports/analysis/contrasts.csv` and `reports/robustness/checks.csv`
+    have the columns `reference` and `reference_2`. A first version on the
+    same day showed the malignant rate in every table; at the owner's
+    request the tables of other outcomes now show their own level.
+  - Holm-adjusted p-values at the resolution limit of the bootstrap are
+    printed as "p < 0.0025" instead of "0.002", with a note: with 10,000
+    resamples and the conservative tie rule the smallest bootstrap p-value
+    is 2/10,001, so the smallest Holm-adjusted p-value over 12 tests is
+    0.0024. The stored values in the CSV tables are unchanged.
+- **Why:** requested by the study owner after reading the results, so that
+  floor and ceiling effects are visible next to each shift, and so that a
+  p-value at the floor is not read as an exact value.
+- **Effect on results:** none. The Python cross-check also recomputes the
+  reference level of every paired shift and of the BI-RADS consistency and
+  abstention tests.
+- **Results known:** yes. Made after the Phase 6 results were seen (tag
+  `analysis-v1`).
+
+## Notes
+
+- **Entry 8 and entries 4 to 7 (2026-11-01):** entry 8 says that entries 4
+  to 7 are added to this file when the analysis is merged after Phase 5.
+  That is resolved: the merge of the analysis into main (commit `ec9f10a`)
+  added them, and the entries are now in order. Entry 8 itself is unchanged.

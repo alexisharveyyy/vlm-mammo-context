@@ -18,6 +18,26 @@ gives the date it was added and what was known when it was added.
 - **Known when added:** the Phase 4 baseline (`reports/baseline.md`), in
   which Qwen3-VL's AUROC of `p_malignant` is significantly below 0.5.
 
+## 2. Conditions against the irrelevant sentence (added 2026-11-01)
+
+- **Status:** exploratory, not part of the frozen plan, and added after the
+  Phase 6 results were known (`docs/DEVIATIONS.md`, entry 9). Computed by
+  `analysis/run_analysis.R` and reported in `reports/analysis.md` under
+  "Exploratory 2", with rows labeled `malignant rate shift vs irrelevant
+  (exploratory 2)` in `reports/analysis/contrasts.csv`.
+- **Question:** how large are the context effects when the reference is a
+  prompt with a sentence of similar length but no clinical content, instead
+  of the plan's references? For each model, on full images in the forced
+  format: `colleague_malignant`, `colleague_benign`, `age_68`, `age_42`,
+  `history_yes` and `history_no`, each against `irrelevant` (the conditions
+  of H1 to H4).
+- **Method:** the malignant rate shift of the primary analysis, with the same
+  paired case bootstrap (10,000 resamples, seed 20261026). Estimates and 95%
+  intervals only: no p-values and no multiplicity correction.
+- **Known when added:** all Phase 6 results (`reports/analysis.md` at tag
+  `analysis-v1`), including the irrelevant-text control, which differs from
+  `neutral` for Qwen3-VL and InternVL3.5.
+
 ## Note: age and history are not covered by the position and decoding checks
 
 - **Status:** a limit of the Phase 7 scope, recorded on 2026-10-27, blind to

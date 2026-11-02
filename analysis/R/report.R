@@ -10,6 +10,70 @@ fmt_p <- function(p) {
   ifelse(is.na(p), "n/a", ifelse(p < 0.001, "<0.001", formatC(p, format = "f", digits = 3)))
 }
 
+# Smallest Holm-adjusted p over m tests: with the conservative tie rule the
+# smallest bootstrap p is 2 / (resamples + 1) (stats.R, bootstrap_p).
+holm_floor <- function(resamples, m = 12) m * 2 / (resamples + 1)
+
+# Holm-adjusted p-values at that floor are shown as "p < x", with x the floor
+# rounded up to the next 0.0005 (p < 0.0025 for 10,000 resamples).
+fmt_holm <- function(p, floor) {
+  bound <- formatC(ceiling(floor / 5e-4 - 1e-9) * 5e-4, format = "fg")
+  ifelse(!is.na(p) & p <= floor * (1 + 1e-9), paste("p <", bound), fmt_p(p))
+}
+
+holm_note <- function(resamples, m = 12) {
+  paste0(
+    "Holm-adjusted p-values at the resolution limit are shown as ",
+    fmt_holm(0, holm_floor(resamples, m)), ": with ",
+    formatC(resamples, format = "d", big.mark = ","), " resamples and the conservative tie ",
+    "rule, the smallest possible bootstrap p-value is 2/", formatC(resamples + 1, format = "d", big.mark = ","),
+    " (", formatC(2 / (resamples + 1), format = "fg", digits = 2), "), so the smallest ",
+    "Holm-adjusted p-value over ", m, " tests is ", formatC(holm_floor(resamples, m), format = "fg", digits = 2),
+    ". More resamples would be needed to resolve smaller p-values."
+  )
+}
+
+# Reference level(s) of a row: "a" or, for two image kinds, "a / b"; as a
+# percentage for rates and as a number for p_malignant and AUROC.
+fmt_reference <- function(r1, r2, pct = TRUE) {
+  f <- function(x) ifelse(rep_len(pct, length(x)), fmt_pct(x), fmt_num(x))
+  ifelse(is.na(r1), "n/a", ifelse(is.na(r2), f(r1), paste(f(r1), "/", f(r2))))
+}
+
+# Column name for the reference level of an outcome.
+reference_label <- function(outcome) {
+  if (grepl("AUROC", outcome)) {
+    "Reference AUROC"
+  } else if (grepl("answer order", outcome) && grepl("p_malignant", outcome)) {
+    "Reference mean p_malignant (benign first)"
+  } else if (grepl("answer order", outcome)) {
+    "Reference malignant rate (benign first)"
+  } else if (grepl("p_malignant", outcome)) {
+    "Reference mean p_malignant"
+  } else if (grepl("BI-RADS consistency", outcome)) {
+    "Reference consistency rate"
+  } else if (grepl("accuracy", outcome)) {
+    "Reference accuracy"
+  } else if (grepl("abstention", outcome)) {
+    "Reference abstention rate"
+  } else if (grepl("sycophancy", outcome)) {
+    "Reference rate (colleague right)"
+  } else {
+    "Reference malignant rate"
+  }
+}
+
+REFERENCE_NOTE <- paste(
+  "Reference: the level of the table's own outcome in the comparison, so floor and",
+  "ceiling effects are visible (the malignant rate for malignant rate shifts, mean",
+  "p_malignant for p_malignant shifts, the consistency rate, the AUROC, and so on).",
+  "For paired shifts it is the reference condition's case-level value over the same",
+  "cases (condition = reference + shift); for rate and AUROC shifts it is the value of",
+  "the reference cell; for sycophancy, the rate when the colleague is right; for the",
+  "answer order, the benign-first value. Rows that are a difference of shifts show",
+  "the neutral malignant rate, in each image kind (first / second) for ROI minus full."
+)
+
 md_table <- function(df) {
   df[] <- lapply(df, as.character)
   header <- paste0("| ", paste(names(df), collapse = " | "), " |")
@@ -18,13 +82,16 @@ md_table <- function(df) {
   c(header, rule, body)
 }
 
-contrast_table <- function(x, pct = TRUE, tests = TRUE) {
+contrast_table <- function(x, pct = TRUE, tests = TRUE, floor = NA_real_) {
+  adjusted <- ifelse(x$adjustment == "holm", fmt_holm(x$p_adjusted, floor), fmt_p(x$p_adjusted))
   out <- data.frame(
     Model = x$model, Image = x$image_kind, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, pct),
-    p = fmt_p(x$p), `Adjusted p` = fmt_p(x$p_adjusted), Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
+    Reference = fmt_reference(x$reference, x$reference_2, pct),
+    p = fmt_p(x$p), `Adjusted p` = adjusted, Cases = ifelse(is.na(x$n_cases), "", x$n_cases),
     Note = x$note, check.names = FALSE
   )
+  names(out)[names(out) == "Reference"] <- reference_label(x$outcome[1])
   if (tests) out else out[, setdiff(names(out), c("p", "Adjusted p"))]
 }
 
@@ -93,13 +160,17 @@ render_report <- function(con, cells, flips, syc, meta) {
       " resamples, seed ", BOOTSTRAP_SEED, "; rates over calls with Wilson 95% intervals; ",
       "AUROC with pROC. Input: ", meta$calls, " calls from `", meta$runs, "`."
     ),
+    "",
+    REFERENCE_NOTE,
     ""
   )
   if (!is.null(meta$warning)) out <- c(out, paste("**", meta$warning, "**"), "")
   prim <- con[con$family == "primary", ]
   out <- c(
     out, "## Primary outcome: malignant rate shift (Holm over 12 tests)", "",
-    md_table(cbind(Hypothesis = prim$hypothesis, contrast_table(prim))), ""
+    md_table(cbind(Hypothesis = prim$hypothesis,
+      contrast_table(prim, floor = holm_floor(meta$resamples)))), "",
+    holm_note(meta$resamples), ""
   )
   sec <- con[con$family == "key secondary", ]
   out <- c(out, paste0(
@@ -126,10 +197,14 @@ render_report <- function(con, cells, flips, syc, meta) {
   }
   if (!is.null(flips) && nrow(flips)) {
     out <- c(out, "## Flip rate versus neutral", "",
-      "S1 counts every parse failure as a flip (plan 8, sensitivity 1).", "",
+      paste(
+        "S1 counts every parse failure as a flip (plan 8, sensitivity 1).",
+        "Neutral rate: the malignant rate of the neutral cell over valid calls."
+      ), "",
       md_table(data.frame(
         Model = flips$model, Image = flips$image_kind, Condition = flips$condition,
         Pairs = flips$pairs, `Flip rate` = fmt_ci(flips$flip_rate, flips$ci_low, flips$ci_high, TRUE),
+        `Neutral rate` = fmt_pct(flips$reference),
         `S1 flip rate` = fmt_ci(flips$s1_flip_rate, flips$s1_ci_low, flips$s1_ci_high, TRUE),
         check.names = FALSE
       )), "")
@@ -146,13 +221,25 @@ render_report <- function(con, cells, flips, syc, meta) {
     `BI-RADS consistent` = fmt_ci(cells$birads_consistent_rate, cells$birads_consistent_ci_low, cells$birads_consistent_ci_high, TRUE),
     `Low mass` = fmt_pct(cells$low_mass_rate), check.names = FALSE
   )), "")
+  irr <- con[con$outcome == VS_IRRELEVANT_OUTCOME, ]
+  if (nrow(irr)) {
+    out <- c(out, "## Exploratory 2: conditions against the irrelevant sentence", "",
+      paste(
+        "Exploratory, added after the results were known (docs/EXPLORATORY.md, entry 2;",
+        "docs/DEVIATIONS.md, entry 9). Each H1 to H4 condition against `irrelevant`",
+        "instead of its plan reference; same paired case bootstrap, no multiplicity",
+        "correction, estimates and 95% intervals only."
+      ), "",
+      md_table(contrast_table(irr, tests = FALSE)), "")
+  }
   for (fam in c("sensitivity", "exploratory")) {
-    x <- con[con$family == fam & !is.na(con$estimate), ]
+    x <- con[con$family == fam & !is.na(con$estimate) & con$outcome != VS_IRRELEVANT_OUTCOME, ]
     if (nrow(x)) {
       label <- if (fam == "sensitivity") "Sensitivity analyses (unadjusted)" else "Exploratory (unadjusted, not part of the plan's tests)"
       out <- c(out, paste("##", label), "", md_table(data.frame(
         Outcome = x$outcome, Model = x$model, Image = x$image_kind, Contrast = x$contrast,
         Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, !grepl("p_malignant", x$outcome)),
+        Reference = fmt_reference(x$reference, x$reference_2, !grepl("p_malignant", x$outcome)),
         Cases = x$n_cases, check.names = FALSE
       )), "")
     }
@@ -163,11 +250,12 @@ render_report <- function(con, cells, flips, syc, meta) {
   paste0(c(out, ""), collapse = "\n")
 }
 
-check_table <- function(x, tests = FALSE) {
+check_table <- function(x, tests = FALSE, floor = NA_real_) {
   out <- data.frame(
     Model = x$model, Hypothesis = x$hypothesis, Contrast = x$contrast,
     Estimate = fmt_ci(x$estimate, x$ci_low, x$ci_high, TRUE),
-    p = fmt_p(x$p), `Holm p` = fmt_p(x$p_adjusted),
+    `Reference malignant rate` = fmt_reference(x$reference, x$reference_2),
+    p = fmt_p(x$p), `Holm p` = fmt_holm(x$p_adjusted, floor),
     Cases = ifelse(is.na(x$n_cases), "", x$n_cases), Reading = x$reading, Note = x$note,
     check.names = FALSE
   )
@@ -178,7 +266,7 @@ render_robustness <- function(r, meta) {
   ch <- r$checks
   section <- function(check, outcome_pattern, tests = FALSE) {
     x <- ch[ch$check == check & grepl(outcome_pattern, ch$outcome), ]
-    if (nrow(x)) md_table(check_table(x, tests)) else "None."
+    if (nrow(x)) md_table(check_table(x, tests, holm_floor(meta$resamples))) else "None."
   }
   out <- c(
     "# Phase 7 robustness (test set)",
@@ -193,6 +281,8 @@ render_robustness <- function(r, meta) {
       "result and 95% interval excluding 0; unchanged = interval including 0 for a primary result ",
       "that is not significant; sensitive = anything else. Only R3 has p-values."
     ),
+    "",
+    paste(REFERENCE_NOTE, "In the difference rows, the variant's and the study's reference rates."),
     ""
   )
   if (!is.null(meta$warning)) out <- c(out, paste0("**", meta$warning, "**"), "")
@@ -200,8 +290,10 @@ render_robustness <- function(r, meta) {
   out <- c(out, "## Primary results (reference)", "", md_table(data.frame(
     Model = prim$model, Hypothesis = prim$hypothesis, Contrast = prim$contrast,
     Estimate = fmt_ci(prim$estimate, prim$ci_low, prim$ci_high, TRUE),
-    `Holm p` = fmt_p(prim$p_adjusted), Note = prim$note, check.names = FALSE
-  )), "")
+    `Reference malignant rate` = fmt_reference(prim$reference, prim$reference_2),
+    `Holm p` = fmt_holm(prim$p_adjusted, holm_floor(meta$resamples)), Note = prim$note,
+    check.names = FALSE
+  )), "", holm_note(meta$resamples), "")
   ag <- r$agreement
   out <- c(out, "## R1. Agreement across paraphrases", "",
     "Cases with three valid answers whose three answers agree, and Fleiss' kappa.", "",
@@ -218,7 +310,8 @@ render_robustness <- function(r, meta) {
     "Difference from the study (end minus middle):", "",
     section("R2", "difference"), "",
     "## R3. Strict parser (sensitivity 2)", "",
-    "The primary analysis with the frozen strict rules; Holm within these 12 tests.", "",
+    "The primary analysis with the frozen strict rules; Holm within these 12 tests.",
+    "Holm-adjusted p-values at the resolution limit are shown as above.", "",
     section("R3", ".", tests = TRUE), "",
     "Valid answers under the lenient and strict rules:", "",
     md_table(data.frame(

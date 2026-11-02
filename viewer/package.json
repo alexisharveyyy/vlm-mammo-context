@@ -10,7 +10,9 @@
   },
   "scripts": {
     "data": "node scripts/build-data.ts",
+    "predev": "npm run data",
     "dev": "vite",
+    "prebuild": "npm run data",
     "build": "vite build",
     "check-dist": "node scripts/check-dist.ts",
     "lint": "eslint .",

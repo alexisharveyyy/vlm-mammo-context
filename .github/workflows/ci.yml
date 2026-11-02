@@ -97,9 +97,8 @@ jobs:
         run: |
           npm run lint
           npm run typecheck
+      # prebuild generates public/data.json from the committed runs/.
       - name: Build
-        run: |
-          npm run data
-          npm run build
+        run: npm run build
       - name: Check the build contains no images
         run: npm run check-dist
