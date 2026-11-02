@@ -7,12 +7,12 @@ intended for clinical use, and it makes no clinical claims.
 
 > **Status: results filled, text pending.** Setup, data, models, protocol,
 > statistics and deviations are written from the frozen plan and the
-> repository. The results in sections 3, 6, 8, 9 and 11 are copied from the
+> repository. The results in sections 3, 6, 8, 9 and 12 are copied from the
 > generated reports and the committed outputs (2026-11-02), without
-> interpretation. Three marked placeholders remain: the
-> summary (section 1), the Phase 7 threats (section 10) and the fresh-clone
-> check (section 11). `scripts/final_audit.sh` fails while any placeholder
-> remains.
+> interpretation. Four marked placeholders remain: the summary (section 1),
+> the discussion (section 10), the Phase 7 threats (section 11) and the
+> fresh-clone check (section 12). `scripts/final_audit.sh` fails while any
+> placeholder remains.
 
 ## 1. Summary
 
@@ -194,7 +194,7 @@ LLaVA-Med was planned and dropped before the plan was frozen.
 ## 8. Results
 
 Numbers in this section are copied from the generated reports named in
-each subsection (section 11 gives the commands and commits). Estimates are
+each subsection (section 12 gives the commands and commits). Estimates are
 followed by their 95% interval. "Reference" is the level of the outcome in
 the comparison's reference condition, as defined in the reports
 (`docs/DEVIATIONS.md`, entry 10). Shifts in percent are differences in the
@@ -633,7 +633,11 @@ the robustness report was regenerated after the Phase 7 runs, when the
 primary and secondary results were known, with no change to the analysis
 code.
 
-## 10. Threats to validity
+## 10. Discussion
+
+[[PENDING: discussion, written by author]]
+
+## 11. Threats to validity
 
 The full list, with evidence and mitigations, is in `docs/THREATS.md`: no
 model reads the images above chance; film mammograms from the 1990s
@@ -644,7 +648,7 @@ answer-order sensitivity; and the strict parser's case sensitivity.
 
 [[PENDING: threats added in Phase 7 and how the results bear on each]]
 
-## 11. Reproduction
+## 12. Reproduction
 
 Every result regenerates from committed outputs with one command, run from
 the repository root at the commit given. Model outputs come from the
@@ -676,7 +680,7 @@ committed in `c6e4af0`.
 [[PENDING: fresh-clone check: date, commit and result of rerunning every
 command above in a new clone]]
 
-## 12. Data, license and citation
+## 13. Data, license and citation
 
 CBIS-DDSM is used under CC BY 3.0 and the TCIA Data Usage Policy; the
 required citations are in `data/README.md`. MedGemma is used under the
