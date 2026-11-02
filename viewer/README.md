@@ -13,7 +13,15 @@ condition.
 
 It contains no images and requests none. The public build is checked for
 that (`npm run check-dist`): no image files, no image references, and only the
-case fields listed in `scripts/build-data.ts` (no paths, hashes or UIDs).
+case fields listed in `scripts/build-data.ts` (no paths or hashes). The only
+identifiers are each case's public DICOM study and series UIDs from
+`data/manifests/idc_viewer.csv`, used for the "View full image in IDC" and
+"View ROI crop in IDC" links, which open the series in the NCI Imaging Data
+Commons viewer; IDC serves the image, this site never loads it.
+
+The cases page also shows the headline chart, `reports/figures/headline.svg`,
+inlined into the page at build time (a chart of model outputs, not an image
+of a case).
 
 ## Build
 
@@ -27,7 +35,8 @@ From `viewer/`, with Node 22.18 or later:
 
 `npm run dev` and `npm run build` run `npm run data` first (`predev` and
 `prebuild`), which reads every committed output under `runs/` (all tiers,
-test split) and `data/manifests/test.csv` and writes `public/data.json`. A
+test split), `data/manifests/test.csv` and `data/manifests/idc_viewer.csv`
+and writes `public/data.json`. A
 fresh clone therefore works with `npm ci && npm run dev`. If the page says the
 data file is missing, run `npm run data` and reload.
 
@@ -36,7 +45,7 @@ derived entirely from committed outputs, so committing it would duplicate
 them (about 2 MB) and it would go stale with every new output; it also
 records the commit it was built from, which a committed copy can never match.
 The public build regenerates it, and `npm run check-dist` checks the built
-copy (no images, only the listed case fields).
+copy (no images, only the listed case fields, UIDs well formed).
 
 ## Local images (owner only)
 
@@ -45,4 +54,10 @@ copy (no images, only the listed case fields).
 shows the full mammogram and ROI crop next to each case, served by the dev
 server from the local `data/png/` and `data/png_roi/` folders (or
 `LOCAL_IMAGES_DIR`). This works only with the dev server; the build never
-includes it. Deploy (GitHub Pages) only after the repository is public.
+includes it.
+
+## Deploy
+
+`.github/workflows/pages.yml` builds the viewer on every push to `main`,
+requires `npm run check-dist` to pass, and publishes `dist/` with GitHub
+Pages.

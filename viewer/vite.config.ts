@@ -28,6 +28,11 @@ function localImages(): Plugin {
 export default defineConfig({
   base: "./",
   plugins: [localImages()],
+  // The case browser inlines reports/figures/headline.svg; the dev server may
+  // read that folder and nothing else outside viewer/.
+  server: {
+    fs: { allow: [import.meta.dirname, resolve(import.meta.dirname, "..", "reports", "figures")] },
+  },
   build: {
     assetsInlineLimit: 0,
     rollupOptions: {

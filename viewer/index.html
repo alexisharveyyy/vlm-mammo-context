@@ -4,77 +4,120 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Same Image, Different Answer</title>
+    <meta
+      name="description"
+      content="Case browser of a study of prompt sensitivity in vision-language models reading mammograms. Model outputs only, no images."
+    />
     <link rel="icon" href="data:," />
   </head>
   <body>
-    <header class="top">
-      <nav class="nav"><a href="./index.html" aria-current="page">Cases</a> <a href="./about.html">About</a></nav>
-      <h1>Same Image, Different Answer</h1>
-      <p class="lede">
-        Model answers for every test case under every prompt condition. Outputs only: this viewer
-        contains no images. A study of model behavior, not a diagnostic tool.
-      </p>
-      <p class="meta" id="meta"></p>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="./index.html">
+          <strong>Same Image, Different Answer</strong>
+          <span>Do vision-language models change their mammogram reading when only the prompt changes?</span>
+        </a>
+        <nav class="nav" aria-label="Site">
+          <a href="./index.html" aria-current="page">Cases</a>
+          <a href="./about.html">About</a>
+          <a href="https://github.com/alexisharveyyy/vlm-mammo-context">GitHub</a>
+        </nav>
+      </div>
     </header>
-    <main>
-      <section class="filters" aria-label="Filters">
-        <label>Model <select id="model"><option value="">all</option></select></label>
-        <label>Image <select id="kind"><option value="">all</option></select></label>
-        <label>Condition <select id="condition"><option value="">all</option></select></label>
-        <label>Format <select id="format"><option value="">all</option></select></label>
-        <label>Label
-          <select id="label">
-            <option value="">all</option>
-            <option value="benign">benign</option>
-            <option value="malignant">malignant</option>
-          </select>
-        </label>
-        <label>Abnormality
-          <select id="type">
-            <option value="">all</option>
-            <option value="mass">mass</option>
-            <option value="calc">calcification</option>
-          </select>
-        </label>
-        <label class="check"><input type="checkbox" id="flipped" /> Answer flipped vs neutral</label>
-        <label>Case <input type="search" id="search" placeholder="P_00001" /></label>
+
+    <main class="container">
+      <p class="intro">
+        Every answer the three models gave to every test case, under every prompt and image
+        condition. Choose filters to narrow the cases, then select a case to see its full grid of
+        answers.
+      </p>
+
+      <section class="stats" aria-label="Study size">
+        <div class="stat card"><strong id="stat-cases">...</strong><span>test cases</span></div>
+        <div class="stat card"><strong id="stat-models">...</strong><span>models</span></div>
+        <div class="stat card"><strong id="stat-calls">...</strong><span>model calls</span></div>
+        <div class="stat card"><strong id="stat-errors">...</strong><span>call errors</span></div>
       </section>
-      <section class="summary" id="summary" aria-live="polite"></section>
+
+      <figure class="chart card">
+        <div id="chart" role="img" aria-label="Malignant-answer rate on full images under the neutral prompt and the two colleague prompts, for each model"></div>
+        <figcaption>
+          Malignant-answer rate on full images under the neutral prompt and the two colleague
+          prompts, 1,500 calls per cell with 95% intervals (<code>reports/figures/headline.svg</code>).
+        </figcaption>
+      </figure>
+
+      <section class="toolbar card" aria-label="Filters">
+        <div class="filters">
+          <label class="field">Model <select id="model"><option value="">all</option></select></label>
+          <label class="field">Image <select id="kind"><option value="">all</option></select></label>
+          <label class="field">Condition <select id="condition"><option value="">all</option></select></label>
+          <label class="field">Format <select id="format"><option value="">all</option></select></label>
+          <label class="field">Label
+            <select id="label">
+              <option value="">all</option>
+              <option value="benign">benign</option>
+              <option value="malignant">malignant</option>
+            </select>
+          </label>
+          <label class="field">Abnormality
+            <select id="type">
+              <option value="">all</option>
+              <option value="mass">mass</option>
+              <option value="calc">calcification</option>
+            </select>
+          </label>
+          <label class="field">Case ID <input type="search" id="search" placeholder="P_00001" /></label>
+          <label class="field check"><input type="checkbox" id="flipped" /> Answer flipped vs neutral</label>
+        </div>
+        <div class="toolbar-foot">
+          <span class="count" id="count" aria-live="polite"></span>
+          <span class="muted small" id="tally"></span>
+          <button id="reset" type="button">Reset filters</button>
+        </div>
+      </section>
+
       <div class="layout">
-        <section class="list" aria-label="Cases">
-          <table>
-            <thead>
-              <tr>
-                <th>Case</th>
-                <th>Label</th>
-                <th>Type</th>
-                <th>Synthetic context</th>
-                <th id="head-a">Malignant / valid</th>
-                <th id="head-b">Cells flipped</th>
-              </tr>
-            </thead>
-            <tbody id="rows"></tbody>
-          </table>
-          <nav class="pager">
+        <section class="list card" aria-label="Cases">
+          <div class="table-wrap">
+            <table class="cases">
+              <thead>
+                <tr>
+                  <th scope="col">Case</th>
+                  <th scope="col">Label</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Synthetic age, history</th>
+                  <th scope="col" id="head-a">Malignant answers</th>
+                  <th scope="col" id="head-b">Cells flipped</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <nav class="pager" aria-label="Pages">
             <button id="prev" type="button">Previous</button>
             <span id="page"></span>
             <button id="next" type="button">Next</button>
           </nav>
         </section>
-        <section class="detail" id="detail" aria-label="Case detail">
-          <p class="hint">Select a case to see every model's answers under every condition.</p>
+        <section class="detail card" id="detail" aria-label="Case detail" tabindex="-1">
+          <p class="empty">Select a case to see every model's answers under every condition.</p>
         </section>
       </div>
-      <section class="legend">
-        <span class="ans M">M</span> malignant
-        <span class="ans B">B</span> benign
-        <span class="ans A">A</span> abstained
-        <span class="ans F">F</span> parse failure
-        <span class="ans E">E</span> run error
-        <span class="ans none">.</span> not run. Three marks per cell, one per paraphrase. Age and
-        family history are synthetic study manipulations, not patient data.
-      </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          A study of model behavior, not a diagnostic tool. Not intended for clinical use. This site
+          shows model outputs only and hosts no images; age and family history are synthetic study
+          manipulations, not patient data.
+        </p>
+        <p>
+          <a href="https://github.com/alexisharveyyy/vlm-mammo-context">Source and reports on GitHub</a>
+        </p>
+      </div>
+    </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

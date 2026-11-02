@@ -4,126 +4,228 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>About the Study</title>
+    <meta
+      name="description"
+      content="About a pre-specified study of prompt sensitivity in vision-language models reading mammograms."
+    />
     <link rel="icon" href="data:," />
   </head>
   <body>
-    <header class="top">
-      <nav class="nav"><a href="./index.html">Cases</a> <a href="./about.html" aria-current="page">About</a></nav>
-      <h1>About this study</h1>
-      <p class="lede">
-        Same Image, Different Answer: Prompt Context Sensitivity of Vision-Language Models in
-        Mammography. Alexis Harvey, Louisiana State University.
-      </p>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="./index.html">
+          <strong>Same Image, Different Answer</strong>
+          <span>Do vision-language models change their mammogram reading when only the prompt changes?</span>
+        </a>
+        <nav class="nav" aria-label="Site">
+          <a href="./index.html">Cases</a>
+          <a href="./about.html" aria-current="page">About</a>
+          <a href="https://github.com/alexisharveyyy/vlm-mammo-context">GitHub</a>
+        </nav>
+      </div>
     </header>
-    <main class="prose">
-      <section>
-        <h2>Not a diagnostic tool</h2>
-        <p>
-          This is a study of model behavior. It is not intended for clinical use and makes no
-          clinical claims. None of the three models reads these mammograms better than chance,
-          and nothing here should be used to interpret a real patient's imaging.
-        </p>
-      </section>
 
-      <section>
-        <h2>The question</h2>
-        <p>
-          When the image stays the same, do vision-language models change their mammogram
-          reading because of what the prompt says: patient context, a colleague's opinion, or
-          irrelevant text? Each of 500 test mammograms from the public CBIS-DDSM dataset was
-          read by three open models (Qwen3-VL 8B, MedGemma 1.5 4B and InternVL3.5 8B) under
-          every condition, and the answers to the same image are compared with each other.
+    <main class="container">
+      <article class="prose">
+        <h1>About this study</h1>
+        <p class="muted">
+          Same Image, Different Answer: Prompt Context Sensitivity of Vision-Language Models in
+          Mammography. Alexis Harvey, Louisiana State University.
         </p>
-      </section>
 
-      <section>
-        <h2>Reading the case browser</h2>
-        <dl>
-          <dt>Marks</dt>
-          <dd>
-            Each cell shows three marks, one per paraphrase of the prompt:
-            <span class="ans M">M</span> malignant, <span class="ans B">B</span> benign,
-            <span class="ans A">A</span> the model abstained (an assessment that is neither),
-            <span class="ans F">F</span> the answer could not be parsed,
-            <span class="ans E">E</span> the call failed, and
-            <span class="ans none">.</span> not run. Hover over a mark for the model's
-            probability of "malignant", its BI-RADS category and its stated confidence.
-          </dd>
-          <dt>Label</dt>
-          <dd>The biopsy result from CBIS-DDSM, benign or malignant.</dd>
-          <dt>Synthetic context</dt>
-          <dd>
-            CBIS-DDSM has no age or family history. The age (42 or 68) and family history shown
-            are experimental values assigned at random, used only by the combined condition. The
-            age and history conditions read every case with both values.
-          </dd>
-          <dt>Answer flipped vs neutral</dt>
-          <dd>
-            A case is flipped when, in at least one paraphrase, the model gives a valid answer
-            under both the selected condition and the neutral prompt and the two answers differ.
-          </dd>
-        </dl>
-      </section>
+        <aside class="callout" aria-label="Scope">
+          <h2>Not a diagnostic tool</h2>
+          <p>
+            This is a study of model behavior. It is not intended for clinical use and makes no
+            clinical claims. None of the three models reads these mammograms better than chance,
+            and nothing here should be used to interpret a real patient's imaging.
+          </p>
+        </aside>
 
-      <section>
-        <h2>Conditions</h2>
-        <dl>
-          <dt>Prompts</dt>
-          <dd>
-            <code>neutral</code> (no context); <code>age_42</code>, <code>age_68</code>;
-            <code>history_yes</code>, <code>history_no</code>; <code>combined</code> (the
-            assigned age and history); <code>colleague_benign</code>,
-            <code>colleague_malignant</code> (a colleague's opinion); and
-            <code>irrelevant</code>, a sentence of similar length with no clinical content.
-          </dd>
-          <dt>Images</dt>
-          <dd>
-            <code>full</code>, the whole mammogram; <code>roi</code>, a crop around one
-            abnormality; and three controls: <code>no_image</code> (the same text without an
-            image), <code>blank_full</code> and <code>blank_roi</code> (an all-black image of
-            the same size).
-          </dd>
-          <dt>Formats</dt>
-          <dd>
-            <code>forced</code> asks the model to choose benign or malignant even when uncertain
-            and is the format of every comparison; <code>plain</code> omits that instruction and
-            is run without context to measure how often the model declines to choose.
-          </dd>
-          <dt>Answer order</dt>
-          <dd>
-            The prompt lists the two options in one order or the other, balanced within each
-            case. Some models depend strongly on that order, so compare a case across
-            conditions within the same paraphrase.
-          </dd>
-        </dl>
-      </section>
+        <section>
+          <h2>Key findings</h2>
+          <p class="muted small">
+            Shifts in percentage points, full images, forced answer format; from the
+            <a href="https://github.com/alexisharveyyy/vlm-mammo-context/blob/main/reports/FINAL_REPORT.md">final report</a>.
+          </p>
+          <ul>
+            <li>
+              <strong>A colleague's opinion moves the answer.</strong> "A colleague thinks it is
+              malignant" raised the malignant-answer rate by 39.9 (Qwen3-VL), 66.1 (MedGemma 1.5)
+              and 85.1 (InternVL3.5) points, although with the neutral prompt no model read the
+              images better than chance (AUROC 0.429 to 0.547).
+            </li>
+            <li>
+              <strong>So do synthetic patient details, for two models.</strong> Age 68 instead of 42
+              and a positive instead of a negative family history raised it by 10.7 to 30.1 points
+              for Qwen3-VL and InternVL3.5 (Holm p &lt; 0.0025 each). For MedGemma 1.5 the shifts
+              were 0.1 and 0.0 points (Holm p 0.544 and 1.000).
+            </li>
+            <li>
+              <strong>So does the order of the two options.</strong> Listing "malignant" first
+              instead of "benign" changed the neutral malignant rate by 23.5 points for Qwen3-VL
+              and -23.0 points for InternVL3.5 (MedGemma 1.5: -0.4).
+            </li>
+            <li>
+              <strong>Right or wrong, the models follow the colleague.</strong> Under the malignant
+              opinion they agreed about as often when the colleague was wrong as when right:
+              Qwen3-VL 52.5% vs 51.9%, MedGemma 1.5 67.7% vs 65.2%, InternVL3.5 100% vs 100%. No
+              wrong-minus-right interval excludes 0.
+            </li>
+          </ul>
+        </section>
 
-      <section>
-        <h2>How the results are analyzed</h2>
-        <p>
-          The analysis plan was written and frozen before any test case was run. The main tests
-          compare the share of malignant answers to the same images between conditions, with
-          the case as the unit and a paired bootstrap over cases. This browser shows the raw
-          answers; the tests, intervals and every change to the plan are in the repository's
-          reports and documents.
-        </p>
-      </section>
+        <section>
+          <h2>The question</h2>
+          <p>
+            When the image stays the same, do vision-language models change their mammogram
+            reading because of what the prompt says: patient context, a colleague's opinion, or
+            irrelevant text? Each of 500 test mammograms from the public CBIS-DDSM dataset was read
+            by three open models (Qwen3-VL 8B, MedGemma 1.5 4B and InternVL3.5 8B) under every
+            condition, and the answers to the same image are compared with each other.
+          </p>
+        </section>
 
-      <section>
-        <h2>Data and credits</h2>
-        <p>
-          CBIS-DDSM (The Cancer Imaging Archive, CC BY 3.0), obtained through the NCI Imaging
-          Data Commons. Sawyer-Lee, R., Gimenez, F., Hoogi, A., and Rubin, D. (2016),
-          doi:10.7937/K9/TCIA.2016.7O02S9CY; Lee, R. S. et al. (2017), Scientific Data 4,
-          170177. MedGemma is used under the Health AI Developer Foundations terms. No images
-          are included in this viewer or in the repository.
-        </p>
-        <p>
-          Source, reports and documents:
-          <a href="https://github.com/alexisharveyyy/vlm-mammo-context">github.com/alexisharveyyy/vlm-mammo-context</a>.
-        </p>
-      </section>
+        <section>
+          <h2>Reading the case browser</h2>
+          <dl>
+            <dt>Marks</dt>
+            <dd>
+              Each cell shows three marks, one per paraphrase of the prompt:
+              <span class="ans M">M</span> malignant, <span class="ans B">B</span> benign,
+              <span class="ans A">A</span> the model abstained (an assessment that is neither),
+              <span class="ans F">F</span> the answer could not be parsed,
+              <span class="ans E">E</span> the call failed, and
+              <span class="ans none">.</span> not run. Hover over a mark for the model's
+              probability of "malignant", its BI-RADS category and its stated confidence.
+            </dd>
+            <dt>Label</dt>
+            <dd>
+              The biopsy result from CBIS-DDSM, <span class="pill benign">benign</span> or
+              <span class="pill malignant">malignant</span>.
+            </dd>
+            <dt>Synthetic context</dt>
+            <dd>
+              CBIS-DDSM has no age or family history. The age (42 or 68) and family history shown
+              are experimental values assigned at random, used only by the combined condition. The
+              age and history conditions read every case with both values.
+            </dd>
+            <dt>Answer flipped vs neutral</dt>
+            <dd>
+              A case is flipped when, in at least one paraphrase, the model gives a valid answer
+              under both the selected condition and the neutral prompt and the two answers differ.
+              Flipped cells are highlighted in the case grid.
+            </dd>
+          </dl>
+        </section>
+
+        <section>
+          <h2>Conditions</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Prompt condition</th><th scope="col">What the prompt adds</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>neutral</code></td><td>nothing; the reference prompt</td></tr>
+                <tr><td><code>age_42</code>, <code>age_68</code></td><td>a synthetic patient age</td></tr>
+                <tr><td><code>history_yes</code>, <code>history_no</code></td><td>a synthetic family history of breast cancer, present or absent</td></tr>
+                <tr><td><code>combined</code></td><td>the case's assigned synthetic age and history</td></tr>
+                <tr><td><code>colleague_benign</code>, <code>colleague_malignant</code></td><td>a colleague's opinion</td></tr>
+                <tr><td><code>irrelevant</code></td><td>a sentence of similar length with no clinical content</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Image condition</th><th scope="col">What the model sees</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>full</code></td><td>the whole mammogram</td></tr>
+                <tr><td><code>roi</code></td><td>a crop around one abnormality</td></tr>
+                <tr><td><code>no_image</code></td><td>the same text without an image</td></tr>
+                <tr><td><code>blank_full</code>, <code>blank_roi</code></td><td>an all-black image of the same size</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <dl>
+            <dt>Formats</dt>
+            <dd>
+              <code>forced</code> asks the model to choose benign or malignant even when uncertain
+              and is the format of every comparison; <code>plain</code> omits that instruction and
+              is run without context to measure how often the model declines to choose.
+            </dd>
+            <dt>Answer order</dt>
+            <dd>
+              The prompt lists the two options in one order or the other, balanced within each
+              case. Some models depend strongly on that order, so compare a case across conditions
+              within the same paraphrase.
+            </dd>
+          </dl>
+        </section>
+
+        <section>
+          <h2>How the results are analyzed</h2>
+          <p>
+            The analysis plan was written and frozen before any test case was run. The main tests
+            compare the share of malignant answers to the same images between conditions, with the
+            case as the unit and a paired bootstrap over cases. This browser shows the raw answers;
+            the tests, intervals and every change to the plan are in the repository's reports and
+            documents.
+          </p>
+        </section>
+
+        <section>
+          <h2>Images</h2>
+          <p>
+            This site shows model outputs only. It does not host, embed or download any image. The
+            buttons in a case's detail open that case's full mammogram or ROI crop in the NCI
+            Imaging Data Commons viewer, where IDC serves the image.
+          </p>
+          <p>The images are from CBIS-DDSM, released under CC BY 3.0. Please cite the dataset:</p>
+          <blockquote>
+            Sawyer-Lee, R., Gimenez, F., Hoogi, A., and Rubin, D. (2016). Curated Breast Imaging
+            Subset of Digital Database for Screening Mammography (CBIS-DDSM) (Version 1) [Data
+            set]. The Cancer Imaging Archive.
+            <a href="https://doi.org/10.7937/K9/TCIA.2016.7O02S9CY">doi:10.7937/K9/TCIA.2016.7O02S9CY</a>
+          </blockquote>
+          <blockquote>
+            Lee, R. S., Gimenez, F., Hoogi, A., Miyake, K. K., Gorovoy, M., and Rubin, D. L.
+            (2017). A curated mammography data set for use in computer-aided detection and
+            diagnosis research. Scientific Data, 4, 170177.
+            <a href="https://doi.org/10.1038/sdata.2017.177">doi:10.1038/sdata.2017.177</a>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>Data and credits</h2>
+          <p>
+            CBIS-DDSM (The Cancer Imaging Archive,
+            <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>), obtained through
+            the NCI Imaging Data Commons. MedGemma is used under the Health AI Developer Foundations
+            terms; Qwen3-VL and InternVL3.5 are Apache-2.0. Code is under the MIT License.
+          </p>
+          <p>
+            Source, reports and documents:
+            <a href="https://github.com/alexisharveyyy/vlm-mammo-context">github.com/alexisharveyyy/vlm-mammo-context</a>.
+          </p>
+        </section>
+      </article>
     </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          A study of model behavior, not a diagnostic tool. Not intended for clinical use. This site
+          shows model outputs only and hosts no images; age and family history are synthetic study
+          manipulations, not patient data.
+        </p>
+        <p>
+          <a href="https://github.com/alexisharveyyy/vlm-mammo-context">Source and reports on GitHub</a>
+        </p>
+      </div>
+    </footer>
     <script type="module" src="/src/about.ts"></script>
   </body>
 </html>
