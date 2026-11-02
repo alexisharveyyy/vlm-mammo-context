@@ -163,7 +163,8 @@ From [CITATION.cff](CITATION.cff):
   title   = {Same Image, Different Answer: Prompt Context Sensitivity of
              Vision-Language Models in Mammography},
   url     = {https://github.com/alexisharveyyy/vlm-mammo-context},
-  version = {0.0.0},
+  version = {1.0.0},
+  year    = {2026},
   license = {MIT}
 }
 ```
