@@ -1,155 +1,179 @@
-# Same Image, Different Answer: Prompt Context Sensitivity of Vision-Language Models in Mammography
+# Same Image, Different Answer
 
-**Question.** When the image stays the same, do vision-language models change
-their mammogram reading because of what the prompt says (patient context, a
-colleague's opinion, irrelevant text)?
+**Do vision-language models change their mammogram reading when only the prompt changes?**
 
-## Scope
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue)](pyproject.toml)
+[![R 4.4](https://img.shields.io/badge/R-4.4-blue)](analysis/renv.lock)
+[![TypeScript](https://img.shields.io/badge/TypeScript-viewer-blue)](viewer/)
+[![Analysis plan: pre-specified](https://img.shields.io/badge/analysis%20plan-pre--specified-informational)](docs/PREREGISTRATION.md)
+[![Model calls: 103,500](https://img.shields.io/badge/model%20calls-103%2C500-informational)](runs/)
+[![CI](https://github.com/alexisharveyyy/vlm-mammo-context/actions/workflows/ci.yml/badge.svg)](https://github.com/alexisharveyyy/vlm-mammo-context/actions/workflows/ci.yml)
 
-This is a study of model behavior. It is not a diagnostic tool, it is not
-intended for clinical use, and it makes no clinical claims. Nothing in this
-repository should be used to interpret a real patient's imaging.
+> **Scope.** This is a study of model behavior, not a diagnostic tool. It is
+> not intended for clinical use and makes no clinical claims. Nothing here
+> should be used to interpret a real patient's imaging.
 
-What the study measures, and what it does not:
+Three open models (Qwen3-VL 8B, MedGemma 1.5 4B, InternVL3.5 8B) read the
+same 500 CBIS-DDSM test mammograms under paired prompts that differ by one
+sentence. The analysis plan was frozen before any test-set run.
 
-- It measures how much the answer to the same image changes when only the
-  prompt text changes. It does not measure how well the models diagnose.
-- In the Phase 4 baseline none of the three models reads the images above
-  chance, so a context effect here is a shift in answers that carry little
-  information about the image.
-- Patient age and family history are synthetic: CBIS-DDSM has neither, so
-  every case is read with both values of each.
-- The images are digitized film mammograms from the 1990s, from one public
-  dataset, read by three small open models (4B and 8B parameters).
+## Key findings
 
-The full list, with evidence and mitigations, is in
-[docs/THREATS.md](docs/THREATS.md).
+All numbers are from [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md);
+shifts are in percentage points, full images, forced answer format.
 
-## Design in brief
+- **A colleague's opinion moves the answer.** "A colleague thinks it is
+  malignant" raised the malignant-answer rate by 39.9 (Qwen3-VL), 66.1
+  (MedGemma 1.5) and 85.1 (InternVL3.5) points, although with the neutral
+  prompt no model read the images better than chance (AUROC 0.429 to 0.547).
+- **So do synthetic patient details, for two models.** Age 68 instead of 42
+  and a positive instead of a negative family history raised it by 10.7 to
+  30.1 points for Qwen3-VL and InternVL3.5 (Holm p < 0.0025 each). For
+  MedGemma 1.5 the shifts were 0.1 and 0.0 points (Holm p 0.544 and 1.000).
+- **So does the order of the two options.** Listing "malignant" first
+  instead of "benign" changed the neutral malignant rate by 23.5 points for
+  Qwen3-VL and -23.0 points for InternVL3.5 (MedGemma 1.5: -0.4).
+- **Right or wrong, the models follow the colleague.** Under the malignant
+  opinion they agreed about as often when the colleague was wrong as when
+  right: Qwen3-VL 52.5% vs 51.9%, MedGemma 1.5 67.7% vs 65.2%, InternVL3.5
+  100% vs 100%. No wrong-minus-right interval excludes 0.
 
-- **Data:** CBIS-DDSM from The Cancer Imaging Archive (TCIA), with BI-RADS
-  assessments and biopsy-confirmed benign or malignant labels. No images are
-  stored in this repository; see `data/README.md`.
-- **Models:** three open vision-language models run locally:
-  Qwen3-VL-8B-Instruct, MedGemma 1.5 4B (`google/medgemma-1.5-4b-it`) and
-  InternVL3.5-8B. Exact checkpoints and revisions are in
-  `configs/models.yaml`. LLaVA-Med was a candidate but was dropped because it
-  does not run outside its original CUDA-oriented codebase.
-- **Model terms:** MedGemma is used under the Health AI Developer Foundations
-  terms; this repository contains only model outputs, no weights and no hosted
-  model. Qwen3-VL and InternVL3.5 are Apache-2.0.
-- **Conditions:** the same image under a neutral prompt and under prompts that
-  add patient age, family history, a colleague's benign or malignant opinion,
-  or irrelevant text, plus text-only and blank-image controls.
-- **Evaluation:** a fixed dev set for prompt and parser development and a test
-  set frozen before any model sees it. Every reported number comes from the
-  test set and names the command, config and commit that produced it.
+![Malignant-answer rate on full images under the neutral prompt and the two colleague prompts, for each model, with 95% intervals](reports/figures/headline.svg)
 
-## Status
+Rates over 1,500 calls per cell with Wilson 95% intervals, from
+`reports/analysis/cells.csv`; drawn by `uv run python -m eval.headline`. The
+shifts above are the paired case-level estimates of the analysis.
 
-Phase 8 of 8: write-up and publication.
+## Explore the results
 
-- **Runs:** complete. Tiers T0 to T4 (103,500 calls, all three models) and
-  the Phase 7 variant runs (13,500 calls) are committed under `runs/`, with
-  no errors and 0 mismatches in every determinism audit.
-- **Analysis:** the Phase 6 analysis (tag `analysis-v1`) and the Phase 7
-  robustness checks are run on all outputs:
-  [reports/analysis.md](reports/analysis.md) and
-  [reports/robustness.md](reports/robustness.md). The Python cross-check
-  finds 0 mismatches.
-- **Final report:** [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md) has
-  the results filled from the generated reports; the summary, discussion and
-  limitations are still being written.
+- **Case browser:** every case, model and condition, outputs only and no
+  images. It will be published with GitHub Pages once the repository is
+  public; until then run it locally (see Quickstart).
+- **Final report:** [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md), with
+  every result, the deviations from the plan, threats to validity and a
+  reproduction table naming the command, config and commit of each number.
 
-The Phase 4 baseline is in [reports/baseline.md](reports/baseline.md). On full images
-with the neutral prompt, none of the three models is above chance by the rule in
-docs/DEVIATIONS.md, entry 2. All three stay in the study.
+## How it works
 
-The hypotheses, outcomes and statistical tests are a pre-specified analysis
-plan, frozen at tag `prereg-v1` before any test-set run:
-`docs/PREREGISTRATION.md`, SHA-256
-`3ae8ae33638b2eb6353eeb199acaa869d1369d21d95527862e8afd68acde8423`.
-The plan was not registered with an external registry. Changes made after the
-tag are logged in `docs/DEVIATIONS.md`; execution follows
-`docs/RUN_DESIGN.md`.
+```mermaid
+flowchart LR
+  A["CBIS-DDSM<br/>500 test cases"] --> B["Frozen splits<br/>tag splits-v1"]
+  B --> C["Paired prompts<br/>9 conditions x 3 paraphrases"]
+  C --> D["3 models<br/>run locally"]
+  D --> E["103,500 calls<br/>runs/"]
+  E --> F["R analysis<br/>analysis/"]
+  F --> G["Python cross-check<br/>eval/crosscheck.py"]
+  F --> H["Reports<br/>reports/"]
+  E --> I["Case browser<br/>viewer/"]
+```
+
+## Primary results
+
+Malignant-rate shift in percentage points (95% interval) and Holm-adjusted
+p over the 12 tests; 500 of 500 cases in each.
+
+| Hypothesis | Qwen3-VL | MedGemma 1.5 | InternVL3.5 |
+|---|---|---|---|
+| H1 colleague_malignant vs neutral | 39.9 (37.8 to 42.1), p < 0.0025 | 66.1 (64.1 to 68.1), p < 0.0025 | 85.1 (83.3 to 86.9), p < 0.0025 |
+| H2 colleague_benign vs neutral | -12.3 (-13.9 to -10.7), p < 0.0025 | -0.3 (-0.8 to 0.0), p 0.299 | -14.9 (-16.7 to -13.1), p < 0.0025 |
+| H3 age_68 vs age_42 | 10.7 (8.9 to 12.6), p < 0.0025 | 0.1 (0.0 to 0.3), p 0.544 | 30.1 (28.2 to 31.9), p < 0.0025 |
+| H4 history_yes vs history_no | 27.9 (26.2 to 29.6), p < 0.0025 | 0.0 (0.0 to 0.0), p 1.000 | 25.1 (23.8 to 26.5), p < 0.0025 |
+
+"p < 0.0025" is the resolution limit of 10,000 bootstrap resamples after
+Holm adjustment. Robustness checks (paraphrases, context position, strict
+parser, sampled decoding) are in [reports/robustness.md](reports/robustness.md).
 
 ## Quickstart
 
-Every reported number regenerates from the committed outputs; no images, no
-model weights and no GPU are needed. From the repository root:
+Every reported number regenerates from the committed outputs. No images,
+model weights or GPU are needed.
 
 ```sh
 uv sync                                          # Python 3.12, pinned in uv.lock
-uv run python -m eval.baseline                   # Phase 4: reports/baseline.md
-Rscript -e 'renv::restore(project = "analysis")' # R 4.4.0, pinned in analysis/renv.lock
-Rscript analysis/run_analysis.R --final          # Phase 6: reports/analysis.md, figures
-Rscript analysis/run_robustness.R --final        # Phase 7: reports/robustness.md
-uv run python -m eval.crosscheck --robustness    # recomputes the point estimates in Python
+(cd analysis && Rscript -e 'renv::restore()')    # R 4.4.0, pinned in analysis/renv.lock
+uv run python -m eval.baseline                   # reports/baseline.md
+Rscript analysis/run_analysis.R --final          # reports/analysis.md, tables, figures
+Rscript analysis/run_robustness.R --final        # reports/robustness.md
+uv run python -m eval.crosscheck --robustness    # recompute the estimates in Python
+uv run python -m eval.headline                   # reports/figures/headline.svg
 ```
 
-The results viewer (outputs only, no images):
+Run the case browser locally (Node 22.18 or later):
 
 ```sh
-cd viewer && npm ci && npm run data && npm run dev
+cd viewer && npm ci && npm run dev               # generates data.json first
 ```
 
 Rerunning the models needs the CBIS-DDSM images (about 30 GB from the NCI
-Imaging Data Commons, verified against the committed checksums) and a machine
-that can run 8B models:
-
-```sh
-uv run python data/download.py metadata && uv run python data/download.py images
-uv run python data/preprocess.py
-uv run python data/download.py roi && uv run python data/preprocess.py --roi
-uv sync --group models
-sh scripts/run_tier.sh T0                        # tiers T0 to T4, docs/RUN_DESIGN.md
-```
-
-The final report, with a reproduction table that gives the command, config and
-commit of every result, is [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md).
+Imaging Data Commons, checked against the committed checksums) and a
+machine that runs 8B models; see `data/README.md` and `docs/RUN_DESIGN.md`.
 
 ## Repository map
 
 | Path | Content |
 |---|---|
-| `docs/PREREGISTRATION.md` | the pre-specified analysis plan (frozen at `prereg-v1`) |
-| `docs/DEVIATIONS.md` | every change to the plan, with date and reason |
-| `docs/RUN_DESIGN.md`, `docs/ROBUSTNESS.md` | how the runs and the Phase 7 checks are done |
-| `docs/THREATS.md`, `docs/EXPLORATORY.md` | threats to validity; exploratory analyses |
-| `data/` | data card, download and preprocessing scripts, manifests and checksums |
-| `prompts/`, `configs/` | prompt text (frozen); model and variant settings |
-| `models/` | model adapters, prompt rendering, the answer parser and the runner |
+| `docs/` | analysis plan (`PREREGISTRATION.md`), deviations, run design, robustness design, threats |
+| `data/` | data card, download and preprocessing scripts, manifests and checksums (no images) |
+| `prompts/`, `configs/` | frozen prompt text; model and variant settings |
+| `models/` | model adapters, prompt rendering, answer parser, runner |
 | `runs/` | every model output, one JSON line per call |
 | `analysis/` | the statistics in R |
-| `eval/` | the baseline, the Python cross-check, exploratory analyses, synthetic test data |
-| `reports/` | generated reports, tables and figures |
-| `viewer/` | the static results viewer |
+| `eval/` | baseline, Python cross-check, exploratory analyses, headline chart |
+| `reports/` | generated reports, tables, figures and the final report |
+| `viewer/` | the static case browser (Vite and TypeScript) |
 
-## Languages
+<details>
+<summary><strong>Methods at a glance</strong></summary>
 
-| Language | Role | Status |
-|---|---|---|
-| Python | data download and preprocessing, model runs and run logging, the Phase 4 baseline, the cross-check of the R numbers, exploratory analyses | in use |
-| R | the statistics and figures under `analysis/` (paired case bootstrap, Wilson intervals, AUROC with pROC, Holm and Benjamini-Hochberg) and the Phase 7 robustness checks, reading only the committed run outputs; versions pinned with renv | in use; run on all tier T0 to T4 and Phase 7 outputs |
-| TypeScript | the static results viewer under `viewer/` (Vite), outputs only and no images | in use; builds from all committed tier T0 to T4 outputs; published with GitHub Pages once the repository is public |
+- **Data:** CBIS-DDSM, one MLO view per patient, biopsy-confirmed labels.
+  Test set of 500 cases (125 per stratum of calcification or mass, benign or
+  malignant), frozen at tag `splits-v1`; a separate dev set of 100 cases.
+- **Models:** Qwen3-VL-8B-Instruct, MedGemma 1.5 4B and InternVL3.5-8B in
+  bfloat16, greedy decoding, run locally on an Apple M2 Max.
+- **Prompts:** `neutral`; `age_42`, `age_68`; `history_yes`, `history_no`;
+  `combined`; `colleague_benign`, `colleague_malignant`; `irrelevant`. Three
+  paraphrases each; answer order counterbalanced within case. Age and
+  family history are synthetic: every case is read with both values.
+- **Images:** full mammogram, ROI crop, and `no_image`, `blank_full`,
+  `blank_roi` controls.
+- **Answer format:** forced choice (BI-RADS, benign or malignant,
+  confidence); a plain format on `neutral` measures abstention.
+- **Statistics:** the case is the unit; paired case bootstrap with 10,000
+  resamples (seed 20261026). Holm over 12 primary tests, Benjamini-Hochberg
+  over 33 key secondary tests, descriptive and exploratory analyses labeled
+  as such. R computes every number; Python recomputes the point estimates.
+- **Plan:** pre-specified and frozen at tag `prereg-v1` before any test-set
+  run (`docs/PREREGISTRATION.md`, SHA-256
+  `3ae8ae33638b2eb6353eeb199acaa869d1369d21d95527862e8afd68acde8423`); not
+  registered externally. Every later change is in `docs/DEVIATIONS.md`.
+- **Provenance:** every call records its commit and config hash; each tier
+  and variant run was audited by rerunning a sample uncached (863 calls, 0
+  mismatches).
 
-## Development
+</details>
 
-```sh
-uv sync
-sh scripts/check.sh            # lint, format, tests, audit
-sh scripts/final_audit.sh      # Phase 8: the whole history
+## Citation
+
+From [CITATION.cff](CITATION.cff):
+
+```bibtex
+@software{harvey_same_image_different_answer,
+  author  = {Harvey, Alexis},
+  title   = {Same Image, Different Answer: Prompt Context Sensitivity of
+             Vision-Language Models in Mammography},
+  url     = {https://github.com/alexisharveyyy/vlm-mammo-context},
+  version = {0.0.0},
+  license = {MIT}
+}
 ```
 
-## Data license and citation
+## License and data
 
-CBIS-DDSM is released under the
-[Creative Commons Attribution 3.0 Unported License (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
-and used under the
-[TCIA Data Usage Policy](https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/).
-No images are redistributed here; the manifests contain case IDs, labels
-derived from the CBIS-DDSM metadata, and checksums. If you use this repository,
-cite the dataset and its description:
+Code is under the MIT License (`LICENSE`). CBIS-DDSM is used under the
+[Creative Commons Attribution 3.0 License (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
+and the [TCIA Data Usage Policy](https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/);
+no images are redistributed here. Please cite the dataset:
 
 > Sawyer-Lee, R., Gimenez, F., Hoogi, A., & Rubin, D. (2016). Curated Breast
 > Imaging Subset of Digital Database for Screening Mammography (CBIS-DDSM)
@@ -161,11 +185,7 @@ cite the dataset and its description:
 > detection and diagnosis research. Scientific Data, 4, 170177.
 > https://doi.org/10.1038/sdata.2017.177
 
-The images are obtained through the NCI Imaging Data Commons; see
-`data/README.md` for the IDC citation, the changes made to the data, and the
-full data card.
-
-## License
-
-Code is released under the MIT License (see `LICENSE`). The CBIS-DDSM data is
-not redistributed here and remains under CC BY 3.0.
+The images come from the NCI Imaging Data Commons; `data/README.md` has the
+IDC citation and the data card. MedGemma is used under the Health AI
+Developer Foundations terms; this repository contains only its outputs, no
+weights. Qwen3-VL and InternVL3.5 are Apache-2.0.
