@@ -47,7 +47,19 @@ The full list, with evidence and mitigations, is in
 
 ## Status
 
-Phase 5 of 8: context conditions on the test set (tiers T1 to T4).
+Phase 8 of 8: write-up and publication.
+
+- **Runs:** complete. Tiers T0 to T4 (103,500 calls, all three models) and
+  the Phase 7 variant runs (13,500 calls) are committed under `runs/`, with
+  no errors and 0 mismatches in every determinism audit.
+- **Analysis:** the Phase 6 analysis (tag `analysis-v1`) and the Phase 7
+  robustness checks are run on all outputs:
+  [reports/analysis.md](reports/analysis.md) and
+  [reports/robustness.md](reports/robustness.md). The Python cross-check
+  finds 0 mismatches.
+- **Final report:** [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md) has
+  the results filled from the generated reports; the summary, discussion and
+  limitations are still being written.
 
 The Phase 4 baseline is in [reports/baseline.md](reports/baseline.md). On full images
 with the neutral prompt, none of the three models is above chance by the rule in
@@ -118,8 +130,8 @@ commit of every result, is [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md).
 | Language | Role | Status |
 |---|---|---|
 | Python | data download and preprocessing, model runs and run logging, the Phase 4 baseline, the cross-check of the R numbers, exploratory analyses | in use |
-| R | the statistics and figures under `analysis/` (paired case bootstrap, Wilson intervals, AUROC with pROC, Holm and Benjamini-Hochberg) and the Phase 7 robustness checks, reading only the committed run outputs; versions pinned with renv | written and tested on synthetic and tier T0 outputs; runs on the full outputs after Phase 5 |
-| TypeScript | the static results viewer under `viewer/` (Vite), outputs only and no images | built against tier T0; published with GitHub Pages once the repository is public |
+| R | the statistics and figures under `analysis/` (paired case bootstrap, Wilson intervals, AUROC with pROC, Holm and Benjamini-Hochberg) and the Phase 7 robustness checks, reading only the committed run outputs; versions pinned with renv | in use; run on all tier T0 to T4 and Phase 7 outputs |
+| TypeScript | the static results viewer under `viewer/` (Vite), outputs only and no images | in use; builds from all committed tier T0 to T4 outputs; published with GitHub Pages once the repository is public |
 
 ## Development
 
