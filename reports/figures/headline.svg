@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 678" width="880" height="678" role="img" aria-labelledby="t d">
+<title id="t">Malignant-answer rate on the same 500 mammograms, by prompt</title>
+<desc id="d">Qwen3-VL 8B: Neutral prompt 12.3%, Colleague says benign 0.0%, Colleague says malignant 52.2%; MedGemma 1.5 4B: Neutral prompt 0.3%, Colleague says benign 0.0%, Colleague says malignant 66.5%; InternVL3.5 8B: Neutral prompt 14.9%, Colleague says benign 0.0%, Colleague says malignant 100.0%. Full images, forced format, 1,500 calls per cell, Wilson 95% intervals.</desc>
+<style>
+.surface { fill: #fcfcfb; }
+.ink { fill: #0b0b0b; }
+.ink2 { fill: #52514e; }
+.grid { stroke: #e4e3df; stroke-width: 1; }
+.axis { stroke: #a3a29c; stroke-width: 1; }
+.c1 { fill: #2a78d6; stroke: #2a78d6; }
+.c2 { fill: #eb6834; stroke: #eb6834; }
+.c3 { fill: #1baf7a; stroke: #1baf7a; }
+.ring { stroke: #fcfcfb; stroke-width: 2; }
+text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+@media (prefers-color-scheme: dark) {
+  .surface { fill: #1a1a19; }
+  .ink { fill: #f0efec; }
+  .ink2 { fill: #c3c2b7; }
+  .grid { stroke: #33332f; }
+  .axis { stroke: #6b6a64; }
+  .c1 { fill: #3987e5; stroke: #3987e5; }
+  .c2 { fill: #d95926; stroke: #d95926; }
+  .c3 { fill: #199e70; stroke: #199e70; }
+  .ring { stroke: #1a1a19; }
+}
+</style>
+<rect class="surface" width="880" height="678" rx="12"/>
+<text class="ink" x="24.0" y="40.0" font-size="24" font-weight="600">Malignant-answer rate on the same 500 mammograms, by prompt</text>
+<text class="ink2" x="24.0" y="68.0" font-size="16">Full images, forced answer format, 1,500 calls per cell; bars are 95% intervals</text>
+<circle class="c1 ring" cx="33.0" cy="100.0" r="7.5"/>
+<text class="ink" x="48.0" y="106.0" font-size="16">Neutral prompt</text>
+<rect class="c2 ring" x="214.0" y="93.0" width="14" height="14" rx="2"/>
+<text class="ink" x="236.0" y="106.0" font-size="16">Colleague says benign</text>
+<path class="c3 ring" d="M472.0 91.0 L481.0 100.0 L472.0 109.0 L463.0 100.0 Z"/>
+<text class="ink" x="487.0" y="106.0" font-size="16">Colleague says malignant</text>
+<line class="grid" x1="270.0" y1="126.0" x2="270.0" y2="586.0"/>
+<text class="ink2" x="270.0" y="610.0" font-size="15" text-anchor="middle">0%</text>
+<line class="grid" x1="412.5" y1="126.0" x2="412.5" y2="586.0"/>
+<text class="ink2" x="412.5" y="610.0" font-size="15" text-anchor="middle">25%</text>
+<line class="grid" x1="555.0" y1="126.0" x2="555.0" y2="586.0"/>
+<text class="ink2" x="555.0" y="610.0" font-size="15" text-anchor="middle">50%</text>
+<line class="grid" x1="697.5" y1="126.0" x2="697.5" y2="586.0"/>
+<text class="ink2" x="697.5" y="610.0" font-size="15" text-anchor="middle">75%</text>
+<line class="grid" x1="840.0" y1="126.0" x2="840.0" y2="586.0"/>
+<text class="ink2" x="840.0" y="610.0" font-size="15" text-anchor="middle">100%</text>
+<line class="axis" x1="270.0" y1="586.0" x2="840.0" y2="586.0"/>
+<text class="ink" x="24.0" y="152.0" font-size="18" font-weight="600">Qwen3-VL 8B</text>
+<g><title>Qwen3-VL 8B, Neutral prompt: 12.3% (95% interval 10.7% to 14.0%)</title>
+<text class="ink2" x="36.0" y="185.0" font-size="16">Neutral prompt</text>
+<line class="c1" x1="331.0" y1="180.0" x2="349.9" y2="180.0" stroke-width="2"/>
+<circle class="c1 ring" cx="339.9" cy="180.0" r="7.5"/>
+<text class="ink" x="363.9" y="185.0" font-size="16" font-weight="600">12.3%</text>
+</g>
+<g><title>Qwen3-VL 8B, Colleague says benign: 0.0% (95% interval 0.0% to 0.3%)</title>
+<text class="ink2" x="36.0" y="221.0" font-size="16">Colleague says benign</text>
+<line class="c2" x1="270.0" y1="216.0" x2="271.5" y2="216.0" stroke-width="2"/>
+<rect class="c2 ring" x="263.0" y="209.0" width="14" height="14" rx="2"/>
+<text class="ink" x="285.5" y="221.0" font-size="16" font-weight="600">0.0%</text>
+</g>
+<g><title>Qwen3-VL 8B, Colleague says malignant: 52.2% (95% interval 49.7% to 54.7%)</title>
+<text class="ink2" x="36.0" y="257.0" font-size="16">Colleague says malignant</text>
+<line class="c3" x1="553.1" y1="252.0" x2="581.9" y2="252.0" stroke-width="2"/>
+<path class="c3 ring" d="M567.5 243.0 L576.5 252.0 L567.5 261.0 L558.5 252.0 Z"/>
+<text class="ink" x="595.9" y="257.0" font-size="16" font-weight="600">52.2%</text>
+</g>
+<text class="ink" x="24.0" y="310.0" font-size="18" font-weight="600">MedGemma 1.5 4B</text>
+<g><title>MedGemma 1.5 4B, Neutral prompt: 0.3% (95% interval 0.1% to 0.8%)</title>
+<text class="ink2" x="36.0" y="343.0" font-size="16">Neutral prompt</text>
+<line class="c1" x1="270.8" y1="338.0" x2="274.4" y2="338.0" stroke-width="2"/>
+<circle class="c1 ring" cx="271.9" cy="338.0" r="7.5"/>
+<text class="ink" x="288.4" y="343.0" font-size="16" font-weight="600">0.3%</text>
+</g>
+<g><title>MedGemma 1.5 4B, Colleague says benign: 0.0% (95% interval 0.0% to 0.3%)</title>
+<text class="ink2" x="36.0" y="379.0" font-size="16">Colleague says benign</text>
+<line class="c2" x1="270.0" y1="374.0" x2="271.5" y2="374.0" stroke-width="2"/>
+<rect class="c2 ring" x="263.0" y="367.0" width="14" height="14" rx="2"/>
+<text class="ink" x="285.5" y="379.0" font-size="16" font-weight="600">0.0%</text>
+</g>
+<g><title>MedGemma 1.5 4B, Colleague says malignant: 66.5% (95% interval 64.0% to 68.8%)</title>
+<text class="ink2" x="36.0" y="415.0" font-size="16">Colleague says malignant</text>
+<line class="c3" x1="635.0" y1="410.0" x2="662.2" y2="410.0" stroke-width="2"/>
+<path class="c3 ring" d="M648.9 401.0 L657.9 410.0 L648.9 419.0 L639.9 410.0 Z"/>
+<text class="ink" x="676.2" y="415.0" font-size="16" font-weight="600">66.5%</text>
+</g>
+<text class="ink" x="24.0" y="468.0" font-size="18" font-weight="600">InternVL3.5 8B</text>
+<g><title>InternVL3.5 8B, Neutral prompt: 14.9% (95% interval 13.2% to 16.8%)</title>
+<text class="ink2" x="36.0" y="501.0" font-size="16">Neutral prompt</text>
+<line class="c1" x1="345.0" y1="496.0" x2="365.5" y2="496.0" stroke-width="2"/>
+<circle class="c1 ring" cx="354.7" cy="496.0" r="7.5"/>
+<text class="ink" x="379.5" y="501.0" font-size="16" font-weight="600">14.9%</text>
+</g>
+<g><title>InternVL3.5 8B, Colleague says benign: 0.0% (95% interval 0.0% to 0.3%)</title>
+<text class="ink2" x="36.0" y="537.0" font-size="16">Colleague says benign</text>
+<line class="c2" x1="270.0" y1="532.0" x2="271.5" y2="532.0" stroke-width="2"/>
+<rect class="c2 ring" x="263.0" y="525.0" width="14" height="14" rx="2"/>
+<text class="ink" x="285.5" y="537.0" font-size="16" font-weight="600">0.0%</text>
+</g>
+<g><title>InternVL3.5 8B, Colleague says malignant: 100.0% (95% interval 99.7% to 100.0%)</title>
+<text class="ink2" x="36.0" y="573.0" font-size="16">Colleague says malignant</text>
+<line class="c3" x1="838.5" y1="568.0" x2="840.0" y2="568.0" stroke-width="2"/>
+<path class="c3 ring" d="M840.0 559.0 L849.0 568.0 L840.0 577.0 L831.0 568.0 Z"/>
+<text class="ink" x="824.5" y="573.0" font-size="16" font-weight="600" text-anchor="end">100.0%</text>
+</g>
+<text class="ink2" x="24.0" y="648.0" font-size="14">Source: reports/analysis/cells.csv. Chart: uv run python -m eval.headline</text>
+</svg>
