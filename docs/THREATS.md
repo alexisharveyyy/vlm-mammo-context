@@ -2,8 +2,11 @@
 
 A working list, started on 2026-10-27 during Phase 5 from what was known by
 then: the frozen plan, the data, the models and the tier T0 baseline. No tier
-T1 to T4 result had been read. It is updated in Phase 7 and summarized in the
-final report.
+T1 to T4 result had been read. Entries 1 to 8 and the other known limits are
+as written then. Entries 9 to 12 were added on 2026-11-02 from the Phase 7
+results (`reports/robustness.md`), after the primary and secondary results
+were known; they state the results and do not interpret them. The list is
+summarized in the final report.
 
 Each entry says what the threat is, the evidence for it, what it does to the
 conclusions, and what the study does about it.
@@ -124,6 +127,66 @@ conclusions, and what the study does about it.
   so contrasts are not confounded with it. The order effect on `neutral` is
   a key secondary test (`docs/DEVIATIONS.md`, entry 4), and its other cells
   are reported as exploratory.
+
+## Added in Phase 7
+
+Readings follow the rule fixed in `docs/ROBUSTNESS.md` before the results:
+robust means the same sign as a significant primary result and a 95%
+interval excluding 0; unchanged means an interval including 0 for a primary
+result that is not significant; sensitive means anything else.
+
+## 9. Dependence on the paraphrase (R1)
+
+- **Evidence:** each primary contrast computed from one paraphrase at a
+  time gives estimates that differ between paraphrases. For Qwen3-VL, H1 is
+  44.2% (39.6% to 49.0%), 66.2% (62.2% to 70.4%) and 9.4% (6.6% to 12.2%)
+  from paraphrases 1, 2 and 3. Of the 36 single-paraphrase estimates, 35 read
+  robust or unchanged. The exception is InternVL3.5's H4
+  (`history_yes` vs `history_no`) from paraphrase 3: 0.0% (0.0% to 0.0%)
+  against 50.6% (46.4% to 55.0%) and 24.8% (21.0% to 28.8%) from paraphrases
+  1 and 2, read sensitive. On full images under `neutral`, the share of
+  cases whose three answers agree is 66.6% for Qwen3-VL, 99.4% for MedGemma
+  1.5 and 62.8% for InternVL3.5.
+- **Where reported:** `reports/robustness.md`, R1; final report, section
+  8.6.
+
+## 10. Strict parser (R3, sensitivity 2)
+
+- **Evidence:** under the frozen strict rules, Qwen3-VL's four primary
+  contrasts are identical to the primary results (every lenient answer is
+  also strictly valid) and read robust. MedGemma 1.5 has no strictly valid
+  answer in these cells, so its four contrasts have no data. InternVL3.5's
+  H1, H2 and H3 read robust, on 435, 435 and 232 of 500 cases. Its H4 is
+  -0.2% (-0.6% to 0.0%), Holm p 0.752, on 251 of 500 cases, against 25.1%
+  (23.8% to 26.5%) in the primary analysis, and reads sensitive.
+- **Where reported:** `reports/robustness.md`, R3; final report, section
+  8.5.
+
+## 11. Position of the context sentence (R2)
+
+- **Evidence:** with the context sentence after the task, the colleague
+  contrasts read robust for all three models, except MedGemma 1.5's H2,
+  which reads unchanged (as in the primary analysis). The difference from
+  the study (end minus middle) is -12.3% (-14.0% to -10.7%) for Qwen3-VL's
+  H1, 1.9% (0.1% to 3.7%) for MedGemma 1.5's H1, and 0.0% (0.0% to 0.0%)
+  for the other four contrasts. The age and history contrasts were not run
+  in this position (`docs/DEVIATIONS.md`, entry 7).
+- **Where reported:** `reports/robustness.md`, R2; final report, section
+  8.6.
+
+## 12. Decoding setting (R4)
+
+- **Evidence:** with sampled decoding (Qwen3-VL only; temperature 0.7,
+  top_p 1.0, seed 1), H1 is 19.3% (16.8% to 21.9%) and H2 is -44.3% (-46.5%
+  to -42.1%); both read robust. The `neutral` malignant rate is 44.3% under
+  sampling and 12.3% under greedy decoding. The differences from greedy
+  (sampled minus greedy) are -20.6% (-23.4% to -17.9%) for H1 and -32.0%
+  (-34.3% to -29.7%) for H2. Sampled answers equal the greedy answer in
+  68.0% of (case, paraphrase) pairs under `neutral`, 100.0% under
+  `colleague_benign` and 88.6% under `colleague_malignant`. The other two
+  models and the age and history contrasts were not run with sampling.
+- **Where reported:** `reports/robustness.md`, R4; final report, section
+  8.6.
 
 ## Other known limits
 
