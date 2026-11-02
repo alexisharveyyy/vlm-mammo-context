@@ -5,14 +5,13 @@
 This is a study of model behavior. It is not a diagnostic tool, it is not
 intended for clinical use, and it makes no clinical claims.
 
-> **Status: written; reproduction check pending.** Setup, data, models,
+> **Status: complete.** Setup, data, models,
 > protocol, statistics and deviations are written from the frozen plan and
 > the repository. The results in sections 3, 6, 8, 9 and 12 are copied from
 > the generated reports and the committed outputs (2026-11-02), without
 > interpretation. The summary (section 1), the discussion (section 10) and
-> the Phase 7 threats (section 11) are written by the author. One marked
-> placeholder remains: the fresh-clone check (section 12).
-> `scripts/final_audit.sh` fails while any placeholder remains.
+> the Phase 7 threats (section 11) are written by the author. The
+> fresh-clone check is in section 12.
 
 ## 1. Summary
 
@@ -692,8 +691,26 @@ Full SHA-256 values: `analysis/renv.lock`
 primary outcome. `reports/robustness.md` and `reports/analysis.md` were
 committed in `c6e4af0`.
 
-[[PENDING: fresh-clone check: date, commit and result of rerunning every
-command above in a new clone]]
+**Fresh-clone check** (2026-11-02, commit `4fa7827`). The repository was
+cloned from GitHub into an empty folder on the same Mac, and every command
+in the table that needs no model run was rerun there in order: `uv sync`,
+`renv::restore()` in `analysis/`, `eval.baseline`, `run_analysis.R --final`,
+`run_robustness.R --final`, `eval.crosscheck` with and without
+`--robustness`, `eval.surface_features` (reading the PNG masters from the
+local `data/png`, which are not in the repository) and `eval.headline`;
+then `sh scripts/check.sh` and the viewer build with `npm ci`, `npm run
+build` and `npm run check-dist`. Every command exited with status 0. Every
+regenerated table, CSV and figure, including `reports/figures/headline.svg`,
+is byte-identical to the committed file. The only differences are the
+commit line in six generated files (`reports/analysis.md`,
+`reports/robustness.md`, `reports/baseline.md`, `reports/baseline.json`,
+`reports/exploratory/surface_features.md` and `.json`), which name the
+clone's commit instead of the one that produced the committed version. The
+cross-checks compared 1,494 and 1,965 numbers with 0 mismatches,
+`check.sh` passed, and `check-dist` reported 6 files and 0 problems. The
+model runs (tiers T0 to T4 and the Phase 7 variants) were not rerun; they
+need the images and the models, and their reproducibility is covered by the
+determinism audits (section 3).
 
 ## 13. Data, license and citation
 
