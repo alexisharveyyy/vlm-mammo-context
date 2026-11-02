@@ -254,3 +254,9 @@ analysis is merged after Phase 5.
   have results. The analysis code is the one merged in `caa74c3` (entries 9
   and 10); nothing was changed for this regeneration. `reports/analysis.md`
   was regenerated at the same commit and only its commit line changed.
+- **Headline chart (2026-11-02):** `eval/headline.py` and
+  `reports/figures/headline.svg` were added after the results were known,
+  for the README. The chart draws the malignant-answer rates and Wilson
+  intervals of nine cells exactly as `reports/analysis/cells.csv` gives
+  them; it computes no new number and changes no analysis. The final
+  report's reproduction table lists it.
