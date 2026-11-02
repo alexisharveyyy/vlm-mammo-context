@@ -23,6 +23,7 @@ set -u
 here="$(cd "$(dirname "$0")" && pwd)"
 cd "$(git rev-parse --show-toplevel)" || exit 2
 exec python3 - "$here" "$@" <<'PY'
+import hashlib
 import json
 import re
 import subprocess
@@ -44,7 +45,21 @@ ATTRIBUTION = re.compile(
     re.IGNORECASE,
 )
 PLACEHOLDER = "[[" + "PENDING"
+# Documented exception to the names check: three historical lines of
+# runs/run_log.jsonl (dev check, 2026-10-29, commit 1cfd31e) record an
+# `--out` path under the macOS per-user temporary folder, and that folder's
+# name contains one of the vendor names. It is a folder name, not
+# attribution. The current run_log.jsonl writes the path as $TMPDIR; the
+# history keeps the lines as committed. Only these exact lines (SHA-256 of
+# the line without its newline) in that file are exempt.
+NAMES_EXEMPT_FILE = "runs/run_log.jsonl"
+NAMES_EXEMPT_LINES = {
+    "1908fbefdad6c93ddc9aa4cb283c63861b44623c1135bdf59c384e9f9f806c9f",
+    "738842679bbb7e7b9e64673185eae9510a3e4739f8975d3e8b52c6a8e895cfc8",
+    "06ea6b6d0cd34bfaa79489df43bdc8e81d761b87e769eed982c7f7b2abe18ad3",
+}
 problems = Counter()
+exempted = Counter()
 
 
 def report(check, message):
@@ -56,11 +71,17 @@ def git(*args, text=True):
     return subprocess.run(["git", *args], check=True, capture_output=True, text=text).stdout
 
 
-def check_text(check_where, text):
+def check_text(check_where, text, path=None):
     if ATTRIBUTION.search(text):
         report("attribution", f"{check_where}: attribution line")
+    lines = text.splitlines()
     for m in NAMES.finditer(text):
         line = text.count("\n", 0, m.start()) + 1
+        if path == NAMES_EXEMPT_FILE:
+            digest = hashlib.sha256(lines[line - 1].encode("utf-8")).hexdigest()
+            if digest in NAMES_EXEMPT_LINES:
+                exempted[f"{path}:{line}"] += 1
+                continue
         report("names", f"{check_where}:{line}: mentions {m.group(0)!r}")
     for lineno, line in enumerate(text.splitlines(), 1):
         if audit.EM_DASH in line:
@@ -124,7 +145,10 @@ for sha, size in sorted(blobs.items()):
         text = data.decode("utf-8")
     except UnicodeDecodeError:
         continue
-    check_text(f"{where} ({sha[:10]})", text)
+    for path in sorted(seen[sha]):
+        if path == NAMES_EXEMPT_FILE:
+            where = path
+    check_text(f"{where} ({sha[:10]})", text, path=where)
 
 # Placeholders left in the final report at HEAD.
 try:
@@ -164,6 +188,7 @@ checks = [
 ]
 for check in checks:
     print(f"{check:15} {problems[check]}")
+print(f"{'names exempt':15} {sum(exempted.values())} (documented run_log.jsonl lines)")
 total = sum(problems.values())
 print(f"final audit: {len(blobs)} file versions, {total} finding(s)")
 sys.exit(1 if total else 0)
