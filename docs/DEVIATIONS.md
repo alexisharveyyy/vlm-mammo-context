@@ -247,3 +247,10 @@ analysis is merged after Phase 5.
   to 7 are added to this file when the analysis is merged after Phase 5.
   That is resolved: the merge of the analysis into main (commit `ec9f10a`)
   added them, and the entries are now in order. Entry 8 itself is unchanged.
+- **Robustness report after Phase 7 (2026-11-02):** `reports/robustness.md`
+  and its tables were regenerated after the Phase 7 variant runs finished
+  (commits `76002e3` and `8f2136b`), when the primary and secondary results
+  were already known. The checks R2 and R4, listed as pending before, now
+  have results. The analysis code is the one merged in `caa74c3` (entries 9
+  and 10); nothing was changed for this regeneration. `reports/analysis.md`
+  was regenerated at the same commit and only its commit line changed.
