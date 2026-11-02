@@ -47,9 +47,9 @@ shifts above are the paired case-level estimates of the analysis.
 
 ## Explore the results
 
-- **Case browser:** every case, model and condition, outputs only and no
-  images. It will be published with GitHub Pages once the repository is
-  public; until then run it locally (see Quickstart).
+- **Case browser:** [alexisalineharvey.com/vlm-mammo-context](https://alexisalineharvey.com/vlm-mammo-context/),
+  every case, model and condition, outputs only and no images. It can also
+  run locally (see Quickstart).
 - **Final report:** [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md), with
   every result, the deviations from the plan, threats to validity and a
   reproduction table naming the command, config and commit of each number.
